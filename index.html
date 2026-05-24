@@ -3246,9 +3246,188 @@
         linear-gradient(180deg, #050914 0%, #030712 42%, #020617 100%);
     }
 
+  
+
+    /* Login gate */
+    body.app-locked {
+      overflow: hidden;
+    }
+
+    body.app-locked header,
+    body.app-locked main,
+    body.app-locked canvas,
+    body.app-locked .bookmarker,
+    body.app-locked .bookmark-panel,
+    body.app-locked .floating-tools {
+      pointer-events: none !important;
+      user-select: none !important;
+    }
+
+    .login-gate {
+      position: fixed;
+      inset: 0;
+      z-index: 30000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background:
+        radial-gradient(circle at 25% 15%, rgba(251, 191, 36, 0.16), transparent 24rem),
+        radial-gradient(circle at 80% 10%, rgba(56, 189, 248, 0.14), transparent 28rem),
+        rgba(3, 7, 18, 0.94);
+      backdrop-filter: blur(18px);
+    }
+
+    body.app-locked .login-gate {
+      display: flex;
+    }
+
+    .login-card {
+      width: min(440px, 100%);
+      border-radius: 30px;
+      border: 1px solid rgba(255, 255, 255, 0.20);
+      background: linear-gradient(180deg, rgba(17, 24, 39, 0.98), rgba(3, 7, 18, 0.98));
+      box-shadow: 0 30px 100px rgba(0, 0, 0, 0.66);
+      padding: 26px;
+      color: #ffffff;
+    }
+
+    .login-brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .login-mark {
+      width: 46px;
+      height: 46px;
+      border-radius: 16px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #fbbf24, #fb923c);
+      color: #111827;
+      font-weight: 1000;
+      box-shadow: 0 14px 30px rgba(251, 191, 36, 0.22);
+      flex: 0 0 auto;
+    }
+
+    .login-brand h2 {
+      margin: 0;
+      font-size: 28px;
+      line-height: 1;
+      letter-spacing: -0.05em;
+      white-space: nowrap;
+    }
+
+    .login-brand p {
+      margin: 5px 0 0;
+      color: #d1d5db;
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    .login-fields {
+      display: grid;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .login-field label {
+      display: block;
+      margin-bottom: 7px;
+      color: #e5e7eb;
+      font-size: 12px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .login-field input {
+      width: 100%;
+      height: 50px;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      background: rgba(0, 0, 0, 0.42);
+      color: #ffffff;
+      padding: 0 15px;
+      font-size: 16px;
+      outline: none;
+    }
+
+    .login-field input:focus {
+      border-color: rgba(251, 191, 36, 0.78);
+      box-shadow: 0 0 0 4px rgba(251, 191, 36, 0.13);
+    }
+
+    .login-actions {
+      margin-top: 18px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .login-button {
+      width: 100%;
+      justify-content: center;
+      min-height: 48px;
+      background: linear-gradient(135deg, #fbbf24, #fb923c);
+      color: #111827;
+      border-color: rgba(255, 255, 255, 0.20);
+      box-shadow: 0 15px 30px rgba(251, 191, 36, 0.20);
+      font-size: 14px;
+    }
+
+    .login-error {
+      display: none;
+      margin-top: 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(248, 113, 113, 0.42);
+      background: rgba(127, 29, 29, 0.42);
+      color: #fecaca;
+      padding: 10px 12px;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .login-error.show {
+      display: block;
+    }
+
+    @media (max-width: 560px) {
+      .login-gate { padding: 14px; align-items: stretch; }
+      .login-card { margin: auto 0; padding: 22px; border-radius: 24px; }
+      .login-brand h2 { font-size: 24px; }
+    }
+
   </style>
 </head>
-<body>
+<body class="app-locked">
+  <div class="login-gate" id="loginGate" aria-modal="true" role="dialog" aria-labelledby="loginTitle">
+    <form class="login-card" id="loginForm" autocomplete="off">
+      <div class="login-brand">
+        <div class="login-mark">PN</div>
+        <div>
+          <h2 id="loginTitle">Prado's Notes</h2>
+          <p>Sign in to open your reading, notes, highlighting, and report workspace.</p>
+        </div>
+      </div>
+      <div class="login-fields">
+        <div class="login-field">
+          <label for="loginUsername">Username</label>
+          <input id="loginUsername" type="text" inputmode="text" autocomplete="username" placeholder="Username" />
+        </div>
+        <div class="login-field">
+          <label for="loginPassword">Password</label>
+          <input id="loginPassword" type="password" autocomplete="current-password" placeholder="Password" />
+        </div>
+      </div>
+      <button class="login-button" type="submit">Unlock Prado's Notes</button>
+      <div class="login-error" id="loginError">Invalid username or password.</div>
+    </form>
+  </div>
   <header>
     <div class="topbar">
       <div class="brand">
@@ -3457,6 +3636,50 @@
   </main>
 
   <script>
+
+    const LOGIN_USERNAME = 'PRADO';
+    const LOGIN_PASSWORD = 'admin';
+
+    function unlockApp() {
+      document.body.classList.remove('app-locked');
+      sessionStorage.setItem('prados_notes_session_unlocked', 'true');
+    }
+
+    function lockApp() {
+      document.body.classList.add('app-locked');
+      sessionStorage.removeItem('prados_notes_session_unlocked');
+      setTimeout(() => document.getElementById('loginUsername')?.focus(), 40);
+    }
+
+    function setupLoginGate() {
+      const form = document.getElementById('loginForm');
+      const username = document.getElementById('loginUsername');
+      const password = document.getElementById('loginPassword');
+      const error = document.getElementById('loginError');
+
+      if (sessionStorage.getItem('prados_notes_session_unlocked') === 'true') {
+        unlockApp();
+      } else {
+        lockApp();
+      }
+
+      form?.addEventListener('submit', e => {
+        e.preventDefault();
+        const userOk = username.value.trim().toUpperCase() === LOGIN_USERNAME;
+        const passOk = password.value === LOGIN_PASSWORD;
+        if (userOk && passOk) {
+          error.classList.remove('show');
+          unlockApp();
+        } else {
+          error.classList.add('show');
+          password.value = '';
+          password.focus();
+        }
+      });
+    }
+
+    setupLoginGate();
+
     const DEFAULT_PROMPT = `Write a 1–2 sentence high-fidelity summary of the paragraph. Preserve the author’s meaning, chronology, named entities, important numbers, causal logic, and tone. Do not add outside information. Aim for greater than 95% fidelity while making the paragraph easier to scan.`;
 
     const ADD_CONTEXT_PROMPT = `You are a news broadcaster helping viewers understand the paragraph. Step outside the author's voice and add the background/context a viewer may need if they are not familiar with the recent events, political actors, policy disputes, or historical setup being referenced. Clearly explain what the paragraph is saying, why it matters, and what context helps it make sense. Preserve the author's core claim and do not invent specifics; when adding background, keep it concise and label it as context rather than as the author's own words. Output 2-4 clear sentences.`;
