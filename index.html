@@ -901,6 +901,21 @@
       margin-bottom: 6px;
     }
 
+    .field-help {
+      margin-top: 7px;
+      color: #fbbf24;
+      font-size: 12px;
+      font-weight: 800;
+      line-height: 1.35;
+    }
+
+    .fake-key-warning {
+      border: 1px solid rgba(251, 191, 36, 0.32);
+      background: rgba(251, 191, 36, 0.10);
+      border-radius: 10px;
+      padding: 8px 10px;
+    }
+
     .notice {
       margin-top: 10px;
       border-radius: 14px;
@@ -3682,7 +3697,7 @@
 
     const DEFAULT_PROMPT = `Write a 1–2 sentence high-fidelity summary of the paragraph. Preserve the author’s meaning, chronology, named entities, important numbers, causal logic, and tone. Do not add outside information. Aim for greater than 95% fidelity while making the paragraph easier to scan.`;
 
-    const ADD_CONTEXT_PROMPT = `You are a news broadcaster helping viewers understand the paragraph. Step outside the author's voice and add the background/context a viewer may need if they are not familiar with the recent events, political actors, policy disputes, or historical setup being referenced. Clearly explain what the paragraph is saying, why it matters, and what context helps it make sense. Preserve the author's core claim and do not invent specifics; when adding background, keep it concise and label it as context rather than as the author's own words. Output 2-4 clear sentences.`;
+    const ADD_CONTEXT_PROMPT = `You are a news broadcaster helping viewers understand the paragraph. Step outside the author's voice and add the background/context a viewer may need if they are not familiar with the recent events, political actors, policy disputes, or historical setup being referenced. Clearly explain what the paragraph is saying, why it matters, and what context helps it make sense. Distinguish between the article's original time frame and the current real-world context. Treat political offices, administrations, court decisions, wars, elections, and policy fights as time-sensitive. If the article refers to Biden as president, explain that this was true during the Biden administration or in the article's time frame, but do not describe Biden as the current president unless the article date explicitly supports that phrasing. Preserve the author's core claim and do not invent specifics; when adding background, keep it concise and label it as context rather than as the author's own words. Output 2-4 clear sentences.`;
 
     const FRIENDLY_REWRITE_PROMPT = `Rewrite the target paragraph in a friendlier, easier-to-read style without watering it down. Preserve the author's meaning, context, chronology, named entities, criticism, political point of view, sharp edges, jokes, jabs, and bias. Do not sanitize the argument or make it falsely neutral. Make the wording smoother and more understandable for a general reader. Output 1-3 clear sentences unless more is needed for fidelity.`;
 
