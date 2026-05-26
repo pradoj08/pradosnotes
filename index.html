@@ -527,6 +527,41 @@
       font-size: 12px;
     }
 
+    .draw-control {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 8px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.72);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      color: #fef3c7;
+      white-space: nowrap;
+    }
+
+    .draw-control input[type="color"] {
+      width: 28px;
+      height: 24px;
+      padding: 0;
+      border: 0;
+      border-radius: 8px;
+      overflow: hidden;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    .draw-control input[type="range"] {
+      width: 86px;
+      accent-color: #fbbf24;
+    }
+
+    .draw-tool-btn.active {
+      background: linear-gradient(135deg, #fef08a, #facc15);
+      border-color: rgba(250, 204, 21, 0.82);
+      color: #111827;
+      box-shadow: 0 0 18px rgba(250, 204, 21, 0.22);
+    }
+
     main {
       max-width: 1800px;
       margin: 0 auto;
@@ -841,6 +876,66 @@
     #articleInput::placeholder {
       color: #94a3b8;
     }
+
+    /* Rich article input: preserves pasted images and formatted article blocks */
+    #articleInput {
+      display: none !important;
+    }
+
+    .article-rich-input {
+      display: block !important;
+      width: 100% !important;
+      max-width: none !important;
+      min-width: 0 !important;
+      min-height: min(54vh, 540px);
+      resize: vertical;
+      overflow: auto;
+      color: #f8fafc !important;
+      background: rgba(0, 0, 0, 0.46) !important;
+      border: 1px solid rgba(255, 255, 255, 0.30) !important;
+      border-radius: 18px !important;
+      padding: 16px 18px !important;
+      font-size: 15px !important;
+      line-height: 1.65 !important;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+      white-space: pre-wrap;
+      overflow-wrap: break-word;
+      outline: none;
+    }
+
+    .article-rich-input:empty::before {
+      content: attr(data-placeholder);
+      color: #94a3b8;
+      pointer-events: none;
+    }
+
+    .article-rich-input img,
+    .article-text img,
+    .library-html-preview img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin: 12px 0;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+    }
+
+    .library-html-preview {
+      display: none;
+      min-height: 260px;
+      max-height: 58vh;
+      overflow: auto;
+      color: #f8fafc;
+      background: rgba(2, 6, 23, 0.52);
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      border-radius: 16px;
+      padding: 16px;
+      line-height: 1.55;
+      white-space: normal;
+    }
+
+    .library-html-preview.show { display: block; }
+
 
     @keyframes fadeIn {
       from { opacity: 0; }
@@ -1357,6 +1452,22 @@
 
     .empty strong { color: white; }
 
+    .article-empty-open {
+      cursor: pointer;
+      transition: transform 0.14s ease, border-color 0.14s ease, background 0.14s ease;
+    }
+
+    .article-empty-open:hover {
+      transform: translateY(-1px);
+      border-color: rgba(56, 189, 248, 0.52);
+      background: rgba(14, 165, 233, 0.10);
+    }
+
+    .article-empty-open:focus-visible {
+      outline: 3px solid rgba(56, 189, 248, 0.45);
+      outline-offset: 3px;
+    }
+
     .footer-tools {
       margin-top: 14px;
       display: flex;
@@ -1451,8 +1562,9 @@
       .modal-actions { padding: 14px 16px 16px; }
       .modal-actions-left, .modal-actions-right { width: 100%; }
       .modal-actions-left button, .modal-actions-right button { width: 100%; }
-      .draw-tools { left: 10px; right: 10px; bottom: 10px; justify-content: space-between; border-radius: 18px; }
+      .draw-tools { left: 10px; right: 10px; bottom: 10px; justify-content: flex-start; border-radius: 18px; flex-wrap: wrap; }
       .draw-tool-btn { width: auto; }
+      .draw-control input[type="range"] { width: 72px; }
       .modal-icon { width: 38px; height: 38px; }
       .highlight-page-actions { width: 100%; justify-content: stretch; }
       .highlight-page-actions button { width: 100%; }
@@ -2508,8 +2620,9 @@
     /* Single-column inline notes layout */
     .single-article {
       display: block !important;
-      width: min(980px, 100%);
+      width: min(var(--article-width, 980px), 100%);
       margin: 0 auto;
+      transition: width 0.16s ease;
     }
 
     .single-reading-pane {
@@ -2581,6 +2694,132 @@
       border: 1px solid rgba(249, 115, 22, 0.35) !important;
       color: #fed7aa !important;
       font-weight: 900 !important;
+    }
+
+    #leftList .eeyore-read-btn {
+      height: 25px !important;
+      min-height: 25px !important;
+      line-height: 23px !important;
+      padding: 0 9px !important;
+      font-size: 10px !important;
+      border-radius: 999px !important;
+      background: rgba(148, 163, 184, 0.16) !important;
+      border: 1px solid rgba(148, 163, 184, 0.38) !important;
+      color: #e5e7eb !important;
+      font-weight: 900 !important;
+      white-space: nowrap !important;
+    }
+
+    #leftList .eeyore-read-btn:hover {
+      background: rgba(148, 163, 184, 0.26) !important;
+      border-color: rgba(203, 213, 225, 0.55) !important;
+      color: #ffffff !important;
+    }
+
+    #leftList .eeyore-read-btn.reader-active {
+      background: rgba(239, 68, 68, 0.20) !important;
+      border-color: rgba(248, 113, 113, 0.62) !important;
+      color: #fee2e2 !important;
+      box-shadow: 0 0 0 3px rgba(248, 113, 113, 0.12) !important;
+    }
+
+    #leftList .eeyore-read-btn.reader-loading {
+      background: rgba(250, 204, 21, 0.18) !important;
+      border-color: rgba(250, 204, 21, 0.55) !important;
+      color: #fef3c7 !important;
+    }
+
+
+    #leftList .voice-settings-btn {
+      height: 25px !important;
+      min-height: 25px !important;
+      line-height: 23px !important;
+      padding: 0 9px !important;
+      font-size: 10px !important;
+      border-radius: 999px !important;
+      background: rgba(56, 189, 248, 0.14) !important;
+      border: 1px solid rgba(56, 189, 248, 0.36) !important;
+      color: #bae6fd !important;
+      font-weight: 900 !important;
+      white-space: nowrap !important;
+    }
+
+    #leftList .voice-settings-btn:hover {
+      background: rgba(56, 189, 248, 0.24) !important;
+      border-color: rgba(125, 211, 252, 0.58) !important;
+      color: #ffffff !important;
+    }
+
+    #leftList .paragraph-remove-row {
+      display: grid !important;
+      grid-template-columns: minmax(0, 1fr) auto auto !important;
+      align-items: center !important;
+      gap: 8px !important;
+      width: 100% !important;
+    }
+
+    #leftList .paragraph-tools {
+      display: flex !important;
+      gap: 6px !important;
+      align-items: center !important;
+      justify-content: flex-start !important;
+      min-width: 0 !important;
+    }
+
+    #leftList .ai-prompt-tools {
+      justify-self: start !important;
+    }
+
+    #leftList .ai-voice-tools {
+      justify-self: end !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 6px !important;
+      flex-wrap: nowrap !important;
+    }
+
+    #leftList .remove-paragraph-btn {
+      justify-self: end !important;
+      flex: 0 0 auto !important;
+    }
+
+    .voice-settings-grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    .voice-preview-card {
+      padding: 13px 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(56, 189, 248, 0.30);
+      background: rgba(8, 47, 73, 0.38);
+      color: #e0f2fe;
+      font-size: 13px;
+      line-height: 1.42;
+    }
+
+    .voice-slider-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: center;
+    }
+
+    #voiceRateValue {
+      min-width: 58px;
+      text-align: right;
+      color: #fef3c7;
+      font-weight: 950;
+    }
+
+    #voiceModal input[type="range"] {
+      width: 100%;
+      accent-color: #38bdf8;
+    }
+
+    #voiceModal select,
+    #voiceModal input[type="range"] {
+      display: block;
     }
 
     #leftList .article-text {
@@ -2695,6 +2934,21 @@
       width: 112px;
     }
 
+    .article-width-control {
+      border-color: rgba(56, 189, 248, 0.28);
+    }
+
+    .article-width-control input[type="range"] {
+      width: 132px;
+      accent-color: #38bdf8;
+      cursor: pointer;
+    }
+
+    .article-width-control span {
+      color: #bae6fd;
+      min-width: 52px;
+    }
+
     .footer-tools #alignBtn {
       display: none !important;
     }
@@ -2707,8 +2961,11 @@
       .single-article { width: 100%; }
       .text-size-control { width: 100%; justify-content: space-between; }
       .text-size-control input[type="range"] { flex: 1; width: auto; }
-      #leftList .paragraph-tools { display: grid !important; grid-template-columns: 1fr auto !important; width: 100%; }
+      #leftList .paragraph-remove-row { grid-template-columns: 1fr auto !important; row-gap: 7px !important; }
+      #leftList .ai-prompt-tools { grid-column: 1 / -1; width: 100% !important; display: grid !important; grid-template-columns: 1fr auto !important; }
+      #leftList .ai-voice-tools { grid-column: 1 / 2; justify-self: start !important; }
       #leftList .prompt-mode-select { max-width: none !important; width: 100% !important; }
+      #leftList .eeyore-read-btn, #leftList .voice-settings-btn { height: 30px !important; line-height: 28px !important; font-size: 11px !important; padding: 0 10px !important; }
       #leftList .article-text { line-height: 1.5 !important; }
       .inline-note { padding-left: 10px; }
       .inline-note-text, .inline-note-text[contenteditable="true"] { line-height: 1.46 !important; }
@@ -2737,7 +2994,800 @@
 
     #highlightReportPromptBox::placeholder { color: #94a3b8; }
 
+
+    /* Files library page */
+    .library-page {
+      display: none;
+      max-width: 1180px;
+      min-height: calc(100vh - 86px);
+      margin: 0 auto;
+      padding: 34px clamp(16px, 4vw, 54px) 84px;
+      color: #f8fafc;
+    }
+
+    .library-page.show { display: block; }
+
+    body.showing-library-page main > :not(#libraryPage) {
+      display: none !important;
+    }
+
+    body.showing-library-page #libraryPage {
+      display: block !important;
+    }
+
+    body.showing-library-page .undo-paragraph-btn,
+    body.showing-library-page .draw-canvas,
+    body.showing-library-page .draw-tools {
+      display: none !important;
+    }
+
+    .library-page-head {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 18px;
+      margin-bottom: 22px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+    }
+
+    .library-page-title-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      margin-bottom: 8px;
+      color: #38bdf8;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .library-page h2 {
+      margin: 0;
+      font-size: clamp(24px, 4vw, 40px);
+      letter-spacing: -0.045em;
+    }
+
+    .library-page p {
+      margin: 5px 0 0;
+      color: #d1d5db;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .library-grid {
+      display: grid;
+      grid-template-columns: minmax(260px, 0.85fr) minmax(0, 1.4fr);
+      gap: 16px;
+      align-items: start;
+    }
+
+    .library-panel {
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 22px;
+      background: rgba(11, 18, 32, 0.92);
+      box-shadow: var(--shadow);
+      padding: 16px;
+      min-width: 0;
+    }
+
+    .library-panel h3 {
+      margin: 0 0 12px;
+      font-size: 15px;
+      letter-spacing: -0.02em;
+    }
+
+    .library-form-row {
+      display: grid;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .library-form-row label {
+      color: #d1d5db;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .library-form-row input,
+    .library-form-row select,
+    .library-viewer {
+      width: 100%;
+      color: #f8fafc;
+      background: rgba(2, 6, 23, 0.58);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      border-radius: 14px;
+      padding: 11px 12px;
+      font-size: 13px;
+      outline: none;
+    }
+
+    .library-form-row input:focus,
+    .library-form-row select:focus,
+    .library-viewer:focus {
+      border-color: rgba(56, 189, 248, 0.72);
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.12);
+    }
+
+    .library-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    .library-actions button {
+      border-radius: 14px;
+    }
+
+    .folder-list,
+    .file-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .folder-pill {
+      width: 100%;
+      justify-content: space-between;
+      border-radius: 16px;
+      background: rgba(15, 23, 42, 0.88);
+      border-color: rgba(255, 255, 255, 0.16);
+    }
+
+    .folder-pill.active {
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.95), rgba(14, 165, 233, 0.95));
+      color: #06131f;
+    }
+
+    .folder-count {
+      opacity: 0.78;
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .file-card {
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 18px;
+      padding: 13px;
+      background: linear-gradient(180deg, rgba(31, 41, 55, 0.72), rgba(15, 23, 42, 0.82));
+      min-width: 0;
+    }
+
+    .file-card-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .file-card-title {
+      color: #ffffff;
+      font-weight: 950;
+      letter-spacing: -0.02em;
+      overflow-wrap: anywhere;
+    }
+
+    .file-badge {
+      display: inline-flex;
+      border-radius: 999px;
+      padding: 4px 7px;
+      color: #e0f2fe;
+      background: rgba(14, 165, 233, 0.18);
+      border: 1px solid rgba(56, 189, 248, 0.28);
+      font-size: 10px;
+      font-weight: 950;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .file-card-meta {
+      color: #cbd5e1;
+      font-size: 11px;
+      margin-bottom: 10px;
+    }
+
+    .file-card-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .file-card-actions button {
+      padding: 8px 10px;
+      font-size: 12px;
+      border-radius: 12px;
+    }
+
+    .library-viewer-box {
+      margin-top: 14px;
+    }
+
+    .library-viewer {
+      min-height: 240px;
+      resize: vertical;
+      line-height: 1.55;
+      white-space: pre-wrap;
+      font-family: Georgia, "Times New Roman", serif;
+    }
+
+    .library-empty {
+      border: 1px dashed rgba(255, 255, 255, 0.18);
+      border-radius: 18px;
+      padding: 22px;
+      color: #d1d5db;
+      background: rgba(15, 23, 42, 0.44);
+      line-height: 1.45;
+    }
+
+    @media (max-width: 780px) {
+      .library-grid { grid-template-columns: 1fr; }
+      .library-page-head { flex-direction: column; align-items: stretch; }
+      .library-actions button { width: 100%; }
+    }
+
+
+
+    /* Display controls: font selector + light/dark mode */
+    :root {
+      --reader-font-family: Georgia, Cambria, "Times New Roman", serif;
+    }
+
+    .display-select-control select {
+      height: 28px;
+      min-width: 132px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.22);
+      background: rgba(2, 6, 23, 0.72);
+      color: #f8fafc;
+      font-size: 12px;
+      font-weight: 850;
+      padding: 0 28px 0 10px;
+      outline: none;
+      cursor: pointer;
+      appearance: none;
+      background-image:
+        linear-gradient(45deg, transparent 50%, #cbd5e1 50%),
+        linear-gradient(135deg, #cbd5e1 50%, transparent 50%);
+      background-position: calc(100% - 16px) 11px, calc(100% - 10px) 11px;
+      background-size: 5px 5px, 5px 5px;
+      background-repeat: no-repeat;
+    }
+
+    .theme-toggle-control {
+      border-color: rgba(167, 139, 250, 0.34);
+    }
+
+    .theme-toggle-control button {
+      min-height: 28px;
+      padding: 0 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      background: rgba(167, 139, 250, 0.18);
+      border-color: rgba(167, 139, 250, 0.30);
+      color: #ede9fe;
+      box-shadow: none;
+    }
+
+    .theme-toggle-control button:hover {
+      transform: translateY(-1px);
+      background: rgba(167, 139, 250, 0.28);
+    }
+
+    .article-text,
+    .summary-text,
+    .summary-text[contenteditable="true"],
+    #leftList .article-text,
+    #rightList .summary-text,
+    #rightList .summary-text[contenteditable="true"],
+    .inline-note-text,
+    .inline-note-text[contenteditable="true"],
+    .highlighted-item-text,
+    .highlight-report-text {
+      font-family: var(--reader-font-family) !important;
+    }
+
+    body.light-mode {
+      --bg: #f4f1ea;
+      --panel: #ffffff;
+      --panel-2: #f8fafc;
+      --card: #ffffff;
+      --card-2: #e5e7eb;
+      --text: #0f172a;
+      --muted: #475569;
+      --line: rgba(15, 23, 42, 0.16);
+      color: #0f172a;
+      background:
+        radial-gradient(circle at top left, rgba(56, 189, 248, 0.14), transparent 28rem),
+        radial-gradient(circle at top right, rgba(249, 115, 22, 0.10), transparent 26rem),
+        #f4f1ea !important;
+    }
+
+    body.light-mode header {
+      background: rgba(248, 250, 252, 0.94) !important;
+      border-bottom-color: rgba(15, 23, 42, 0.14) !important;
+    }
+
+    body.light-mode .brand h1,
+    body.light-mode .brand p,
+    body.light-mode .pane-head h2,
+    body.light-mode .pane-head span,
+    body.light-mode .chip,
+    body.light-mode .summary-footer,
+    body.light-mode .card-meta {
+      color: #0f172a !important;
+    }
+
+    body.light-mode header .actions,
+    body.light-mode .pane,
+    body.light-mode .pane.reading-pane,
+    body.light-mode .pane.reading-pane .paragraph-list,
+    body.light-mode .paragraph-list {
+      background: rgba(255, 255, 255, 0.92) !important;
+      border-color: rgba(15, 23, 42, 0.16) !important;
+    }
+
+    body.light-mode .pane-head,
+    body.light-mode .pane.reading-pane .pane-head {
+      background: rgba(248, 250, 252, 0.98) !important;
+      border-bottom-color: rgba(15, 23, 42, 0.13) !important;
+      color: #0f172a !important;
+    }
+
+    body.light-mode .para-card,
+    body.light-mode .summary-card,
+    body.light-mode #rightList .summary-card,
+    body.light-mode .pane.reading-pane .para-card,
+    body.light-mode .pane.reading-pane .summary-card {
+      background: #ffffff !important;
+      color: #0f172a !important;
+      border-color: rgba(15, 23, 42, 0.10) !important;
+    }
+
+    body.light-mode .article-text,
+    body.light-mode #leftList .article-text,
+    body.light-mode .summary-text,
+    body.light-mode .summary-text[contenteditable="true"],
+    body.light-mode #rightList .summary-text,
+    body.light-mode #rightList .summary-text[contenteditable="true"] {
+      color: #0f172a !important;
+    }
+
+    body.light-mode .inline-note-text,
+    body.light-mode .inline-note-text[contenteditable="true"] {
+      color: #92400e !important;
+    }
+
+    body.light-mode .top-action,
+    body.light-mode .text-size-control,
+    body.light-mode .display-select-control select {
+      color: #0f172a !important;
+      background: rgba(255, 255, 255, 0.92) !important;
+      border-color: rgba(15, 23, 42, 0.18) !important;
+    }
+
+    body.light-mode .top-action .btn-icon {
+      background: rgba(15, 23, 42, 0.06) !important;
+      border-color: rgba(15, 23, 42, 0.10) !important;
+    }
+
+    body.light-mode .top-danger {
+      color: #7f1d1d !important;
+      background: rgba(254, 226, 226, 0.9) !important;
+      border-color: rgba(185, 28, 28, 0.28) !important;
+    }
+
+    body.light-mode .theme-toggle-control button {
+      color: #312e81 !important;
+      background: rgba(221, 214, 254, 0.86) !important;
+      border-color: rgba(109, 40, 217, 0.24) !important;
+    }
+
+    body.light-mode .highlighted-page,
+    body.light-mode .library-page,
+    body.light-mode .library-panel,
+    body.light-mode .file-card,
+    body.light-mode .modal-card {
+      background: #ffffff !important;
+      color: #0f172a !important;
+      border-color: rgba(15, 23, 42, 0.14) !important;
+    }
+
+    body.light-mode .modal-head,
+    body.light-mode .modal-actions {
+      background: rgba(248, 250, 252, 0.96) !important;
+      border-color: rgba(15, 23, 42, 0.12) !important;
+    }
+
+    body.light-mode input,
+    body.light-mode textarea,
+    body.light-mode select,
+    body.light-mode [contenteditable="true"] {
+      color: #0f172a !important;
+      background-color: #ffffff !important;
+      border-color: rgba(15, 23, 42, 0.20) !important;
+    }
+
+    body.light-mode .highlighted-item-text,
+    body.light-mode .highlight-report-text,
+    body.light-mode .highlight-empty,
+    body.light-mode .library-empty,
+    body.light-mode .file-card-meta,
+    body.light-mode .file-card-body {
+      color: #0f172a !important;
+    }
+
+
+    /* Light mode readability fix for per-paragraph controls */
+    body.light-mode #leftList .original-control-row,
+    body.light-mode #leftList .paragraph-remove-row {
+      opacity: 1 !important;
+    }
+
+    body.light-mode #leftList .prompt-mode-select {
+      background: #f8fafc !important;
+      color: #111827 !important;
+      border: 1px solid rgba(15, 23, 42, 0.34) !important;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.80), 0 2px 6px rgba(15, 23, 42, 0.08) !important;
+      background-image:
+        linear-gradient(45deg, transparent 50%, #111827 50%),
+        linear-gradient(135deg, #111827 50%, transparent 50%) !important;
+      background-position: calc(100% - 17px) 11px, calc(100% - 11px) 11px !important;
+      background-size: 5px 5px, 5px 5px !important;
+      background-repeat: no-repeat !important;
+    }
+
+    body.light-mode #leftList .generate-one {
+      background: #fff7ed !important;
+      color: #9a3412 !important;
+      border: 1px solid rgba(234, 88, 12, 0.45) !important;
+      box-shadow: 0 2px 6px rgba(234, 88, 12, 0.10) !important;
+      opacity: 1 !important;
+    }
+
+    body.light-mode #leftList .generate-one:disabled {
+      background: #ffedd5 !important;
+      color: #9a3412 !important;
+      border-color: rgba(234, 88, 12, 0.42) !important;
+      opacity: 0.82 !important;
+    }
+
+    body.light-mode #leftList .eeyore-read-btn {
+      background: #eef2ff !important;
+      color: #1e293b !important;
+      border: 1px solid rgba(71, 85, 105, 0.30) !important;
+      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08) !important;
+      opacity: 1 !important;
+    }
+
+    body.light-mode #leftList .eeyore-read-btn:hover {
+      background: #e0e7ff !important;
+      color: #0f172a !important;
+      border-color: rgba(71, 85, 105, 0.46) !important;
+    }
+
+    body.light-mode #leftList .eeyore-read-btn.reader-loading {
+      background: #fef3c7 !important;
+      color: #78350f !important;
+      border-color: rgba(217, 119, 6, 0.48) !important;
+    }
+
+    body.light-mode #leftList .eeyore-read-btn.reader-active {
+      background: #fee2e2 !important;
+      color: #7f1d1d !important;
+      border-color: rgba(185, 28, 28, 0.42) !important;
+    }
+
+    body.light-mode #leftList .voice-settings-btn {
+      background: #e0f2fe !important;
+      color: #075985 !important;
+      border: 1px solid rgba(2, 132, 199, 0.34) !important;
+      box-shadow: 0 2px 6px rgba(2, 132, 199, 0.09) !important;
+      opacity: 1 !important;
+    }
+
+    body.light-mode #leftList .voice-settings-btn:hover {
+      background: #bae6fd !important;
+      color: #0c4a6e !important;
+      border-color: rgba(2, 132, 199, 0.52) !important;
+    }
+
+    body.light-mode #leftList .remove-paragraph-btn {
+      background: #fee2e2 !important;
+      color: #991b1b !important;
+      border: 1px solid rgba(185, 28, 28, 0.34) !important;
+      box-shadow: 0 2px 6px rgba(185, 28, 28, 0.10) !important;
+      opacity: 1 !important;
+    }
+
+    body.light-mode #leftList .remove-paragraph-btn:hover {
+      background: #fecaca !important;
+      color: #7f1d1d !important;
+      border-color: rgba(185, 28, 28, 0.55) !important;
+    }
+
+
+
+    /* Teleprompter mode */
+    .teleprompter-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 140;
+      display: none;
+      grid-template-rows: auto 1fr;
+      background: #000000;
+      color: #ffffff;
+    }
+
+    .teleprompter-modal.open { display: grid; }
+
+    .teleprompter-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px clamp(12px, 2vw, 22px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+      background: rgba(2, 6, 23, 0.92);
+      backdrop-filter: blur(14px);
+      box-shadow: 0 10px 28px rgba(0,0,0,0.34);
+    }
+
+    .teleprompter-title {
+      font-size: 13px;
+      font-weight: 950;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: #e5e7eb;
+      white-space: nowrap;
+    }
+
+    .teleprompter-controls {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .teleprompter-control {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 34px;
+      padding: 6px 10px;
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 999px;
+      color: #f8fafc;
+      background: rgba(15, 23, 42, 0.86);
+      font-size: 12px;
+      font-weight: 850;
+    }
+
+    .teleprompter-control input[type="range"] { width: 150px; }
+    .teleprompter-control input[type="color"] {
+      width: 32px;
+      height: 24px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      cursor: pointer;
+    }
+
+    .teleprompter-btn {
+      min-height: 34px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 950;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(31, 41, 55, 0.95);
+      color: #f8fafc;
+      box-shadow: none;
+    }
+
+    .teleprompter-btn.primary { background: linear-gradient(135deg, #38bdf8, #0ea5e9); color: #03111f; }
+    .teleprompter-btn.warn { background: rgba(245, 158, 11, 0.18); color: #fde68a; border-color: rgba(245, 158, 11, 0.38); }
+    .teleprompter-btn.danger { background: rgba(239, 68, 68, 0.18); color: #fecaca; border-color: rgba(239, 68, 68, 0.40); }
+
+    .teleprompter-stage {
+      overflow: hidden;
+      position: relative;
+      background: #000000;
+    }
+
+    .teleprompter-scroll {
+      position: absolute;
+      left: 50%;
+      top: 0;
+      transform: translateX(-50%);
+      width: min(1120px, calc(100vw - 44px));
+      padding: 18vh 0 50vh;
+      font-family: var(--reader-font-family, Georgia, Cambria, "Times New Roman", serif);
+      font-size: clamp(34px, 5vw, 78px);
+      line-height: 1.32;
+      letter-spacing: -0.018em;
+      color: var(--teleprompter-text-color, #ffffff);
+      text-align: center;
+      white-space: pre-wrap;
+      will-change: transform;
+    }
+
+    .teleprompter-empty {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 24px;
+      color: #d1d5db;
+      font-size: 18px;
+      line-height: 1.45;
+    }
+
+    body.teleprompter-open { overflow: hidden; }
+
+    body.light-mode .top-teleprompter {
+      color: #083344 !important;
+      background: #cffafe !important;
+      border-color: rgba(8, 145, 178, 0.34) !important;
+    }
+
+    @media (max-width: 720px) {
+      .teleprompter-toolbar { align-items: stretch; flex-direction: column; }
+      .teleprompter-title { white-space: normal; }
+      .teleprompter-controls { justify-content: flex-start; }
+      .teleprompter-control { width: 100%; justify-content: space-between; }
+      .teleprompter-control input[type="range"] { flex: 1; width: auto; }
+      .teleprompter-btn { flex: 1 1 auto; }
+      .teleprompter-scroll { width: calc(100vw - 30px); font-size: clamp(30px, 9vw, 58px); }
+    }
+
+  
+    .article-empty-open {
+      cursor: pointer !important;
+      pointer-events: auto !important;
+    }
+
   </style>
+
+
+  <style id="tight-paragraph-spacing-patch">
+    /* Tighten vertical spacing between article paragraphs */
+    #leftList {
+      padding-top: 8px !important;
+      padding-bottom: 14px !important;
+    }
+
+    #leftList .para-card {
+      padding-top: 4px !important;
+      padding-bottom: 7px !important;
+      margin: 0 !important;
+    }
+
+    #leftList .para-card + .para-card {
+      padding-top: 4px !important;
+      margin-top: 0 !important;
+    }
+
+    #leftList .original-control-row {
+      margin-bottom: 2px !important;
+    }
+
+    #leftList .article-text {
+      margin: 0 !important;
+    }
+
+    #leftList .inline-note {
+      margin-top: 4px !important;
+    }
+
+    @media (max-width: 560px) {
+      #leftList .para-card {
+        padding-top: 3px !important;
+        padding-bottom: 6px !important;
+      }
+      #leftList .original-control-row {
+        margin-bottom: 2px !important;
+      }
+    }
+  </style>
+
+
+  <style id="current-page-teleprompter-and-drag-scroll-patch">
+    /* Drag-to-scroll reading mode */
+    body.drag-scroll-ready main,
+    body.drag-scroll-ready #leftList,
+    body.drag-scroll-ready .article-text {
+      cursor: grab;
+    }
+
+    body.drag-scrolling,
+    body.drag-scrolling * {
+      cursor: grabbing !important;
+      user-select: none !important;
+      -webkit-user-select: none !important;
+    }
+
+    /* Current-page teleprompter: controls float over the existing article page instead of opening a separate reading page. */
+    .teleprompter-modal {
+      position: fixed !important;
+      left: 14px !important;
+      right: 14px !important;
+      bottom: 14px !important;
+      top: auto !important;
+      z-index: 140 !important;
+      display: none !important;
+      width: auto !important;
+      max-width: 1180px !important;
+      margin: 0 auto !important;
+      background: transparent !important;
+      color: #ffffff !important;
+      pointer-events: none !important;
+    }
+
+    .teleprompter-modal.open {
+      display: block !important;
+      pointer-events: none !important;
+    }
+
+    .teleprompter-toolbar {
+      pointer-events: auto !important;
+      border: 1px solid rgba(255, 255, 255, 0.18) !important;
+      border-radius: 22px !important;
+      background: rgba(2, 6, 23, 0.92) !important;
+      box-shadow: 0 18px 46px rgba(0, 0, 0, 0.46) !important;
+    }
+
+    .teleprompter-stage,
+    .teleprompter-scroll,
+    .teleprompter-empty {
+      display: none !important;
+    }
+
+    html.teleprompter-open,
+    body.teleprompter-open {
+      overflow-y: auto !important;
+      overscroll-behavior: auto !important;
+      padding-bottom: 96px !important;
+    }
+
+    body.teleprompter-open main {
+      padding-bottom: 130px !important;
+    }
+
+    body.teleprompter-open .article-text,
+    body.teleprompter-open .inline-note-text,
+    body.teleprompter-open #leftList .summary-text {
+      color: var(--teleprompter-text-color, inherit) !important;
+    }
+
+    body.light-mode .teleprompter-toolbar {
+      background: rgba(248, 250, 252, 0.94) !important;
+      border-color: rgba(15, 23, 42, 0.16) !important;
+      color: #0f172a !important;
+    }
+
+    body.light-mode .teleprompter-title,
+    body.light-mode .teleprompter-control {
+      color: #0f172a !important;
+    }
+
+    body.light-mode .teleprompter-control {
+      background: rgba(255, 255, 255, 0.90) !important;
+      border-color: rgba(15, 23, 42, 0.18) !important;
+    }
+
+    @media (max-width: 720px) {
+      .teleprompter-modal { left: 10px !important; right: 10px !important; bottom: 10px !important; }
+      body.teleprompter-open { padding-bottom: 210px !important; }
+    }
+  </style>
+
 </head>
 <body>
   <header>
@@ -2751,9 +3801,30 @@
         <button class="top-action top-pen" id="drawToggleBtn" aria-pressed="false"><span class="btn-icon">✒️</span><span class="btn-label">Draw</span></button>
         <button class="top-action top-highlight" id="highlightToggleBtn" aria-pressed="false"><span class="btn-icon">🖍️</span><span class="btn-label">Highlight</span></button>
         <button class="top-action top-page" id="highlightedTextBtn" aria-pressed="false"><span class="btn-icon">📌</span><span class="btn-label">Highlighted Text</span></button>
+        <button class="top-action top-page" id="libraryPageBtn" aria-pressed="false"><span class="btn-icon">📁</span><span class="btn-label">Files</span></button>
+        <button class="top-action top-teleprompter" id="teleprompterBtn" aria-pressed="false"><span class="btn-icon">🎙️</span><span class="btn-label">Teleprompter</span></button>
+        <button class="top-action top-read-page" id="readWholePageBtn" aria-pressed="false"><span class="btn-icon">🔊</span><span class="btn-label">Read Page</span></button>
         <label class="text-size-control top-text-size" for="textSizeSlider">Text Size
           <input id="textSizeSlider" type="range" min="14" max="26" step="1" value="18" />
           <span id="textSizeValue">18px</span>
+        </label>
+        <label class="text-size-control top-text-size article-width-control" for="articleWidthSlider">Paragraph Width
+          <input id="articleWidthSlider" type="range" min="680" max="1400" step="20" value="980" />
+          <span id="articleWidthValue">980px</span>
+        </label>
+        <label class="text-size-control top-text-size display-select-control" for="fontSelect">Font
+          <select id="fontSelect">
+            <option value="georgia">Georgia</option>
+            <option value="system">System</option>
+            <option value="arial">Arial</option>
+            <option value="times">Times</option>
+            <option value="verdana">Verdana</option>
+            <option value="trebuchet">Trebuchet</option>
+            <option value="courier">Courier</option>
+          </select>
+        </label>
+        <label class="text-size-control top-text-size theme-toggle-control">Mode
+          <button type="button" id="themeToggleBtn">🌙 Dark</button>
         </label>
         <button class="top-action top-danger" id="clearBtn"><span class="btn-icon">🗑</span><span class="btn-label">Clear</span></button>
       </div>
@@ -2763,9 +3834,39 @@
   <canvas id="drawCanvas" class="draw-canvas" aria-hidden="true"></canvas>
   <div class="draw-tools" id="drawTools" aria-hidden="true">
     <span id="toolModeLabel">Drawing mode on</span>
+    <label class="draw-control" title="Pen color">Color <input id="penColorInput" type="color" value="#fbbf24"></label>
+    <label class="draw-control" title="Pen size">Size <input id="penSizeInput" type="range" min="1" max="26" step="1" value="4"><span id="penSizeLabel">4px</span></label>
+    <button class="draw-tool-btn" id="rainbowInkBtn" type="button" aria-pressed="false">Rainbow Off</button>
+    <button class="draw-tool-btn" id="glowInkBtn" type="button" aria-pressed="false">Glow Off</button>
+    <button class="draw-tool-btn" id="trailInkBtn" type="button" aria-pressed="false">Trail Off</button>
+    <label class="draw-control" title="How long trail marks stay visible">Trail <input id="trailTimerInput" type="range" min="1" max="12" step="1" value="4"><span id="trailTimerLabel">4s</span></label>
     <button class="draw-tool-btn" id="undoInkBtn" type="button">Undo</button>
     <button class="draw-tool-btn" id="clearInkBtn" type="button">Clear Ink</button>
   </div>
+
+  <section class="teleprompter-modal" id="teleprompterModal" aria-hidden="true">
+    <div class="teleprompter-toolbar">
+      <div class="teleprompter-title">🎙️ Teleprompter</div>
+      <div class="teleprompter-controls">
+        <button class="teleprompter-btn primary" id="teleprompterPlayBtn" type="button">▶ Start</button>
+        <button class="teleprompter-btn" id="teleprompterDirectionBtn" type="button" title="Toggle scroll direction">⬇ Down</button>
+        <label class="teleprompter-control" for="teleprompterSpeedSlider">Speed
+          <input id="teleprompterSpeedSlider" type="range" min="10" max="180" step="5" value="45" />
+          <span id="teleprompterSpeedValue">45</span>
+        </label>
+        <label class="teleprompter-control" for="teleprompterColorInput">Text
+          <input id="teleprompterColorInput" type="color" value="#ffffff" />
+        </label>
+        <button class="teleprompter-btn warn" id="teleprompterResetBtn" type="button">Reset</button>
+        <button class="teleprompter-btn danger" id="teleprompterEraseBtn" type="button">Erase Object</button>
+        <button class="teleprompter-btn" id="teleprompterCloseBtn" type="button">Close</button>
+      </div>
+    </div>
+    <div class="teleprompter-stage" id="teleprompterStage">
+      <div class="teleprompter-scroll" id="teleprompterText"></div>
+      <div class="teleprompter-empty" id="teleprompterEmpty" hidden>No article text is loaded. Add or paste an article first.</div>
+    </div>
+  </section>
 
   <div class="modal-backdrop" id="articleModal" aria-hidden="true">
     <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="articleModalTitle">
@@ -2782,8 +3883,9 @@
       </div>
       <div class="modal-body">
         <textarea id="articleInput" placeholder="Paste the article here. Blank lines are treated as paragraph breaks."></textarea>
+        <div id="articleRichInput" class="article-rich-input" contenteditable="true" role="textbox" aria-multiline="true" data-placeholder="Paste the article here. Pictures copied from the article will be preserved when possible. Blank lines create paragraph breaks."></div>
         <div class="modal-panel-note">
-          <strong>Paragraph alignment:</strong> each paragraph on the left is paired with one matching summary card on the right. Use blank lines between paragraphs for the cleanest layout.
+          <strong>Paragraph alignment:</strong> each paragraph on the left is paired with one matching summary card on the right. You can paste formatted article text and pictures here; pictures will be saved into rich files when available.
         </div>
       </div>
       <div class="modal-actions">
@@ -2882,6 +3984,64 @@
     </div>
   </div>
 
+  <div class="modal-backdrop" id="voiceModal" aria-hidden="true">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="voiceModalTitle">
+      <div class="modal-head">
+        <div class="modal-title-row">
+          <div class="modal-icon">🫏</div>
+          <div>
+            <div class="modal-kicker">Reader Voice</div>
+            <h2 id="voiceModalTitle">OpenAI Voice + Speed Settings</h2>
+            <p>Choose the OpenAI voice and reading speed used by the paragraph reader button.</p>
+          </div>
+        </div>
+        <button class="modal-close" id="closeVoiceBtn" type="button" aria-label="Close voice settings">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="voice-settings-grid">
+          <div class="field">
+            <label for="voiceSelect">Voice</label>
+            <select id="voiceSelect">
+              <option value="cedar">cedar — recommended</option>
+              <option value="marin">marin — recommended</option>
+              <option value="alloy">alloy</option>
+              <option value="ash">ash</option>
+              <option value="ballad">ballad</option>
+              <option value="coral">coral</option>
+              <option value="echo">echo</option>
+              <option value="fable">fable</option>
+              <option value="nova">nova</option>
+              <option value="onyx">onyx</option>
+              <option value="sage">sage</option>
+              <option value="shimmer">shimmer</option>
+              <option value="verse">verse</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="voiceRate">Speed</label>
+            <div class="voice-slider-row">
+              <input id="voiceRate" type="range" min="0.45" max="1.4" step="0.05" value="0.66" />
+              <span id="voiceRateValue">0.66×</span>
+            </div>
+          </div>
+          <div class="voice-preview-card">
+            Tip: these are OpenAI TTS voices, so they are consistent across devices. Add your API key in Summary Engine settings first. The app sends only the paragraph text as the TTS input.
+          </div>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <div class="modal-actions-left">
+          <button class="modal-secondary" id="testVoiceBtn" type="button">Test Voice</button>
+          <button class="modal-secondary" id="resetVoiceBtn" type="button">Reset</button>
+        </div>
+        <div class="modal-actions-right">
+          <button class="modal-primary" id="saveVoiceBtn" type="button">Save Voice Settings</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
   <main>
     <div class="ai-status-banner" id="aiStatusBanner">
       <div class="ai-status-left">
@@ -2902,7 +4062,7 @@
           <span>Generate notes under each paragraph</span>
         </div>
         <div class="paragraph-list" id="leftList">
-          <div class="empty"><strong>No article yet.</strong><br />Open Article Input to paste text, then generate notes paragraph by paragraph.</div>
+          <div class="empty article-empty-open" data-open-article-input="true" role="button" tabindex="0" aria-label="Open Article Input"><strong>No article yet.</strong><br />Click here to open Article Input and paste text or pictures.</div>
         </div>
       </div>
       <div id="rightList" hidden></div>
@@ -2925,8 +4085,67 @@
         <div class="highlight-report-title">Generated Report</div>
         <div class="highlight-report-text" id="highlightReportText"></div>
       </div>
+
       <div class="highlighted-list" id="highlightedList">
         <div class="highlight-empty">No highlighted text yet. Turn on Highlight, select text in the article, and it will collect here.</div>
+      </div>
+    </section>
+
+    <section class="library-page" id="libraryPage" aria-hidden="true">
+      <div class="library-page-head">
+        <div>
+          <div class="library-page-title-badge">📁 Saved Reading Files</div>
+          <h2>Folders & Files</h2>
+          <p>Create folders, then save a rich copy of the edited first-page article, including pasted pictures, or save quote-page highlights only.</p>
+        </div>
+        <div class="highlight-page-actions">
+          <button class="ghost small back-article-btn" id="libraryBackToArticleBtn" type="button">← Back to Article</button>
+        </div>
+      </div>
+
+      <div class="library-grid">
+        <aside class="library-panel">
+          <h3>Folders</h3>
+          <div class="library-form-row">
+            <label for="folderNameInput">New folder name</label>
+            <input id="folderNameInput" placeholder="Example: Politics, Books, Work Notes" />
+          </div>
+          <div class="library-actions">
+            <button class="blue" id="createFolderBtn" type="button">Create Folder</button>
+          </div>
+          <div class="folder-list" id="folderList" style="margin-top:14px;"></div>
+        </aside>
+
+        <section class="library-panel">
+          <h3>Create File</h3>
+          <div class="library-form-row">
+            <label for="libraryFolderSelect">Save into folder</label>
+            <select id="libraryFolderSelect"></select>
+          </div>
+          <div class="library-form-row">
+            <label for="libraryFileNameInput">File name</label>
+            <input id="libraryFileNameInput" placeholder="Example: Article notes — May 25" />
+          </div>
+          <div class="library-actions">
+            <button class="primary" id="saveEditedTextFileBtn" type="button">Save Edited Text + Pictures</button>
+            <button class="blue" id="saveQuotesFileBtn" type="button">Save Quotes Only File</button>
+          </div>
+
+          <div style="height:18px"></div>
+          <h3 id="activeFolderTitle">Files</h3>
+          <div class="file-list" id="fileList"></div>
+          <div class="library-viewer-box" id="libraryViewerBox" hidden>
+            <div class="library-form-row">
+              <label id="libraryViewerTitle">Preview</label>
+              <textarea class="library-viewer" id="libraryViewer" readonly></textarea>
+              <div class="library-html-preview" id="libraryHtmlPreview" aria-live="polite"></div>
+            </div>
+            <div class="library-actions">
+              <button class="ghost" id="copyLibraryViewerBtn" type="button">Copy Preview</button>
+              <button class="ghost" id="downloadLibraryViewerBtn" type="button">Download</button>
+            </div>
+          </div>
+        </section>
       </div>
     </section>
 
@@ -2969,17 +4188,23 @@ Paragraph-level summarization is especially useful because it keeps the writer's
       highlightReport: '',
       highlightMode: false,
       activePage: 'article',
-      removedStack: []
+      removedStack: [],
+      voiceName: localStorage.getItem('pas_voice_name') || 'cedar',
+      voiceRate: parseFloat(localStorage.getItem('pas_voice_rate') || '0.66') || 0.66,
+      library: loadLibraryFromStorage(),
+      activeFolderId: ''
     };
 
     const els = {
       articleModal: document.getElementById('articleModal'),
       promptModal: document.getElementById('promptModal'),
+      voiceModal: document.getElementById('voiceModal'),
       openArticleBtn: document.getElementById('openArticleBtn'),
       openPromptBtn: document.getElementById('openPromptBtn'),
       drawToggleBtn: document.getElementById('drawToggleBtn'),
       highlightToggleBtn: document.getElementById('highlightToggleBtn'),
       highlightedTextBtn: document.getElementById('highlightedTextBtn'),
+      libraryPageBtn: document.getElementById('libraryPageBtn'),
       highlightedPage: document.getElementById('highlightedPage'),
       highlightedList: document.getElementById('highlightedList'),
       clearHighlightsPageBtn: document.getElementById('clearHighlightsPageBtn'),
@@ -2990,10 +4215,19 @@ Paragraph-level summarization is especially useful because it keeps the writer's
       drawCanvas: document.getElementById('drawCanvas'),
       drawTools: document.getElementById('drawTools'),
       toolModeLabel: document.getElementById('toolModeLabel'),
+      penColorInput: document.getElementById('penColorInput'),
+      penSizeInput: document.getElementById('penSizeInput'),
+      penSizeLabel: document.getElementById('penSizeLabel'),
+      rainbowInkBtn: document.getElementById('rainbowInkBtn'),
+      glowInkBtn: document.getElementById('glowInkBtn'),
+      trailInkBtn: document.getElementById('trailInkBtn'),
+      trailTimerInput: document.getElementById('trailTimerInput'),
+      trailTimerLabel: document.getElementById('trailTimerLabel'),
       clearInkBtn: document.getElementById('clearInkBtn'),
       undoInkBtn: document.getElementById('undoInkBtn'),
       closeArticleBtn: document.getElementById('closeArticleBtn'),
       closePromptBtn: document.getElementById('closePromptBtn'),
+      closeVoiceBtn: document.getElementById('closeVoiceBtn'),
       applyArticleBtn: document.getElementById('applyArticleBtn'),
       applyPromptBtn: document.getElementById('applyPromptBtn'),
       resetPromptBtn: document.getElementById('resetPromptBtn'),
@@ -3003,6 +4237,7 @@ Paragraph-level summarization is especially useful because it keeps the writer's
       aiStatusText: document.getElementById('aiStatusText'),
       bannerOpenPromptBtn: document.getElementById('bannerOpenPromptBtn'),
       articleInput: document.getElementById('articleInput'),
+      articleRichInput: document.getElementById('articleRichInput'),
       promptBox: document.getElementById('promptBox'),
       contextPromptBox: document.getElementById('contextPromptBox'),
       friendlyPromptBox: document.getElementById('friendlyPromptBox'),
@@ -3025,11 +4260,38 @@ Paragraph-level summarization is especially useful because it keeps the writer's
       sampleBtn: document.getElementById('sampleBtn'),
       textSizeSlider: document.getElementById('textSizeSlider'),
       textSizeValue: document.getElementById('textSizeValue'),
+      articleWidthSlider: document.getElementById('articleWidthSlider'),
+      articleWidthValue: document.getElementById('articleWidthValue'),
+      fontSelect: document.getElementById('fontSelect'),
+      themeToggleBtn: document.getElementById('themeToggleBtn'),
       alignBtn: document.getElementById('alignBtn'),
       undoParagraphBtn: document.getElementById('undoParagraphBtn'),
+      voiceSelect: document.getElementById('voiceSelect'),
+      voiceRate: document.getElementById('voiceRate'),
+      voiceRateValue: document.getElementById('voiceRateValue'),
+      testVoiceBtn: document.getElementById('testVoiceBtn'),
+      resetVoiceBtn: document.getElementById('resetVoiceBtn'),
+      saveVoiceBtn: document.getElementById('saveVoiceBtn'),
       printBtn: document.getElementById('printBtn'),
       leftList: document.getElementById('leftList'),
       rightList: document.getElementById('rightList'),
+      libraryPage: document.getElementById('libraryPage'),
+      libraryBackToArticleBtn: document.getElementById('libraryBackToArticleBtn'),
+      folderNameInput: document.getElementById('folderNameInput'),
+      createFolderBtn: document.getElementById('createFolderBtn'),
+      folderList: document.getElementById('folderList'),
+      libraryFolderSelect: document.getElementById('libraryFolderSelect'),
+      libraryFileNameInput: document.getElementById('libraryFileNameInput'),
+      saveEditedTextFileBtn: document.getElementById('saveEditedTextFileBtn'),
+      saveQuotesFileBtn: document.getElementById('saveQuotesFileBtn'),
+      activeFolderTitle: document.getElementById('activeFolderTitle'),
+      fileList: document.getElementById('fileList'),
+      libraryViewerBox: document.getElementById('libraryViewerBox'),
+      libraryViewerTitle: document.getElementById('libraryViewerTitle'),
+      libraryViewer: document.getElementById('libraryViewer'),
+      libraryHtmlPreview: document.getElementById('libraryHtmlPreview'),
+      copyLibraryViewerBtn: document.getElementById('copyLibraryViewerBtn'),
+      downloadLibraryViewerBtn: document.getElementById('downloadLibraryViewerBtn'),
 
     };
 
@@ -3046,6 +4308,317 @@ Paragraph-level summarization is especially useful because it keeps the writer's
     els.apiUrl.value = localStorage.getItem('pas_api_url') || 'https://api.openai.com/v1/responses';
     els.apiKey.value = localStorage.getItem('pas_api_key') || '';
 
+    let currentTtsAudio = null;
+    let currentTtsUrl = '';
+    let currentTtsAbortController = null;
+    let ttsPlaybackState = { status: 'idle', index: null };
+    const ttsAudioCache = new Map();
+
+
+    function loadLibraryFromStorage() {
+      try {
+        const raw = localStorage.getItem('pas_library');
+        const parsed = raw ? JSON.parse(raw) : null;
+        if (parsed && Array.isArray(parsed.folders)) return parsed;
+      } catch (err) {
+        console.warn('Could not load saved library', err);
+      }
+      return {
+        folders: [{ id: 'default', name: 'Saved Notes', files: [] }],
+        selectedFolderId: 'default',
+        lastViewedFileId: ''
+      };
+    }
+
+    function saveLibrary() {
+      try {
+        localStorage.setItem('pas_library', JSON.stringify(state.library));
+      } catch (err) {
+        alert('Could not save the file library in this browser. Storage may be full.');
+      }
+    }
+
+    function ensureLibraryFolder() {
+      if (!state.library || !Array.isArray(state.library.folders)) state.library = loadLibraryFromStorage();
+      if (!state.library.folders.length) state.library.folders.push({ id: 'default', name: 'Saved Notes', files: [] });
+      const selected = state.activeFolderId || state.library.selectedFolderId;
+      if (!state.library.folders.some(f => f.id === selected)) state.activeFolderId = state.library.folders[0].id;
+      else state.activeFolderId = selected;
+      state.library.selectedFolderId = state.activeFolderId;
+      return state.library.folders.find(f => f.id === state.activeFolderId) || state.library.folders[0];
+    }
+
+    function makeId(prefix = 'id') {
+      return `${prefix}_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`;
+    }
+
+    function slugFileName(name) {
+      return String(name || 'prados-notes')
+        .trim()
+        .replace(/[\\/:*?"<>|]+/g, '-')
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-')
+        .slice(0, 80) || 'prados-notes';
+    }
+
+    function getEditedFirstPageText() {
+      if (!state.paragraphs.length) return '';
+      return state.paragraphs.map((paragraph, i) => {
+        const text = paragraphToPlainText(paragraph).trim();
+        const note = (state.summaries[i] || '').trim();
+        const blocks = [`Paragraph ${i + 1}:\n${text}`];
+        if (note) blocks.push(`Edited AI Response:\n${note}`);
+        return blocks.join('\n\n');
+      }).join('\n\n---\n\n');
+    }
+
+    function getEditedFirstPageHtml() {
+      if (!state.paragraphs.length) return '';
+      const rows = state.paragraphs.map((paragraph, i) => {
+        const note = (state.summaries[i] || '').trim();
+        return `
+          <section class="saved-paragraph">
+            <h3>Paragraph ${i + 1}</h3>
+            <div class="saved-article-block">${paragraphToDisplayHtml(paragraph, i)}</div>
+            ${note ? `<div class="saved-ai-block"><h4>Edited AI Response</h4><p>${escapeHtml(note).replace(/\n/g, '<br>')}</p></div>` : ''}
+          </section>`;
+      }).join('\n');
+      return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prado's Notes Export</title>
+<style>
+  body{font-family:Inter,Arial,sans-serif;background:#0b1220;color:#f8fafc;line-height:1.55;margin:0;padding:28px;}
+  main{max-width:980px;margin:0 auto;}
+  h1{margin:0 0 20px;font-size:30px;}
+  .saved-paragraph{border:1px solid rgba(255,255,255,.18);border-radius:18px;padding:18px;margin:0 0 18px;background:#111827;}
+  h3{margin:0 0 10px;color:#fbbf24;} h4{margin:16px 0 8px;color:#38bdf8;}
+  img{max-width:100%;height:auto;display:block;margin:12px 0;border-radius:14px;border:1px solid rgba(255,255,255,.18);}
+  .saved-ai-block{border-top:1px solid rgba(255,255,255,.14);margin-top:14px;padding-top:4px;color:#dbeafe;}
+</style>
+
+</body></html>`;
+    }
+
+    function getQuotesOnlyText() {
+      const sorted = [...state.highlights].sort((a, b) => (a.index - b.index) || (a.createdAt - b.createdAt));
+      return sorted.map((h, idx) => {
+        const source = (h.target || 'article') === 'summary' ? 'AI Response' : 'Article';
+        return `${idx + 1}. [${source} · Paragraph ${Number(h.index) + 1}] ${String(h.text || '').trim()}`;
+      }).filter(Boolean).join('\n\n');
+    }
+
+    function getActiveLibraryFolder() {
+      return ensureLibraryFolder();
+    }
+
+    function renderLibraryPage() {
+      if (!els.libraryPage) return;
+      const folder = getActiveLibraryFolder();
+      const folders = state.library.folders;
+
+      if (els.libraryFolderSelect) {
+        els.libraryFolderSelect.innerHTML = folders.map(f => `<option value="${escapeHtml(f.id)}" ${f.id === folder.id ? 'selected' : ''}>${escapeHtml(f.name)}</option>`).join('');
+      }
+
+      if (els.folderList) {
+        els.folderList.innerHTML = folders.map(f => `
+          <button class="folder-pill ${f.id === folder.id ? 'active' : ''}" type="button" onclick="selectLibraryFolder('${escapeHtml(f.id)}')">
+            <span>📁 ${escapeHtml(f.name)}</span>
+            <span class="folder-count">${(f.files || []).length} file${(f.files || []).length === 1 ? '' : 's'}</span>
+          </button>
+        `).join('');
+      }
+
+      if (els.activeFolderTitle) els.activeFolderTitle.textContent = `${folder.name} Files`;
+      const files = Array.isArray(folder.files) ? folder.files : [];
+      if (els.fileList) {
+        if (!files.length) {
+          els.fileList.innerHTML = '<div class="library-empty">No files in this folder yet. Use the buttons above to save a copy of the edited article text or your quote-page highlights.</div>';
+        } else {
+          els.fileList.innerHTML = files.slice().reverse().map(file => `
+            <article class="file-card">
+              <div class="file-card-head">
+                <div class="file-card-title">${escapeHtml(file.name)}</div>
+                <span class="file-badge">${file.type === 'quotes' ? 'Quotes' : (file.htmlContent ? 'Edited + Images' : 'Edited Text')}</span>
+              </div>
+              <div class="file-card-meta">Saved ${escapeHtml(new Date(file.createdAt || Date.now()).toLocaleString())} · ${wordCount(file.content || '')} words${file.htmlContent ? ' · images preserved' : ''}</div>
+              <div class="file-card-actions">
+                <button class="ghost" type="button" onclick="viewLibraryFile('${escapeHtml(folder.id)}','${escapeHtml(file.id)}')">View</button>
+                <button class="ghost" type="button" onclick="copyLibraryFile('${escapeHtml(folder.id)}','${escapeHtml(file.id)}')">Copy</button>
+                <button class="ghost" type="button" onclick="downloadLibraryFile('${escapeHtml(folder.id)}','${escapeHtml(file.id)}')">Download</button>
+                <button class="danger" type="button" onclick="deleteLibraryFile('${escapeHtml(folder.id)}','${escapeHtml(file.id)}')">Delete</button>
+              </div>
+            </article>
+          `).join('');
+        }
+      }
+    }
+
+    function setLibraryPage(show, updateHash = true) {
+      state.activePage = show ? 'library' : 'article';
+      const showingLibrary = state.activePage === 'library';
+      const articlePage = document.getElementById('splitView');
+      if (showingLibrary) {
+        if (state.highlightMode) setHighlightEnabled(false);
+        if (drawState.enabled) setDrawingEnabled(false);
+      }
+      document.body.classList.toggle('showing-library-page', showingLibrary);
+      document.body.classList.toggle('showing-highlighted-page', false);
+      if (articlePage) articlePage.style.display = showingLibrary ? 'none' : '';
+      els.highlightedPage?.classList.remove('show');
+      els.highlightedPage?.setAttribute('aria-hidden', 'true');
+      els.libraryPage?.classList.toggle('show', showingLibrary);
+      els.libraryPage?.setAttribute('aria-hidden', String(!showingLibrary));
+      els.libraryPageBtn?.classList.toggle('active', showingLibrary);
+      els.libraryPageBtn?.setAttribute('aria-pressed', String(showingLibrary));
+      els.highlightedTextBtn?.classList.remove('active');
+      els.highlightedTextBtn?.setAttribute('aria-pressed', 'false');
+      const hLabel = els.highlightedTextBtn?.querySelector('.btn-label');
+      if (hLabel) hLabel.textContent = 'Highlighted Text';
+      const lLabel = els.libraryPageBtn?.querySelector('.btn-label');
+      if (lLabel) lLabel.textContent = showingLibrary ? 'Article' : 'Files';
+      if (showingLibrary) renderLibraryPage();
+      if (updateHash) {
+        const targetHash = showingLibrary ? '#files' : '#article';
+        if (window.location.hash !== targetHash) window.history.pushState(null, '', targetHash);
+      }
+    }
+
+    window.selectLibraryFolder = function(folderId) {
+      if (!state.library.folders.some(f => f.id === folderId)) return;
+      state.activeFolderId = folderId;
+      state.library.selectedFolderId = folderId;
+      saveLibrary();
+      renderLibraryPage();
+    };
+
+    function createLibraryFolder() {
+      const name = (els.folderNameInput?.value || '').trim();
+      if (!name) return alert('Enter a folder name first.');
+      if (state.library.folders.some(f => f.name.toLowerCase() === name.toLowerCase())) return alert('That folder already exists.');
+      const folder = { id: makeId('folder'), name, files: [] };
+      state.library.folders.push(folder);
+      state.activeFolderId = folder.id;
+      state.library.selectedFolderId = folder.id;
+      if (els.folderNameInput) els.folderNameInput.value = '';
+      saveLibrary();
+      renderLibraryPage();
+    }
+
+    function saveLibraryFile(type) {
+      const folder = getActiveLibraryFolder();
+      const content = type === 'quotes' ? getQuotesOnlyText() : getEditedFirstPageText();
+      const htmlContent = type === 'quotes' ? '' : getEditedFirstPageHtml();
+      if (!content.trim() && !htmlContent.trim()) {
+        alert(type === 'quotes' ? 'No quote-page highlights found yet.' : 'No article text found yet.');
+        return;
+      }
+      const fallbackName = type === 'quotes' ? 'Quotes Only' : 'Edited Article Text';
+      const name = (els.libraryFileNameInput?.value || '').trim() || `${fallbackName} — ${new Date().toLocaleDateString()}`;
+      folder.files = Array.isArray(folder.files) ? folder.files : [];
+      folder.files.push({ id: makeId('file'), name, type, content, htmlContent, createdAt: new Date().toISOString() });
+      state.library.lastViewedFileId = folder.files[folder.files.length - 1].id;
+      if (els.libraryFileNameInput) els.libraryFileNameInput.value = '';
+      saveLibrary();
+      renderLibraryPage();
+      viewLibraryFile(folder.id, state.library.lastViewedFileId);
+    }
+
+    function findLibraryFile(folderId, fileId) {
+      const folder = state.library.folders.find(f => f.id === folderId);
+      const file = folder?.files?.find(f => f.id === fileId);
+      return { folder, file };
+    }
+
+    window.viewLibraryFile = function(folderId, fileId) {
+      const { file } = findLibraryFile(folderId, fileId);
+      if (!file || !els.libraryViewer) return;
+      els.libraryViewerBox.hidden = false;
+      els.libraryViewerTitle.textContent = file.name;
+      els.libraryViewer.value = file.content || '';
+      els.libraryViewer.dataset.fileName = file.name || 'prados-notes';
+      els.libraryViewer.dataset.fileId = file.id || '';
+      els.libraryViewer.dataset.folderId = folderId || '';
+      if (els.libraryHtmlPreview) {
+        if (file.htmlContent) {
+          els.libraryHtmlPreview.innerHTML = sanitizeArticleHtml(file.htmlContent);
+          els.libraryHtmlPreview.classList.add('show');
+        } else {
+          els.libraryHtmlPreview.innerHTML = '';
+          els.libraryHtmlPreview.classList.remove('show');
+        }
+      }
+      els.libraryViewer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    };
+
+    window.copyLibraryFile = async function(folderId, fileId) {
+      const { file } = findLibraryFile(folderId, fileId);
+      if (!file) return;
+      if (file.htmlContent && window.ClipboardItem) {
+        try {
+          await navigator.clipboard.write([
+            new ClipboardItem({
+              'text/html': new Blob([file.htmlContent], { type: 'text/html' }),
+              'text/plain': new Blob([file.content || ''], { type: 'text/plain' })
+            })
+          ]);
+          return;
+        } catch (err) {
+          console.warn('HTML copy failed; falling back to plain text.', err);
+        }
+      }
+      await navigator.clipboard.writeText(file.content || '');
+    };
+
+    window.downloadLibraryFile = function(folderId, fileId) {
+      const { file } = findLibraryFile(folderId, fileId);
+      if (!file) return;
+      if (file.htmlContent) return downloadHtmlFile(file.name, file.htmlContent);
+      downloadTextFile(file.name, file.content || '');
+    };
+
+    window.deleteLibraryFile = function(folderId, fileId) {
+      const { folder, file } = findLibraryFile(folderId, fileId);
+      if (!folder || !file) return;
+      if (!confirm(`Delete "${file.name}"?`)) return;
+      folder.files = folder.files.filter(f => f.id !== fileId);
+      if (els.libraryViewer?.dataset.fileName === file.name) {
+        els.libraryViewerBox.hidden = true;
+        els.libraryViewer.value = '';
+        if (els.libraryHtmlPreview) { els.libraryHtmlPreview.innerHTML = ''; els.libraryHtmlPreview.classList.remove('show'); }
+      }
+      saveLibrary();
+      renderLibraryPage();
+    };
+
+    function downloadTextFile(name, content) {
+      const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${slugFileName(name)}.txt`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+
+    function downloadHtmlFile(name, content) {
+      const blob = new Blob([content], { type: 'text/html;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${slugFileName(name)}.html`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
     function applyTextSize(size) {
       const safeSize = Math.max(14, Math.min(26, Number(size) || 18));
       document.documentElement.style.setProperty('--reader-font-size', safeSize + 'px');
@@ -3055,7 +4628,43 @@ Paragraph-level summarization is especially useful because it keeps the writer's
       localStorage.setItem('pas_reader_text_size', String(safeSize));
     }
 
+    function applyArticleWidth(width) {
+      const safeWidth = Math.max(680, Math.min(1400, Number(width) || 980));
+      document.documentElement.style.setProperty('--article-width', safeWidth + 'px');
+      if (els.articleWidthSlider) els.articleWidthSlider.value = String(safeWidth);
+      if (els.articleWidthValue) els.articleWidthValue.textContent = safeWidth + 'px';
+      localStorage.setItem('pas_article_width', String(safeWidth));
+    }
+
+    const FONT_STACKS = {
+      georgia: 'Georgia, Cambria, "Times New Roman", serif',
+      system: 'Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+      arial: 'Arial, Helvetica, sans-serif',
+      times: '"Times New Roman", Times, serif',
+      verdana: 'Verdana, Geneva, sans-serif',
+      trebuchet: '"Trebuchet MS", Arial, sans-serif',
+      courier: '"Courier New", Courier, monospace'
+    };
+
+    function applyReaderFont(fontKey) {
+      const safeKey = FONT_STACKS[fontKey] ? fontKey : 'georgia';
+      document.documentElement.style.setProperty('--reader-font-family', FONT_STACKS[safeKey]);
+      if (els.fontSelect) els.fontSelect.value = safeKey;
+      localStorage.setItem('pas_reader_font', safeKey);
+    }
+
+    function applyTheme(theme) {
+      const safeTheme = theme === 'light' ? 'light' : 'dark';
+      document.body.classList.toggle('light-mode', safeTheme === 'light');
+      if (els.themeToggleBtn) els.themeToggleBtn.textContent = safeTheme === 'light' ? '☀️ Light' : '🌙 Dark';
+      localStorage.setItem('pas_color_theme', safeTheme);
+    }
+
     applyTextSize(localStorage.getItem('pas_reader_text_size') || 18);
+    applyArticleWidth(localStorage.getItem('pas_article_width') || 980);
+    applyReaderFont(localStorage.getItem('pas_reader_font') || 'georgia');
+    applyTheme(localStorage.getItem('pas_color_theme') || 'dark');
+    state.activeFolderId = state.library.selectedFolderId || (state.library.folders[0] && state.library.folders[0].id) || 'default';
 
     const drawState = {
       enabled: false,
@@ -3063,7 +4672,16 @@ Paragraph-level summarization is especially useful because it keeps the writer's
       lastX: 0,
       lastY: 0,
       ctx: null,
-      history: []
+      history: [],
+      strokes: [],
+      currentStroke: null,
+      color: localStorage.getItem('pas_pen_color') || '#fbbf24',
+      size: Math.max(1, Math.min(26, parseInt(localStorage.getItem('pas_pen_size') || '4', 10) || 4)),
+      rainbow: localStorage.getItem('pas_pen_rainbow') === 'true',
+      glow: localStorage.getItem('pas_pen_glow') === 'true',
+      trail: localStorage.getItem('pas_pen_trail') === 'true',
+      trailSeconds: parseInt(localStorage.getItem('pas_pen_trail_seconds') || '4', 10) || 4,
+      cleanupTimer: null
     };
 
 
@@ -3105,12 +4723,19 @@ Paragraph-level summarization is especially useful because it keeps the writer's
       }
 
       document.body.classList.toggle('showing-highlighted-page', showingHighlights);
-      articlePage.style.display = showingHighlights ? 'none' : '';
+      document.body.classList.toggle('showing-library-page', false);
+      if (articlePage) articlePage.style.display = showingHighlights ? 'none' : '';
       els.highlightedPage.classList.toggle('show', showingHighlights);
       els.highlightedPage.setAttribute('aria-hidden', String(!showingHighlights));
+      els.libraryPage?.classList.remove('show');
+      els.libraryPage?.setAttribute('aria-hidden', 'true');
       els.highlightedTextBtn.classList.toggle('active', showingHighlights);
       els.highlightedTextBtn.setAttribute('aria-pressed', String(showingHighlights));
       els.highlightedTextBtn.querySelector('.btn-label').textContent = showingHighlights ? 'Article' : 'Highlighted Text';
+      els.libraryPageBtn?.classList.remove('active');
+      els.libraryPageBtn?.setAttribute('aria-pressed', 'false');
+      const lLabel = els.libraryPageBtn?.querySelector('.btn-label');
+      if (lLabel) lLabel.textContent = 'Files';
 
       if (updateHash) {
         const targetHash = showingHighlights ? '#highlighted-text' : '#article';
@@ -3269,20 +4894,44 @@ Paragraph-level summarization is especially useful because it keeps the writer's
       renderHighlightedTextPage();
     }
 
+    function applyPenSettingsUI() {
+      if (els.penColorInput) els.penColorInput.value = drawState.color;
+      if (els.penSizeInput) els.penSizeInput.value = String(drawState.size);
+      if (els.penSizeLabel) els.penSizeLabel.textContent = `${drawState.size}px`;
+      if (els.rainbowInkBtn) {
+        els.rainbowInkBtn.classList.toggle('active', drawState.rainbow);
+        els.rainbowInkBtn.setAttribute('aria-pressed', String(drawState.rainbow));
+        els.rainbowInkBtn.textContent = drawState.rainbow ? 'Rainbow On' : 'Rainbow Off';
+      }
+      if (els.glowInkBtn) {
+        els.glowInkBtn.classList.toggle('active', drawState.glow);
+        els.glowInkBtn.setAttribute('aria-pressed', String(drawState.glow));
+        els.glowInkBtn.textContent = drawState.glow ? 'Glow On' : 'Glow Off';
+      }
+      if (els.trailInkBtn) {
+        els.trailInkBtn.classList.toggle('active', drawState.trail);
+        els.trailInkBtn.setAttribute('aria-pressed', String(drawState.trail));
+        els.trailInkBtn.textContent = drawState.trail ? 'Trail On' : 'Trail Off';
+      }
+      if (els.trailTimerInput) els.trailTimerInput.value = String(drawState.trailSeconds);
+      if (els.trailTimerLabel) els.trailTimerLabel.textContent = `${drawState.trailSeconds}s`;
+    }
+
+    function savePenSettings() {
+      localStorage.setItem('pas_pen_color', drawState.color);
+      localStorage.setItem('pas_pen_size', String(drawState.size));
+      localStorage.setItem('pas_pen_rainbow', String(drawState.rainbow));
+      localStorage.setItem('pas_pen_glow', String(drawState.glow));
+      localStorage.setItem('pas_pen_trail', String(drawState.trail));
+      localStorage.setItem('pas_pen_trail_seconds', String(drawState.trailSeconds));
+    }
+
     function sizeDrawingCanvas(preserve = true) {
       const canvas = els.drawCanvas;
       if (!canvas) return;
       const dpr = window.devicePixelRatio || 1;
       const width = Math.max(document.documentElement.scrollWidth, window.innerWidth);
       const height = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight, window.innerHeight);
-      let oldImage = null;
-
-      if (preserve && canvas.width && canvas.height) {
-        oldImage = document.createElement('canvas');
-        oldImage.width = canvas.width;
-        oldImage.height = canvas.height;
-        oldImage.getContext('2d').drawImage(canvas, 0, 0);
-      }
 
       canvas.style.width = width + 'px';
       canvas.style.height = height + 'px';
@@ -3293,16 +4942,9 @@ Paragraph-level summarization is especially useful because it keeps the writer's
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.lineCap = 'round';
       ctx.lineJoin = 'round';
-      ctx.lineWidth = 3.5;
-      ctx.strokeStyle = '#fbbf24';
+      ctx.lineWidth = drawState.size || 4;
       drawState.ctx = ctx;
-
-      if (oldImage) {
-        ctx.save();
-        ctx.setTransform(1, 0, 0, 1, 0, 0);
-        ctx.drawImage(oldImage, 0, 0);
-        ctx.restore();
-      }
+      redrawInk();
     }
 
     function setDrawingEnabled(enabled) {
@@ -3315,9 +4957,11 @@ Paragraph-level summarization is especially useful because it keeps the writer's
       els.drawTools.setAttribute('aria-hidden', String(!(drawState.enabled || state.highlightMode)));
       els.drawCanvas.setAttribute('aria-hidden', String(!drawState.enabled));
       if (drawState.enabled) {
-        els.toolModeLabel.textContent = 'Drawing mode on';
+        els.toolModeLabel.textContent = drawState.rainbow ? 'Drawing mode on — rainbow trail active' : 'Drawing mode on';
         els.clearInkBtn.textContent = 'Clear Ink';
+        applyPenSettingsUI();
         sizeDrawingCanvas(true);
+        startTrailCleanup();
       }
     }
 
@@ -3325,24 +4969,85 @@ Paragraph-level summarization is especially useful because it keeps the writer's
       return { x: event.pageX, y: event.pageY };
     }
 
+    function cloneStrokes(strokes = drawState.strokes) {
+      return strokes.map(stroke => ({
+        ...stroke,
+        points: stroke.points.map(point => ({ ...point }))
+      }));
+    }
+
     function saveInkSnapshot() {
-      if (!els.drawCanvas || !drawState.ctx) return;
-      const snap = document.createElement('canvas');
-      snap.width = els.drawCanvas.width;
-      snap.height = els.drawCanvas.height;
-      snap.getContext('2d').drawImage(els.drawCanvas, 0, 0);
-      drawState.history.push(snap);
+      drawState.history.push(cloneStrokes());
       if (drawState.history.length > 40) drawState.history.shift();
     }
 
-    function undoInk() {
-      if (!els.drawCanvas || !drawState.ctx || !drawState.history.length) return;
-      const snap = drawState.history.pop();
+    function rainbowHueForPoint(point, stroke, i = 0) {
+      const base = stroke.createdAt || Date.now();
+      return Math.round(((point.x * 0.55) + (point.y * 0.35) + (i * 18) + (base / 18)) % 360);
+    }
+
+    function drawStroke(stroke) {
+      if (!drawState.ctx || !stroke || !stroke.points || stroke.points.length < 2) return;
+      const ctx = drawState.ctx;
+      ctx.save();
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.lineWidth = stroke.width || drawState.size || 4;
+      const baseColor = stroke.color || drawState.color;
+      if (stroke.glow) {
+        ctx.shadowColor = stroke.rainbow ? 'rgba(255,255,255,0.95)' : baseColor;
+        ctx.shadowBlur = Math.max(12, (stroke.width || drawState.size || 4) * 4);
+      }
+
+      if (stroke.rainbow) {
+        for (let i = 1; i < stroke.points.length; i += 1) {
+          const prev = stroke.points[i - 1];
+          const cur = stroke.points[i];
+          const hue = rainbowHueForPoint(cur, stroke, i);
+          ctx.strokeStyle = `hsl(${hue}, 100%, 58%)`;
+          if (stroke.glow) ctx.shadowColor = `hsla(${hue}, 100%, 62%, 0.95)`;
+          ctx.beginPath();
+          ctx.moveTo(prev.x, prev.y);
+          ctx.lineTo(cur.x, cur.y);
+          ctx.stroke();
+        }
+      } else {
+        ctx.strokeStyle = baseColor;
+        ctx.beginPath();
+        ctx.moveTo(stroke.points[0].x, stroke.points[0].y);
+        for (let i = 1; i < stroke.points.length; i += 1) {
+          ctx.lineTo(stroke.points[i].x, stroke.points[i].y);
+        }
+        ctx.stroke();
+      }
+      ctx.restore();
+    }
+
+    function redrawInk() {
+      if (!drawState.ctx || !els.drawCanvas) return;
+      const now = Date.now();
+      drawState.strokes = drawState.strokes.filter(stroke => !stroke.expiresAt || stroke.expiresAt > now);
       drawState.ctx.save();
       drawState.ctx.setTransform(1, 0, 0, 1, 0, 0);
       drawState.ctx.clearRect(0, 0, els.drawCanvas.width, els.drawCanvas.height);
-      drawState.ctx.drawImage(snap, 0, 0);
       drawState.ctx.restore();
+      drawState.strokes.forEach(drawStroke);
+    }
+
+    function startTrailCleanup() {
+      if (drawState.cleanupTimer) return;
+      drawState.cleanupTimer = window.setInterval(() => {
+        if (!drawState.strokes.some(stroke => stroke.expiresAt)) return;
+        const before = drawState.strokes.length;
+        redrawInk();
+        if (before !== drawState.strokes.length) applyPenSettingsUI();
+      }, 250);
+    }
+
+    function undoInk() {
+      if (!drawState.history.length) return;
+      drawState.strokes = drawState.history.pop() || [];
+      redrawInk();
     }
 
     function beginDraw(event) {
@@ -3354,16 +5059,34 @@ Paragraph-level summarization is especially useful because it keeps the writer's
       drawState.drawing = true;
       drawState.lastX = point.x;
       drawState.lastY = point.y;
+      drawState.currentStroke = {
+        color: drawState.color,
+        rainbow: drawState.rainbow,
+        glow: drawState.glow,
+        trail: drawState.trail,
+        width: drawState.size || 4,
+        createdAt: Date.now(),
+        expiresAt: drawState.trail ? Date.now() + (drawState.trailSeconds * 1000) : null,
+        points: [point]
+      };
+      drawState.strokes.push(drawState.currentStroke);
+      startTrailCleanup();
     }
 
     function moveDraw(event) {
-      if (!drawState.enabled || !drawState.drawing || !drawState.ctx) return;
+      if (!drawState.enabled || !drawState.drawing || !drawState.ctx || !drawState.currentStroke) return;
       event.preventDefault();
       const point = getDrawPoint(event);
-      drawState.ctx.beginPath();
-      drawState.ctx.moveTo(drawState.lastX, drawState.lastY);
-      drawState.ctx.lineTo(point.x, point.y);
-      drawState.ctx.stroke();
+      drawState.currentStroke.points.push(point);
+      if (drawState.currentStroke.trail) {
+        drawState.currentStroke.expiresAt = Date.now() + (drawState.trailSeconds * 1000);
+      }
+      // Draw only the newest segment for immediate response. Full redraw handles trail cleanup.
+      const segment = {
+        ...drawState.currentStroke,
+        points: [{ x: drawState.lastX, y: drawState.lastY }, point]
+      };
+      drawStroke(segment);
       drawState.lastX = point.x;
       drawState.lastY = point.y;
     }
@@ -3371,20 +5094,73 @@ Paragraph-level summarization is especially useful because it keeps the writer's
     function endDraw(event) {
       if (!drawState.enabled) return;
       drawState.drawing = false;
+      drawState.currentStroke = null;
       if (event?.pointerId !== undefined) els.drawCanvas.releasePointerCapture?.(event.pointerId);
     }
 
     function clearInk() {
-      if (!drawState.ctx || !els.drawCanvas) return;
-      drawState.ctx.clearRect(0, 0, els.drawCanvas.width, els.drawCanvas.height);
+      drawState.strokes = [];
       drawState.history = [];
+      redrawInk();
     }
 
+    function setPenColor(color) {
+      drawState.color = color || '#fbbf24';
+      savePenSettings();
+      applyPenSettingsUI();
+    }
+
+    function setPenSize(size) {
+      drawState.size = Math.max(1, Math.min(26, parseInt(size || '4', 10) || 4));
+      savePenSettings();
+      applyPenSettingsUI();
+    }
+
+    function setPenRainbow(enabled) {
+      drawState.rainbow = Boolean(enabled);
+      if (drawState.rainbow) drawState.trail = true;
+      savePenSettings();
+      applyPenSettingsUI();
+      if (drawState.trail) startTrailCleanup();
+    }
+
+    function setPenGlow(enabled) {
+      drawState.glow = Boolean(enabled);
+      savePenSettings();
+      applyPenSettingsUI();
+    }
+
+    function setPenTrail(enabled) {
+      drawState.trail = Boolean(enabled);
+      savePenSettings();
+      applyPenSettingsUI();
+      if (drawState.trail) startTrailCleanup();
+    }
+
+    function setTrailSeconds(seconds) {
+      drawState.trailSeconds = Math.max(1, Math.min(12, parseInt(seconds || '4', 10) || 4));
+      savePenSettings();
+      applyPenSettingsUI();
+    }
+
+    applyPenSettingsUI();
+
     els.drawToggleBtn.addEventListener('click', () => setDrawingEnabled(!drawState.enabled));
+    els.penColorInput?.addEventListener('input', e => setPenColor(e.target.value));
+    els.penSizeInput?.addEventListener('input', e => setPenSize(e.target.value));
+    els.rainbowInkBtn?.addEventListener('click', () => setPenRainbow(!drawState.rainbow));
+    els.glowInkBtn?.addEventListener('click', () => setPenGlow(!drawState.glow));
+    els.trailInkBtn?.addEventListener('click', () => setPenTrail(!drawState.trail));
+    els.trailTimerInput?.addEventListener('input', e => setTrailSeconds(e.target.value));
     els.highlightToggleBtn.addEventListener('click', () => setHighlightEnabled(!state.highlightMode));
     els.highlightedTextBtn.addEventListener('click', () => setHighlightedPage(state.activePage !== 'highlights'));
+    els.libraryPageBtn?.addEventListener('click', () => setLibraryPage(state.activePage !== 'library'));
+    els.libraryBackToArticleBtn?.addEventListener('click', () => setLibraryPage(false));
     if (els.backToArticleBtn) els.backToArticleBtn.addEventListener('click', () => setHighlightedPage(false));
-    window.addEventListener('popstate', () => setHighlightedPage(window.location.hash === '#highlighted-text', false));
+    window.addEventListener('popstate', () => {
+      if (window.location.hash === '#files') setLibraryPage(true, false);
+      else setHighlightedPage(window.location.hash === '#highlighted-text', false);
+    });
     els.clearHighlightsPageBtn.addEventListener('click', clearHighlights);
     els.clearInkBtn.addEventListener('click', () => {
       if (state.highlightMode) clearHighlights();
@@ -3506,12 +5282,12 @@ Paragraph-level summarization is especially useful because it keeps the writer's
     }
 
     function buildParagraphRequestText(index) {
-      const paragraph = state.paragraphs[index] || '';
+      const paragraph = paragraphToPlainText(state.paragraphs[index] || '');
       const mode = getPromptMode(index);
       if (mode === 'universal') return paragraph;
 
-      const previous = state.paragraphs[index - 1] || '[No previous paragraph]';
-      const next = state.paragraphs[index + 1] || '[No next paragraph]';
+      const previous = paragraphToPlainText(state.paragraphs[index - 1] || '') || '[No previous paragraph]';
+      const next = paragraphToPlainText(state.paragraphs[index + 1] || '') || '[No next paragraph]';
 
       if (mode === 'context') {
         return `Previous paragraph for article sequence:\n${previous}\n\nTarget paragraph for news-broadcaster context:\n${paragraph}\n\nNext paragraph for article sequence:\n${next}`;
@@ -3631,7 +5407,7 @@ Paragraph-level summarization is especially useful because it keeps the writer's
     }
 
     async function summarizeParagraph(index, forceVariant = false) {
-      const paragraph = state.paragraphs[index];
+      const paragraph = paragraphToPlainText(state.paragraphs[index]);
       if (!paragraph) return;
 
       state.busy.add(index);
@@ -3681,7 +5457,7 @@ Paragraph-level summarization is especially useful because it keeps the writer's
         saveSilent();
         updateAiStatusBanner();
       }
-      state.paragraphs = splitParagraphs(els.articleInput.value);
+      state.paragraphs = getArticleBlocksFromInput();
       state.summaries = new Array(state.paragraphs.length).fill('');
       state.summarySources = new Array(state.paragraphs.length).fill('');
       state.promptModes = state.paragraphs.map((_, i) => state.promptModes[i] || 'universal');
@@ -3704,6 +5480,116 @@ Paragraph-level summarization is especially useful because it keeps the writer's
         .replace(/'/g, '&#039;');
     }
 
+    function textToRichHtml(text) {
+      const parts = String(text || '').split(/\n{2,}/).map(part => part.trim()).filter(Boolean);
+      if (!parts.length) return '';
+      return parts.map(part => `<p>${escapeHtml(part).replace(/\n/g, '<br>')}</p>`).join('');
+    }
+
+    function richHtmlToPlainText(html) {
+      const tmp = document.createElement('div');
+      tmp.innerHTML = sanitizeArticleHtml(html || '');
+      tmp.querySelectorAll('img').forEach(img => {
+        const alt = img.getAttribute('alt') || img.getAttribute('src') || 'Image';
+        img.replaceWith(document.createTextNode(`\n[Image: ${alt}]\n`));
+      });
+      return normalizeText(tmp.innerText || tmp.textContent || '');
+    }
+
+    function paragraphToPlainText(value) {
+      const raw = String(value || '');
+      return /<\/?[a-z][\s\S]*>/i.test(raw) ? richHtmlToPlainText(raw) : raw;
+    }
+
+    function sanitizeArticleHtml(html) {
+      const template = document.createElement('template');
+      template.innerHTML = String(html || '');
+      const allowedTags = new Set(['P','DIV','BR','IMG','FIGURE','FIGCAPTION','BLOCKQUOTE','UL','OL','LI','B','STRONG','I','EM','U','A','H1','H2','H3','H4','SPAN']);
+      const allowedAttrs = new Set(['href','src','alt','title']);
+      template.content.querySelectorAll('*').forEach(el => {
+        if (!allowedTags.has(el.tagName)) {
+          el.replaceWith(...Array.from(el.childNodes));
+          return;
+        }
+        Array.from(el.attributes).forEach(attr => {
+          const name = attr.name.toLowerCase();
+          const value = attr.value || '';
+          if (!allowedAttrs.has(name)) el.removeAttribute(attr.name);
+          if ((name === 'src' || name === 'href') && /^javascript:/i.test(value)) el.removeAttribute(attr.name);
+          if (name === 'href' && value) el.setAttribute('target', '_blank');
+          if (name === 'href' && value) el.setAttribute('rel', 'noopener noreferrer');
+        });
+      });
+      template.content.querySelectorAll('img').forEach(img => {
+        const src = img.getAttribute('src') || '';
+        if (!src || /^javascript:/i.test(src)) img.remove();
+        img.setAttribute('loading', 'lazy');
+      });
+      return template.innerHTML.trim();
+    }
+
+    function splitArticleRichHtml(html) {
+      const clean = sanitizeArticleHtml(html || '');
+      const holder = document.createElement('div');
+      holder.innerHTML = clean;
+      const blockSelectors = ':scope > p, :scope > div, :scope > figure, :scope > blockquote, :scope > ul, :scope > ol, :scope > h1, :scope > h2, :scope > h3, :scope > h4, :scope > img';
+      let blocks = Array.from(holder.querySelectorAll(blockSelectors))
+        .map(node => node.outerHTML || node.textContent || '')
+        .map(part => sanitizeArticleHtml(part).trim())
+        .filter(part => richHtmlToPlainText(part) || /<img\b/i.test(part));
+      if (!blocks.length) {
+        const text = richHtmlToPlainText(clean);
+        blocks = splitParagraphs(text);
+      }
+      return blocks;
+    }
+
+    function syncArticleRichToTextarea() {
+      if (!els.articleRichInput || !els.articleInput) return;
+      els.articleInput.value = els.articleRichInput.innerHTML || '';
+    }
+
+    function setArticleEditorContent(content, isRich = true) {
+      if (!els.articleRichInput || !els.articleInput) return;
+      const raw = String(content || '');
+      const rich = isRich || /<\/?[a-z][\s\S]*>/i.test(raw);
+      els.articleRichInput.innerHTML = rich ? sanitizeArticleHtml(raw) : textToRichHtml(raw);
+      els.articleInput.value = els.articleRichInput.innerHTML;
+    }
+
+    function getArticleBlocksFromInput() {
+      syncArticleRichToTextarea();
+      const html = els.articleRichInput ? els.articleRichInput.innerHTML : els.articleInput.value;
+      const hasRich = /<img\b|<p\b|<div\b|<figure\b|<blockquote\b|<h[1-4]\b|<ul\b|<ol\b/i.test(html || '');
+      if (hasRich) return splitArticleRichHtml(html);
+      return splitParagraphs(els.articleInput.value);
+    }
+
+    function paragraphToDisplayHtml(value, index) {
+      const raw = String(value || '');
+      if (/<\/?[a-z][\s\S]*>/i.test(raw)) return sanitizeArticleHtml(raw);
+      return markHighlightsForParagraph(raw, index);
+    }
+
+    async function handleArticleRichPaste(event) {
+      const items = Array.from(event.clipboardData?.items || []);
+      const imageItems = items.filter(item => item.type && item.type.startsWith('image/'));
+      if (!imageItems.length) return;
+      event.preventDefault();
+      for (const item of imageItems) {
+        const file = item.getAsFile();
+        if (!file) continue;
+        const dataUrl = await new Promise(resolve => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result);
+          reader.readAsDataURL(file);
+        });
+        document.execCommand('insertHTML', false, `<figure><img src="${dataUrl}" alt="Pasted image"><figcaption></figcaption></figure><p><br></p>`);
+      }
+      syncArticleRichToTextarea();
+    }
+
+
     function updateAiStatusBanner() {
       const usingApi = els.engineMode.value === 'api';
       const hasKey = Boolean(els.apiKey.value.trim());
@@ -3723,6 +5609,245 @@ Paragraph-level summarization is especially useful because it keeps the writer's
       }
     }
 
+    const OPENAI_TTS_VOICES = [
+      { id: 'cedar', label: 'Cedar — recommended' },
+      { id: 'marin', label: 'Marin — recommended' },
+      { id: 'alloy', label: 'Alloy' },
+      { id: 'ash', label: 'Ash' },
+      { id: 'ballad', label: 'Ballad' },
+      { id: 'coral', label: 'Coral' },
+      { id: 'echo', label: 'Echo' },
+      { id: 'fable', label: 'Fable' },
+      { id: 'nova', label: 'Nova' },
+      { id: 'onyx', label: 'Onyx' },
+      { id: 'sage', label: 'Sage' },
+      { id: 'shimmer', label: 'Shimmer' },
+      { id: 'verse', label: 'Verse' }
+    ];
+
+    function getVoiceDisplayName(id) {
+      const selected = OPENAI_TTS_VOICES.find(voice => voice.id === id) || OPENAI_TTS_VOICES[0];
+      return String(selected.label || selected.id || 'Cedar').replace(/\s+—.*$/, '').trim();
+    }
+
+    function getReaderButtonLabel() {
+      return `🔊 ${getVoiceDisplayName(state.voiceName || 'cedar')}`;
+    }
+
+    function updateReaderButtonLabels() {
+      const normalLabel = getReaderButtonLabel();
+      document.querySelectorAll('.eeyore-read-btn').forEach(btn => {
+        const idx = Number(btn.dataset.readerIndex);
+        const isActive = ttsPlaybackState.index === idx && ttsPlaybackState.status !== 'idle';
+        btn.classList.toggle('reader-active', isActive);
+        btn.classList.toggle('reader-loading', isActive && ttsPlaybackState.status === 'loading');
+        if (isActive) {
+          btn.textContent = ttsPlaybackState.status === 'loading' ? '⏳ Stop' : '⏹ Stop';
+          btn.title = 'Stop current speech immediately';
+        } else {
+          btn.textContent = normalLabel;
+          btn.title = `Read this paragraph using OpenAI voice: ${getVoiceDisplayName(state.voiceName || 'cedar')}`;
+        }
+      });
+    }
+
+    function ensureTtsPlayer() {
+      let player = document.getElementById('openAiTtsPlayer');
+      if (!player) {
+        player = document.createElement('audio');
+        player.id = 'openAiTtsPlayer';
+        player.controls = true;
+        player.style.position = 'fixed';
+        player.style.left = '16px';
+        player.style.bottom = '68px';
+        player.style.zIndex = '120';
+        player.style.width = 'min(420px, calc(100vw - 32px))';
+        player.style.display = 'none';
+        player.style.filter = 'drop-shadow(0 12px 26px rgba(0,0,0,0.45))';
+        document.body.appendChild(player);
+      }
+      return player;
+    }
+
+    function stopParagraphReader() {
+      if (currentTtsAbortController) {
+        currentTtsAbortController.abort();
+        currentTtsAbortController = null;
+      }
+      if (currentTtsAudio) {
+        currentTtsAudio.pause();
+        currentTtsAudio.currentTime = 0;
+        currentTtsAudio = null;
+      }
+      const player = document.getElementById('openAiTtsPlayer');
+      if (player) {
+        player.removeAttribute('src');
+        player.load();
+        player.style.display = 'none';
+      }
+      if (currentTtsUrl) {
+        URL.revokeObjectURL(currentTtsUrl);
+        currentTtsUrl = '';
+      }
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+      ttsPlaybackState = { status: 'idle', index: null };
+      updateReaderButtonLabels();
+    }
+
+    function populateVoiceOptions() {
+      if (!els.voiceSelect) return;
+      const current = state.voiceName || els.voiceSelect.value || 'cedar';
+      els.voiceSelect.innerHTML = OPENAI_TTS_VOICES.map(voice => `<option value="${voice.id}">${voice.label}</option>`).join('');
+      els.voiceSelect.value = OPENAI_TTS_VOICES.some(voice => voice.id === current) ? current : 'cedar';
+      state.voiceName = els.voiceSelect.value;
+      updateReaderButtonLabels();
+    }
+
+    function updateVoiceRateLabel() {
+      if (!els.voiceRate || !els.voiceRateValue) return;
+      const rate = parseFloat(els.voiceRate.value || state.voiceRate || 0.66) || 0.66;
+      els.voiceRateValue.textContent = `${rate.toFixed(2)}×`;
+    }
+
+    async function speakEeyoreText(text, index = null) {
+      const cleanText = String(text || '').replace(/\s+/g, ' ').trim();
+      if (!cleanText) return;
+
+      const key = els.apiKey?.value?.trim() || localStorage.getItem('pas_api_key') || '';
+      if (!key) {
+        alert('Add your OpenAI API key in Summary Engine settings first. OpenAI voices need the API key to generate audio.');
+        openPromptSettings();
+        return;
+      }
+
+      stopParagraphReader();
+
+      const voice = state.voiceName || els.voiceSelect?.value || 'cedar';
+      const speed = Math.min(1.4, Math.max(0.45, parseFloat(state.voiceRate || 0.66) || 0.66));
+      const cacheKey = `${voice}|${speed.toFixed(2)}|${cleanText}`;
+      const player = ensureTtsPlayer();
+      player.style.display = 'block';
+      player.removeAttribute('src');
+      player.load();
+      ttsPlaybackState = { status: 'loading', index };
+      updateReaderButtonLabels();
+
+      let audioBlob = ttsAudioCache.get(cacheKey) || null;
+      if (!audioBlob) {
+        currentTtsAbortController = new AbortController();
+        let response;
+        try {
+          response = await fetch('https://api.openai.com/v1/audio/speech', {
+            method: 'POST',
+            mode: 'cors',
+            signal: currentTtsAbortController.signal,
+            headers: {
+              'Authorization': `Bearer ${key}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              model: 'gpt-4o-mini-tts',
+              voice,
+              input: cleanText,
+              speed,
+              response_format: 'mp3',
+              instructions: 'Read exactly the provided paragraph text. Do not add an introduction, preface, title, commentary, or extra words.'
+            })
+          });
+        } catch (err) {
+          if (err?.name === 'AbortError') return;
+          player.style.display = 'none';
+          ttsPlaybackState = { status: 'idle', index: null };
+          currentTtsAbortController = null;
+          updateReaderButtonLabels();
+          alert('OpenAI voice request failed before audio was generated. Check your network connection and API settings.');
+          return;
+        } finally {
+          currentTtsAbortController = null;
+        }
+
+        if (!response.ok) {
+          let detail = '';
+          try {
+            const data = await response.json();
+            detail = data?.error?.message ? `\n\n${data.error.message}` : '';
+          } catch (err) {}
+          player.style.display = 'none';
+          ttsPlaybackState = { status: 'idle', index: null };
+          updateReaderButtonLabels();
+          alert(`OpenAI voice failed for ${getVoiceDisplayName(voice)}. Check your API key, billing, selected voice, and network connection.${detail}`);
+          return;
+        }
+
+        audioBlob = await response.blob();
+        if (!audioBlob || !audioBlob.size) {
+          player.style.display = 'none';
+          ttsPlaybackState = { status: 'idle', index: null };
+          updateReaderButtonLabels();
+          alert('OpenAI voice returned an empty audio file. Try another voice or check API access.');
+          return;
+        }
+        ttsAudioCache.set(cacheKey, audioBlob);
+      }
+
+      currentTtsUrl = URL.createObjectURL(audioBlob);
+      player.src = currentTtsUrl;
+      currentTtsAudio = player;
+      ttsPlaybackState = { status: 'playing', index };
+      updateReaderButtonLabels();
+      currentTtsAudio.onended = () => stopParagraphReader();
+      currentTtsAudio.onerror = () => stopParagraphReader();
+      try {
+        await currentTtsAudio.play();
+      } catch (err) {
+        console.warn('Autoplay was blocked; audio controls are visible for manual playback.', err);
+        alert('Voice audio is ready. Tap the audio player at the bottom-left to play it.');
+      }
+    }
+
+    function readParagraphEeyore(index) {
+      if (ttsPlaybackState.status !== 'idle' && ttsPlaybackState.index === index) {
+        stopParagraphReader();
+        return;
+      }
+      speakEeyoreText(paragraphToPlainText(state.paragraphs[index] || ''), index).catch(err => {
+        if (err?.name === 'AbortError') return;
+        console.error(err);
+        ttsPlaybackState = { status: 'idle', index: null };
+        updateReaderButtonLabels();
+        alert('OpenAI voice playback failed. Check your browser permissions and API settings.');
+      });
+    }
+
+    function openVoiceSettings() {
+      populateVoiceOptions();
+      if (els.voiceRate) els.voiceRate.value = String(state.voiceRate || 0.66);
+      updateVoiceRateLabel();
+      openModal(els.voiceModal);
+    }
+
+    function saveVoiceSettings() {
+      state.voiceName = els.voiceSelect?.value || 'cedar';
+      state.voiceRate = parseFloat(els.voiceRate?.value || '0.66') || 0.66;
+      localStorage.setItem('pas_voice_name', state.voiceName);
+      localStorage.setItem('pas_voice_rate', String(state.voiceRate));
+      updateReaderButtonLabels();
+      closeModal(els.voiceModal);
+    }
+
+    function resetVoiceSettings() {
+      state.voiceName = 'cedar';
+      state.voiceRate = 0.66;
+      if (els.voiceSelect) els.voiceSelect.value = 'cedar';
+      if (els.voiceRate) els.voiceRate.value = '0.66';
+      updateVoiceRateLabel();
+      updateReaderButtonLabels();
+      localStorage.setItem('pas_voice_name', 'cedar');
+      localStorage.setItem('pas_voice_rate', '0.66');
+    }
+
     function updateUndoButton() {
       if (!els.undoParagraphBtn) return;
       const count = state.removedStack.length;
@@ -3730,18 +5855,292 @@ Paragraph-level summarization is especially useful because it keeps the writer's
       els.undoParagraphBtn.textContent = count ? `↶ Undo Delete (${count})` : '↶ Undo Delete';
     }
 
+
+
+    const teleprompterState = {
+      playing: false,
+      animationFrame: null,
+      lastTimestamp: 0,
+      offset: 0,
+      direction: 1,
+      erased: false
+    };
+
+    function getTeleprompterEls() {
+      return {
+        modal: document.getElementById('teleprompterModal'),
+        button: document.getElementById('teleprompterBtn'),
+        play: document.getElementById('teleprompterPlayBtn'),
+        direction: document.getElementById('teleprompterDirectionBtn'),
+        close: document.getElementById('teleprompterCloseBtn'),
+        reset: document.getElementById('teleprompterResetBtn'),
+        erase: document.getElementById('teleprompterEraseBtn'),
+        speed: document.getElementById('teleprompterSpeedSlider'),
+        speedValue: document.getElementById('teleprompterSpeedValue'),
+        color: document.getElementById('teleprompterColorInput'),
+        stage: document.getElementById('teleprompterStage'),
+        text: document.getElementById('teleprompterText'),
+        empty: document.getElementById('teleprompterEmpty')
+      };
+    }
+
+    function buildTeleprompterText() {
+      const lines = [];
+      state.paragraphs.forEach((paragraph, index) => {
+        const articleText = paragraphToPlainText(paragraph || '').trim();
+        const noteText = (state.summaries[index] || '').trim();
+        if (articleText) lines.push(articleText);
+        if (noteText) lines.push(noteText);
+      });
+      return lines.join('\n\n');
+    }
+
+    function applyTeleprompterSettings() {
+      const t = getTeleprompterEls();
+      const speed = localStorage.getItem('pas_teleprompter_speed') || '45';
+      const color = localStorage.getItem('pas_teleprompter_color') || '#ffffff';
+      if (t.speed) t.speed.value = speed;
+      if (t.speedValue) t.speedValue.textContent = speed;
+      if (t.color) t.color.value = color;
+      document.documentElement.style.setProperty('--teleprompter-text-color', color);
+    }
+
+    function refreshTeleprompterContent() {
+      const t = getTeleprompterEls();
+      if (!t.text || !t.empty) return;
+      if (teleprompterState.erased) {
+        t.text.textContent = '';
+        t.empty.hidden = false;
+        t.empty.textContent = 'Teleprompter object erased. Close and reopen, or click Reset after loading an article.';
+        return;
+      }
+      const text = buildTeleprompterText();
+      t.text.textContent = text;
+      t.empty.hidden = !!text;
+      if (!text) t.empty.textContent = 'No article text is loaded. Add or paste an article first.';
+    }
+
+    function updateTeleprompterTransform() {
+      // Current-page teleprompter scrolls the live article page, not a separate text layer.
+    }
+
+    function stopTeleprompter() {
+      const t = getTeleprompterEls();
+      teleprompterState.playing = false;
+      teleprompterState.lastTimestamp = 0;
+      if (teleprompterState.animationFrame) cancelAnimationFrame(teleprompterState.animationFrame);
+      teleprompterState.animationFrame = null;
+      if (t.play) t.play.textContent = '▶ Start';
+    }
+
+    function getTeleprompterScrollRoot() {
+      return document.scrollingElement || document.documentElement || document.body;
+    }
+
+    function getPageMaxScroll() {
+      const root = getTeleprompterScrollRoot();
+      const doc = document.documentElement;
+      const body = document.body;
+      return Math.max(0, Math.max(root.scrollHeight || 0, doc.scrollHeight || 0, body.scrollHeight || 0) - window.innerHeight);
+    }
+
+    function setTeleprompterDirection(direction) {
+      const t = getTeleprompterEls();
+      teleprompterState.direction = direction === -1 ? -1 : 1;
+      if (t.direction) t.direction.textContent = teleprompterState.direction === 1 ? '⬇ Down' : '⬆ Up';
+    }
+
+    function teleprompterStep(timestamp) {
+      const t = getTeleprompterEls();
+      if (!teleprompterState.playing) return;
+      const root = getTeleprompterScrollRoot();
+      const maxScroll = getPageMaxScroll();
+      if (maxScroll <= 0) {
+        stopTeleprompter();
+        return;
+      }
+      if (!teleprompterState.lastTimestamp) teleprompterState.lastTimestamp = timestamp;
+      const delta = Math.max(0, timestamp - teleprompterState.lastTimestamp) / 1000;
+      teleprompterState.lastTimestamp = timestamp;
+      const pxPerSecond = parseFloat(t.speed?.value || '45') || 45;
+      const current = root.scrollTop || window.scrollY || 0;
+      const next = Math.min(maxScroll, Math.max(0, current + (pxPerSecond * delta * teleprompterState.direction)));
+      root.scrollTop = next;
+      // Some browsers keep window as the real scroll container even when document.scrollingElement exists.
+      if (Math.abs((window.scrollY || 0) - next) > 2) window.scrollTo({ top: next, left: 0, behavior: 'auto' });
+      if ((teleprompterState.direction === 1 && next >= maxScroll - 1) || (teleprompterState.direction === -1 && next <= 1)) {
+        stopTeleprompter();
+        return;
+      }
+      teleprompterState.animationFrame = requestAnimationFrame(teleprompterStep);
+    }
+
+    function toggleTeleprompterPlay() {
+      if (teleprompterState.playing) {
+        stopTeleprompter();
+        return;
+      }
+      teleprompterState.erased = false;
+      const root = getTeleprompterScrollRoot();
+      const maxScroll = getPageMaxScroll();
+      if (teleprompterState.direction === 1 && root.scrollTop >= maxScroll - 2) root.scrollTop = 0;
+      if (teleprompterState.direction === -1 && root.scrollTop <= 2) root.scrollTop = maxScroll;
+      teleprompterState.playing = true;
+      teleprompterState.lastTimestamp = 0;
+      const t = getTeleprompterEls();
+      if (t.play) t.play.textContent = '⏸ Pause';
+      teleprompterState.animationFrame = requestAnimationFrame(teleprompterStep);
+    }
+
+    function resetTeleprompter() {
+      stopTeleprompter();
+      teleprompterState.erased = false;
+      const root = getTeleprompterScrollRoot();
+      root.scrollTop = 0;
+      window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+    }
+
+    function eraseTeleprompterObject() {
+      // Erase the floating teleprompter controls/object without deleting article content.
+      closeTeleprompter();
+      teleprompterState.erased = true;
+    }
+
+    function openTeleprompter() {
+      const t = getTeleprompterEls();
+      if (!t.modal) return;
+      if (t.modal.classList.contains('open')) {
+        closeTeleprompter();
+        return;
+      }
+      applyTeleprompterSettings();
+      teleprompterState.erased = false;
+      t.modal.classList.add('open');
+      t.modal.setAttribute('aria-hidden', 'false');
+      document.documentElement.classList.add('teleprompter-open');
+      document.body.classList.add('teleprompter-open');
+      setTeleprompterDirection(teleprompterState.direction || 1);
+      if (t.button) t.button.setAttribute('aria-pressed', 'true');
+    }
+
+    function closeTeleprompter() {
+      const t = getTeleprompterEls();
+      stopTeleprompter();
+      if (t.modal) {
+        t.modal.classList.remove('open');
+        t.modal.setAttribute('aria-hidden', 'true');
+      }
+      document.documentElement.classList.remove('teleprompter-open');
+      document.body.classList.remove('teleprompter-open');
+      if (t.button) t.button.setAttribute('aria-pressed', 'false');
+    }
+
+    function setupTeleprompterControls() {
+      const t = getTeleprompterEls();
+      t.button?.addEventListener('click', openTeleprompter);
+      t.close?.addEventListener('click', closeTeleprompter);
+      t.play?.addEventListener('click', toggleTeleprompterPlay);
+      t.direction?.addEventListener('click', () => setTeleprompterDirection(teleprompterState.direction === 1 ? -1 : 1));
+      t.reset?.addEventListener('click', resetTeleprompter);
+      t.erase?.addEventListener('click', eraseTeleprompterObject);
+      t.speed?.addEventListener('input', e => {
+        const value = e.target.value || '45';
+        localStorage.setItem('pas_teleprompter_speed', value);
+        if (t.speedValue) t.speedValue.textContent = value;
+      });
+      t.color?.addEventListener('input', e => {
+        const value = e.target.value || '#ffffff';
+        localStorage.setItem('pas_teleprompter_color', value);
+        document.documentElement.style.setProperty('--teleprompter-text-color', value);
+      });
+      applyTeleprompterSettings();
+      setTeleprompterDirection(teleprompterState.direction || 1);
+    }
+
+    function setupDragToScrollReading() {
+      document.body.classList.add('drag-scroll-ready');
+      const drag = { active: false, started: false, startX: 0, startY: 0, lastX: 0, lastY: 0, pointerId: null, target: null };
+
+      const isInteractiveDragTarget = target => Boolean(target?.closest?.('button, input, select, textarea, label, a, [contenteditable="true"], .modal-backdrop, .teleprompter-modal, .draw-tools, .topbar, header, .remove-paragraph-btn, .voice-settings-btn, .eeyore-read-btn, .generate-one, .prompt-mode-select'));
+
+      document.addEventListener('pointerdown', e => {
+        if (e.button !== undefined && e.button !== 0) return;
+        if (state.activePage !== 'article' || state.highlightMode || drawState.enabled) return;
+        if (isInteractiveDragTarget(e.target)) return;
+        const readingSurface = e.target?.closest?.('#leftList, #rightList, .paragraph-list, .article-text, .inline-note');
+        if (!readingSurface) return;
+        drag.active = true;
+        drag.started = false;
+        drag.startX = drag.lastX = e.clientX;
+        drag.startY = drag.lastY = e.clientY;
+        drag.pointerId = e.pointerId;
+        drag.target = readingSurface;
+      }, { passive: true });
+
+      document.addEventListener('pointermove', e => {
+        if (!drag.active || e.pointerId !== drag.pointerId) return;
+        const dx = e.clientX - drag.startX;
+        const dy = e.clientY - drag.startY;
+        if (!drag.started && Math.hypot(dx, dy) < 4) return;
+        drag.started = true;
+        document.body.classList.add('drag-scrolling');
+        stopTeleprompter();
+        const moveY = drag.lastY - e.clientY;
+        window.scrollBy({ top: moveY, left: 0, behavior: 'auto' });
+        drag.lastX = e.clientX;
+        drag.lastY = e.clientY;
+        e.preventDefault();
+      }, { passive: false });
+
+      function endDrag() {
+        if (!drag.active) return;
+        drag.active = false;
+        drag.started = false;
+        drag.pointerId = null;
+        drag.target = null;
+        document.body.classList.remove('drag-scrolling');
+      }
+
+      document.addEventListener('pointerup', endDrag, { passive: true });
+      document.addEventListener('pointercancel', endDrag, { passive: true });
+      window.addEventListener('blur', endDrag);
+    }
+
     function render() {
       updateAiStatusBanner();
       updateUndoButton();
+      updateReaderButtonLabels();
 
       if (!state.paragraphs.length) {
-        els.leftList.innerHTML = '<div class="empty"><strong>No article yet.</strong><br />Open Article Input to paste text, then generate notes paragraph by paragraph.</div>';
+        els.leftList.innerHTML = '<div class="empty article-empty-open" data-open-article-input="true" role="button" tabindex="0" aria-label="Open Article Input"><strong>No article yet.</strong><br />Click here to open Article Input and paste text or pictures.</div>';
         els.rightList.innerHTML = '';
         return;
       }
 
       const promptNames = getPromptNames();
-      syncPromptNameLabels();
+      els.voiceRate?.addEventListener('input', e => {
+      state.voiceRate = parseFloat(e.target.value || '0.66') || 0.66;
+      updateVoiceRateLabel();
+    });
+    els.voiceSelect?.addEventListener('change', e => {
+      state.voiceName = e.target.value || 'cedar';
+      updateReaderButtonLabels();
+    });
+    els.saveVoiceBtn?.addEventListener('click', saveVoiceSettings);
+    els.resetVoiceBtn?.addEventListener('click', resetVoiceSettings);
+    els.testVoiceBtn?.addEventListener('click', () => {
+      state.voiceName = els.voiceSelect?.value || 'cedar';
+      state.voiceRate = parseFloat(els.voiceRate?.value || '0.66') || 0.66;
+      speakEeyoreText('This is the selected reading voice and speed.', null);
+    });
+    if ('speechSynthesis' in window) {
+      populateVoiceOptions();
+      window.speechSynthesis.onvoiceschanged = populateVoiceOptions;
+    }
+    if (els.voiceRate) els.voiceRate.value = String(state.voiceRate || 0.66);
+    updateVoiceRateLabel();
+
+    syncPromptNameLabels();
 
       els.leftList.innerHTML = state.paragraphs.map((p, i) => {
         const busy = state.busy.has(i);
@@ -3759,7 +6158,7 @@ Paragraph-level summarization is especially useful because it keeps the writer's
           <article class="para-card" data-index="${i}">
             <div class="card-meta original-control-row">
               <div class="paragraph-remove-row">
-                <div class="paragraph-tools">
+                <div class="paragraph-tools ai-prompt-tools">
                   <select class="prompt-mode-select" title="Choose what to generate for this paragraph" onchange="setPromptMode(${i}, this.value)">
                     <option value="universal" ${mode === 'universal' ? 'selected' : ''}>${escapeHtml(promptNames.universal)}</option>
                     <option value="context" ${mode === 'context' ? 'selected' : ''}>${escapeHtml(promptNames.context)}</option>
@@ -3767,10 +6166,14 @@ Paragraph-level summarization is especially useful because it keeps the writer's
                   </select>
                   <button class="generate-one" title="Generate this paragraph only" onclick="generateOne(${i})">${busy ? '<span class="spinner"></span>' : 'Generate'}</button>
                 </div>
+                <div class="paragraph-tools ai-voice-tools">
+                  <button class="eeyore-read-btn" data-reader-index="${i}" title="Read this paragraph using the selected OpenAI voice" onclick="readParagraphEeyore(${i})">${escapeHtml(getReaderButtonLabel())}</button>
+                  <button class="voice-settings-btn" title="Change reader voice and speed" onclick="openVoiceSettings()">⚙ Voice</button>
+                </div>
                 <button class="remove-paragraph-btn" title="Remove this paragraph" aria-label="Remove paragraph ${i + 1}" onclick="removeParagraph(${i})">×</button>
               </div>
             </div>
-            <div class="article-text">${markHighlightsForParagraph(p, i)}</div>
+            <div class="article-text">${paragraphToDisplayHtml(p, i)}</div>
             <div class="inline-note ${summary || busy ? 'show' : ''}">
               <div class="inline-note-text" contenteditable="true" oninput="editSummary(${i}, this.innerText)">${busy ? 'Generating requested response…' : (summary ? markHighlightsForText(summary, i, 'summary') : `<span class="inline-note-placeholder">${escapeHtml(placeholder)}</span>`)}</div>
               <div class="inline-note-meta">
@@ -3787,6 +6190,10 @@ Paragraph-level summarization is especially useful because it keeps the writer's
       if (state.activePage === 'highlights') renderHighlightedTextPage();
 
       scheduleAlignHeights();
+      if (document.body.classList.contains('teleprompter-open')) {
+        refreshTeleprompterContent();
+        updateTeleprompterTransform();
+      }
     }
 
     function alignHeights() {
@@ -3924,7 +6331,8 @@ Paragraph-level summarization is especially useful because it keeps the writer's
 
     function saveSilent() {
       const payload = {
-        article: els.articleInput.value,
+        article: els.articleRichInput ? els.articleRichInput.innerHTML : els.articleInput.value,
+        articleIsRich: true,
         prompt: els.promptBox.value,
         contextPrompt: els.contextPromptBox.value,
         friendlyPrompt: els.friendlyPromptBox.value,
@@ -3964,7 +6372,7 @@ Paragraph-level summarization is especially useful because it keeps the writer's
       const raw = localStorage.getItem('pas_draft');
       if (!raw) return alert('No saved draft found in this browser.');
       const payload = JSON.parse(raw);
-      els.articleInput.value = payload.article || '';
+      setArticleEditorContent(payload.article || '', payload.articleIsRich !== false);
       els.promptBox.value = payload.prompt || localStorage.getItem('pas_prompt') || DEFAULT_PROMPT;
       els.contextPromptBox.value = payload.contextPrompt || localStorage.getItem('pas_context_prompt') || ADD_CONTEXT_PROMPT;
       els.friendlyPromptBox.value = payload.friendlyPrompt || localStorage.getItem('pas_friendly_prompt') || FRIENDLY_REWRITE_PROMPT;
@@ -3973,12 +6381,34 @@ Paragraph-level summarization is especially useful because it keeps the writer's
       els.promptNameContext.value = payload.promptNameContext || localStorage.getItem('pas_prompt_name_context') || DEFAULT_PROMPT_NAMES.context;
       els.promptNameFriendly.value = payload.promptNameFriendly || localStorage.getItem('pas_prompt_name_friendly') || DEFAULT_PROMPT_NAMES.friendly;
       els.promptNameHighlightReport.value = payload.promptNameHighlightReport || localStorage.getItem('pas_prompt_name_highlight_report') || DEFAULT_PROMPT_NAMES.highlightReport;
-      syncPromptNameLabels();
+      els.voiceRate?.addEventListener('input', e => {
+      state.voiceRate = parseFloat(e.target.value || '0.66') || 0.66;
+      updateVoiceRateLabel();
+    });
+    els.voiceSelect?.addEventListener('change', e => {
+      state.voiceName = e.target.value || 'cedar';
+      updateReaderButtonLabels();
+    });
+    els.saveVoiceBtn?.addEventListener('click', saveVoiceSettings);
+    els.resetVoiceBtn?.addEventListener('click', resetVoiceSettings);
+    els.testVoiceBtn?.addEventListener('click', () => {
+      state.voiceName = els.voiceSelect?.value || 'cedar';
+      state.voiceRate = parseFloat(els.voiceRate?.value || '0.66') || 0.66;
+      speakEeyoreText('This is the selected reading voice and speed.', null);
+    });
+    if ('speechSynthesis' in window) {
+      populateVoiceOptions();
+      window.speechSynthesis.onvoiceschanged = populateVoiceOptions;
+    }
+    if (els.voiceRate) els.voiceRate.value = String(state.voiceRate || 0.66);
+    updateVoiceRateLabel();
+
+    syncPromptNameLabels();
       els.engineMode.value = payload.engine || 'local';
       els.modelName.value = payload.model || 'gpt-4o-mini';
       els.apiUrl.value = payload.apiUrl || 'https://api.openai.com/v1/responses';
       els.apiKey.value = payload.apiKey || '';
-      state.paragraphs = payload.paragraphs || splitParagraphs(els.articleInput.value);
+      state.paragraphs = payload.paragraphs || getArticleBlocksFromInput();
       state.summaries = payload.summaries || [];
       state.summarySources = payload.summarySources || new Array(state.summaries.length).fill('');
       state.promptModes = payload.promptModes || new Array(state.paragraphs.length).fill('universal');
@@ -4001,7 +6431,10 @@ Paragraph-level summarization is especially useful because it keeps the writer's
           <p style="font-size:18px;line-height:1.55;color:#111827;">${escapeHtml(p)}</p>
           ${state.summaries[i] ? `<p style="font-size:17px;line-height:1.5;color:#b45309;margin-top:10px;"><strong>Note:</strong> ${escapeHtml(state.summaries[i])}</p>` : ''}
         </section>`).join('\n');
-      const html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Prado's Notes Export</title></head><body style="font-family:Georgia,serif;line-height:1.5;padding:24px;max-width:900px;margin:auto;">${rows}</body></html>`;
+      const html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Prado's Notes Export</title></head><body style="font-family:Georgia,serif;line-height:1.5;padding:24px;max-width:900px;margin:auto;">${rows}
+
+
+</body></html>`;
       const blob = new Blob([html], { type: 'text/html' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -4012,9 +6445,30 @@ Paragraph-level summarization is especially useful because it keeps the writer's
     }
 
     els.copyAllBtn?.addEventListener('click', copyAll);
+    els.createFolderBtn?.addEventListener('click', createLibraryFolder);
+    els.libraryFolderSelect?.addEventListener('change', e => { state.activeFolderId = e.target.value; state.library.selectedFolderId = e.target.value; saveLibrary(); renderLibraryPage(); });
+    els.saveEditedTextFileBtn?.addEventListener('click', () => saveLibraryFile('edited'));
+    els.saveQuotesFileBtn?.addEventListener('click', () => saveLibraryFile('quotes'));
+    function getViewedLibraryFile() {
+      const folderId = els.libraryViewer?.dataset.folderId || state.activeFolderId;
+      const fileId = els.libraryViewer?.dataset.fileId || state.library.lastViewedFileId;
+      return findLibraryFile(folderId, fileId).file;
+    }
+
+    els.copyLibraryViewerBtn?.addEventListener('click', async () => {
+      const file = getViewedLibraryFile();
+      if (file) return copyLibraryFile(state.activeFolderId, file.id);
+      if (els.libraryViewer?.value) await navigator.clipboard.writeText(els.libraryViewer.value);
+    });
+    els.downloadLibraryViewerBtn?.addEventListener('click', () => {
+      const file = getViewedLibraryFile();
+      if (file?.htmlContent) return downloadHtmlFile(file.name, file.htmlContent);
+      if (file) return downloadTextFile(file.name, file.content || '');
+      if (els.libraryViewer?.value) downloadTextFile(els.libraryViewer.dataset.fileName || 'prados-notes', els.libraryViewer.value);
+    });
     els.printTopBtn?.addEventListener('click', () => window.print());
     els.clearBtn.addEventListener('click', () => {
-      els.articleInput.value = '';
+      setArticleEditorContent('', true);
       state.paragraphs = [];
       state.summaries = [];
       state.summarySources = [];
@@ -4025,10 +6479,10 @@ Paragraph-level summarization is especially useful because it keeps the writer's
       state.edited.clear();
       render();
     });
-    els.sampleBtn.addEventListener('click', () => { els.articleInput.value = SAMPLE; });
+    els.sampleBtn.addEventListener('click', () => { setArticleEditorContent(SAMPLE, false); });
     els.clearArticleTextBtn.addEventListener('click', () => {
-      els.articleInput.value = '';
-      els.articleInput.focus();
+      setArticleEditorContent('', true);
+      els.articleRichInput?.focus();
     });
 
     function openModal(modal) {
@@ -4041,13 +6495,49 @@ Paragraph-level summarization is especially useful because it keeps the writer's
       modal.setAttribute('aria-hidden', 'true');
     }
 
+    window.readParagraphEeyore = readParagraphEeyore;
+    window.openVoiceSettings = openVoiceSettings;
+    window.stopParagraphReader = stopParagraphReader;
+
+    els.articleRichInput?.addEventListener('input', syncArticleRichToTextarea);
+    els.articleRichInput?.addEventListener('paste', handleArticleRichPaste);
+    if (els.articleRichInput && els.articleInput && !els.articleRichInput.innerHTML.trim()) setArticleEditorContent(els.articleInput.value || '', false);
+
     els.openArticleBtn.addEventListener('click', () => openModal(els.articleModal));
+    // Robust fallback: open Article Input when the empty article/text box is clicked,
+    // even after later render/drag-scroll patches replace the empty-state HTML.
+    document.addEventListener('click', event => {
+      const emptyArticleBox = event.target?.closest?.('.article-empty-open, .empty.article-empty-open, [data-open-article-input="true"]');
+      if (!emptyArticleBox) return;
+      event.preventDefault();
+      event.stopPropagation();
+      openModal(els.articleModal);
+    }, true);
+    document.addEventListener('keydown', event => {
+      const emptyArticleBox = event.target?.closest?.('.article-empty-open, .empty.article-empty-open, [data-open-article-input="true"]');
+      if (!emptyArticleBox) return;
+      if (event.key !== 'Enter' && event.key !== ' ') return;
+      event.preventDefault();
+      event.stopPropagation();
+      openModal(els.articleModal);
+    }, true);
+    els.leftList?.addEventListener('click', event => {
+      if (event.target.closest('.article-empty-open')) openModal(els.articleModal);
+    });
+    els.leftList?.addEventListener('keydown', event => {
+      if (!event.target.closest('.article-empty-open')) return;
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        openModal(els.articleModal);
+      }
+    });
     els.openPromptBtn.addEventListener('click', () => openModal(els.promptModal));
     els.bannerOpenPromptBtn.addEventListener('click', () => openModal(els.promptModal));
     els.closeArticleBtn.addEventListener('click', () => closeModal(els.articleModal));
     els.closePromptBtn.addEventListener('click', () => closeModal(els.promptModal));
+    els.closeVoiceBtn?.addEventListener('click', () => closeModal(els.voiceModal));
     els.applyArticleBtn.addEventListener('click', () => {
-      state.paragraphs = splitParagraphs(els.articleInput.value);
+      state.paragraphs = getArticleBlocksFromInput();
       state.summaries = new Array(state.paragraphs.length).fill('');
       state.summarySources = new Array(state.paragraphs.length).fill('');
       state.promptModes = state.paragraphs.map((_, i) => state.promptModes[i] || 'universal');
@@ -4077,11 +6567,33 @@ Paragraph-level summarization is especially useful because it keeps the writer's
       els.promptNameContext.value = DEFAULT_PROMPT_NAMES.context;
       els.promptNameFriendly.value = DEFAULT_PROMPT_NAMES.friendly;
       els.promptNameHighlightReport.value = DEFAULT_PROMPT_NAMES.highlightReport;
-      syncPromptNameLabels();
+      els.voiceRate?.addEventListener('input', e => {
+      state.voiceRate = parseFloat(e.target.value || '0.66') || 0.66;
+      updateVoiceRateLabel();
+    });
+    els.voiceSelect?.addEventListener('change', e => {
+      state.voiceName = e.target.value || 'cedar';
+      updateReaderButtonLabels();
+    });
+    els.saveVoiceBtn?.addEventListener('click', saveVoiceSettings);
+    els.resetVoiceBtn?.addEventListener('click', resetVoiceSettings);
+    els.testVoiceBtn?.addEventListener('click', () => {
+      state.voiceName = els.voiceSelect?.value || 'cedar';
+      state.voiceRate = parseFloat(els.voiceRate?.value || '0.66') || 0.66;
+      speakEeyoreText('This is the selected reading voice and speed.', null);
+    });
+    if ('speechSynthesis' in window) {
+      populateVoiceOptions();
+      window.speechSynthesis.onvoiceschanged = populateVoiceOptions;
+    }
+    if (els.voiceRate) els.voiceRate.value = String(state.voiceRate || 0.66);
+    updateVoiceRateLabel();
+
+    syncPromptNameLabels();
       saveSilent();
       render();
     });
-    [els.articleModal, els.promptModal].forEach(modal => {
+    [els.articleModal, els.promptModal, els.voiceModal].forEach(modal => {
       modal.addEventListener('click', e => {
         if (e.target === modal) closeModal(modal);
       });
@@ -4090,6 +6602,8 @@ Paragraph-level summarization is especially useful because it keeps the writer's
       if (e.key === 'Escape') {
         closeModal(els.articleModal);
         closeModal(els.promptModal);
+        closeModal(els.voiceModal);
+        closeTeleprompter();
       }
     });
     document.addEventListener('mouseup', () => setTimeout(addSelectedHighlight, 0));
@@ -4097,7 +6611,12 @@ Paragraph-level summarization is especially useful because it keeps the writer's
     document.addEventListener('keyup', e => {
       if (state.highlightMode && (e.key === 'Shift' || e.key.startsWith('Arrow'))) setTimeout(addSelectedHighlight, 0);
     });
-    els.textSizeSlider.addEventListener('input', e => applyTextSize(e.target.value));
+    els.textSizeSlider?.addEventListener('input', e => applyTextSize(e.target.value));
+    els.articleWidthSlider?.addEventListener('input', e => applyArticleWidth(e.target.value));
+    els.fontSelect?.addEventListener('change', e => applyReaderFont(e.target.value));
+    els.themeToggleBtn?.addEventListener('click', () => {
+      applyTheme(document.body.classList.contains('light-mode') ? 'dark' : 'light');
+    });
     els.alignBtn.addEventListener('click', alignHeights);
     els.undoParagraphBtn?.addEventListener('click', () => window.undoRemoveParagraph());
     els.printBtn?.addEventListener('click', () => window.print());
@@ -4107,14 +6626,61 @@ Paragraph-level summarization is especially useful because it keeps the writer's
       els[id].addEventListener('input', () => {
         if (id !== 'articleInput') saveSilent();
         if (id.startsWith('promptName')) {
-          syncPromptNameLabels();
+          els.voiceRate?.addEventListener('input', e => {
+      state.voiceRate = parseFloat(e.target.value || '0.66') || 0.66;
+      updateVoiceRateLabel();
+    });
+    els.voiceSelect?.addEventListener('change', e => {
+      state.voiceName = e.target.value || 'cedar';
+      updateReaderButtonLabels();
+    });
+    els.saveVoiceBtn?.addEventListener('click', saveVoiceSettings);
+    els.resetVoiceBtn?.addEventListener('click', resetVoiceSettings);
+    els.testVoiceBtn?.addEventListener('click', () => {
+      state.voiceName = els.voiceSelect?.value || 'cedar';
+      state.voiceRate = parseFloat(els.voiceRate?.value || '0.66') || 0.66;
+      speakEeyoreText('This is the selected reading voice and speed.', null);
+    });
+    if ('speechSynthesis' in window) {
+      populateVoiceOptions();
+      window.speechSynthesis.onvoiceschanged = populateVoiceOptions;
+    }
+    if (els.voiceRate) els.voiceRate.value = String(state.voiceRate || 0.66);
+    updateVoiceRateLabel();
+
+    syncPromptNameLabels();
           render();
         }
         if (['engineMode', 'apiKey', 'apiUrl', 'modelName'].includes(id)) updateAiStatusBanner();
       });
     });
 
+    els.voiceRate?.addEventListener('input', e => {
+      state.voiceRate = parseFloat(e.target.value || '0.66') || 0.66;
+      updateVoiceRateLabel();
+    });
+    els.voiceSelect?.addEventListener('change', e => {
+      state.voiceName = e.target.value || 'cedar';
+      updateReaderButtonLabels();
+    });
+    els.saveVoiceBtn?.addEventListener('click', saveVoiceSettings);
+    els.resetVoiceBtn?.addEventListener('click', resetVoiceSettings);
+    els.testVoiceBtn?.addEventListener('click', () => {
+      state.voiceName = els.voiceSelect?.value || 'cedar';
+      state.voiceRate = parseFloat(els.voiceRate?.value || '0.66') || 0.66;
+      speakEeyoreText('This is the selected reading voice and speed.', null);
+    });
+    if ('speechSynthesis' in window) {
+      populateVoiceOptions();
+      window.speechSynthesis.onvoiceschanged = populateVoiceOptions;
+    }
+    if (els.voiceRate) els.voiceRate.value = String(state.voiceRate || 0.66);
+    updateVoiceRateLabel();
+
     syncPromptNameLabels();
+
+    setupTeleprompterControls();
+    setupDragToScrollReading();
 
     window.addEventListener('resize', () => {
       scheduleAlignHeights();
@@ -4124,7 +6690,477 @@ Paragraph-level summarization is especially useful because it keeps the writer's
       if (drawState.enabled) sizeDrawingCanvas(true);
     }, { passive: true });
     render();
-    if (window.location.hash === '#highlighted-text') setHighlightedPage(true, false);
+    if (window.location.hash === '#files') setLibraryPage(true, false);
+    else if (window.location.hash === '#highlighted-text') setHighlightedPage(true, false);
   </script>
+
+
+<style id="teleprompter-read-page-fix-patch">
+  /* Final override: make current-page teleprompter scroll the live page, never a hidden/separate stage. */
+  body.teleprompter-open {
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    padding-bottom: 170px !important;
+  }
+  .teleprompter-modal {
+    position: fixed !important;
+    left: 16px !important;
+    right: 16px !important;
+    bottom: 16px !important;
+    top: auto !important;
+    width: auto !important;
+    height: auto !important;
+    min-height: 0 !important;
+    display: none !important;
+    align-items: stretch !important;
+    justify-content: stretch !important;
+    z-index: 140 !important;
+    pointer-events: none !important;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    padding: 0 !important;
+  }
+  .teleprompter-modal.open {
+    display: block !important;
+  }
+  .teleprompter-modal.open .teleprompter-toolbar {
+    pointer-events: auto !important;
+  }
+  .teleprompter-toolbar {
+    width: min(980px, calc(100vw - 32px)) !important;
+    margin: 0 auto !important;
+    border-radius: 22px !important;
+    border: 1px solid rgba(56, 189, 248, 0.36) !important;
+    background: rgba(3, 7, 18, 0.93) !important;
+    box-shadow: 0 18px 50px rgba(0,0,0,0.48) !important;
+  }
+  .teleprompter-stage,
+  .teleprompter-scroll,
+  .teleprompter-empty {
+    display: none !important;
+  }
+  body.teleprompter-open .article-text,
+  body.teleprompter-open .summary-text,
+  body.teleprompter-open .inline-note-text {
+    color: var(--teleprompter-text-color, inherit) !important;
+  }
+  .top-read-page {
+    border-color: rgba(74, 222, 128, 0.42) !important;
+    background: linear-gradient(180deg, rgba(20, 83, 45, 0.78), rgba(15, 23, 42, 0.88)) !important;
+    color: #dcfce7 !important;
+  }
+  .top-read-page.reader-active,
+  .top-read-page[aria-pressed="true"] {
+    color: #052e16 !important;
+    border-color: rgba(134, 239, 172, 0.82) !important;
+    background: linear-gradient(135deg, #86efac, #4ade80 48%, #22c55e) !important;
+  }
+  .page-reader-panel {
+    position: fixed;
+    left: 16px;
+    bottom: 16px;
+    z-index: 155;
+    display: none;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    width: min(720px, calc(100vw - 32px));
+    padding: 10px;
+    border-radius: 18px;
+    border: 1px solid rgba(74, 222, 128, 0.34);
+    background: rgba(3, 7, 18, 0.94);
+    box-shadow: 0 18px 44px rgba(0,0,0,0.45);
+    color: #dcfce7;
+  }
+  .page-reader-panel.show { display: flex; }
+  .page-reader-status {
+    flex: 1 1 190px;
+    min-width: 170px;
+    color: #dcfce7;
+    font-size: 12px;
+    font-weight: 850;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .page-reader-panel button {
+    border-radius: 12px;
+    padding: 9px 11px;
+    font-size: 12px;
+    font-weight: 950;
+    border: 1px solid rgba(255,255,255,0.18);
+    background: rgba(15, 23, 42, 0.94);
+    color: #f8fafc;
+  }
+  .page-reader-panel button.primary {
+    background: linear-gradient(135deg, #86efac, #22c55e);
+    color: #052e16;
+  }
+  .page-reader-panel button.danger {
+    background: rgba(127, 29, 29, 0.72);
+    color: #fee2e2;
+    border-color: rgba(248, 113, 113, 0.42);
+  }
+  @media (max-width: 560px) {
+    body.teleprompter-open { padding-bottom: 230px !important; }
+    .teleprompter-modal { left: 10px !important; right: 10px !important; bottom: 10px !important; }
+    .teleprompter-toolbar { width: calc(100vw - 20px) !important; }
+    .page-reader-panel { left: 10px; bottom: 10px; width: calc(100vw - 20px); }
+    .page-reader-panel button { flex: 1 1 auto; }
+  }
+</style>
+<script id="teleprompter-read-page-fix-script">
+(function(){
+  'use strict';
+
+  const pageReader = {
+    audio: null,
+    url: '',
+    abort: null,
+    cache: new Map(),
+    status: 'idle'
+  };
+
+  const $ = (id) => document.getElementById(id);
+
+  function getOpenAiVoiceId(){
+    return (window.state && window.state.voiceName) || $('voiceSelect')?.value || localStorage.getItem('pas_voice_name') || 'cedar';
+  }
+
+  function getOpenAiVoiceLabel(){
+    const id = getOpenAiVoiceId();
+    return String(id || 'cedar').charAt(0).toUpperCase() + String(id || 'cedar').slice(1);
+  }
+
+  function getOpenAiSpeed(){
+    const raw = (window.state && window.state.voiceRate) || $('voiceRate')?.value || localStorage.getItem('pas_voice_rate') || '0.66';
+    return Math.min(1.4, Math.max(0.45, parseFloat(raw) || 0.66));
+  }
+
+  function plainFromHtml(html){
+    const div = document.createElement('div');
+    div.innerHTML = String(html || '');
+    return (div.textContent || div.innerText || '').replace(/\s+/g, ' ').trim();
+  }
+
+  function getArticlePageText(){
+    const rows = [];
+    const articleNodes = Array.from(document.querySelectorAll('#leftList .article-text'));
+    const summaryNodes = Array.from(document.querySelectorAll('#rightList .summary-text'));
+    const max = Math.max(articleNodes.length, summaryNodes.length);
+    for (let i = 0; i < max; i++) {
+      const a = (articleNodes[i]?.innerText || articleNodes[i]?.textContent || '').replace(/\s+/g, ' ').trim();
+      const s = (summaryNodes[i]?.innerText || summaryNodes[i]?.textContent || '').replace(/\s+/g, ' ').trim();
+      if (a) rows.push(a);
+      if (s && !/^No response yet|Choose Generate/i.test(s)) rows.push(s);
+    }
+    if (!rows.length && window.state?.paragraphs?.length) {
+      window.state.paragraphs.forEach((p, i) => {
+        const a = plainFromHtml(p);
+        const s = String(window.state.summaries?.[i] || '').replace(/\s+/g, ' ').trim();
+        if (a) rows.push(a);
+        if (s) rows.push(s);
+      });
+    }
+    return rows.join('\n\n').trim();
+  }
+
+  function switchToArticlePage(){
+    try { if (window.state?.activePage === 'library' && typeof window.setLibraryPage === 'function') window.setLibraryPage(false); } catch(e) {}
+    try { if (window.state?.activePage === 'highlights' && typeof window.setHighlightedPage === 'function') window.setHighlightedPage(false); } catch(e) {}
+    document.body.classList.remove('showing-library-page','showing-highlighted-page');
+    const split = $('splitView');
+    if (split) split.style.display = '';
+  }
+
+  const tele = {
+    open: false,
+    playing: false,
+    raf: 0,
+    last: 0
+  };
+
+  function teleEls(){
+    return {
+      modal: $('teleprompterModal'),
+      button: $('teleprompterBtn'),
+      play: $('teleprompterPlayBtn'),
+      close: $('teleprompterCloseBtn'),
+      reset: $('teleprompterResetBtn'),
+      erase: $('teleprompterEraseBtn'),
+      speed: $('teleprompterSpeedSlider'),
+      speedValue: $('teleprompterSpeedValue'),
+      color: $('teleprompterColorInput')
+    };
+  }
+
+  function applyTeleSettings(){
+    const t = teleEls();
+    const speed = localStorage.getItem('pas_teleprompter_speed') || t.speed?.value || '45';
+    const color = localStorage.getItem('pas_teleprompter_color') || t.color?.value || '#ffffff';
+    if (t.speed) t.speed.value = speed;
+    if (t.speedValue) t.speedValue.textContent = speed;
+    if (t.color) t.color.value = color;
+    document.documentElement.style.setProperty('--teleprompter-text-color', color);
+    document.body.style.overflowY = 'auto';
+  }
+
+  function maxScroll(){
+    return Math.max(0, Math.max(document.documentElement.scrollHeight, document.body.scrollHeight) - window.innerHeight);
+  }
+
+  function stopTele(){
+    tele.playing = false;
+    tele.last = 0;
+    if (tele.raf) cancelAnimationFrame(tele.raf);
+    tele.raf = 0;
+    const t = teleEls();
+    if (t.play) t.play.textContent = '▶ Start';
+  }
+
+  function stepTele(ts){
+    if (!tele.playing) return;
+    if (!tele.last) tele.last = ts;
+    const delta = Math.max(0, ts - tele.last) / 1000;
+    tele.last = ts;
+    const t = teleEls();
+    const speed = parseFloat(t.speed?.value || '45') || 45;
+    const before = window.scrollY || document.documentElement.scrollTop || 0;
+    window.scrollBy(0, speed * delta);
+    const after = window.scrollY || document.documentElement.scrollTop || 0;
+    if (after >= maxScroll() - 2 || Math.abs(after - before) < 0.01) {
+      stopTele();
+      return;
+    }
+    tele.raf = requestAnimationFrame(stepTele);
+  }
+
+  function toggleTele(){
+    if (tele.open) closeTele();
+    else openTele();
+  }
+
+  function openTele(){
+    switchToArticlePage();
+    const t = teleEls();
+    if (!t.modal) return;
+    applyTeleSettings();
+    t.modal.classList.add('open');
+    t.modal.setAttribute('aria-hidden','false');
+    document.body.classList.add('teleprompter-open');
+    t.button?.setAttribute('aria-pressed','true');
+    tele.open = true;
+  }
+
+  function closeTele(){
+    const t = teleEls();
+    stopTele();
+    t.modal?.classList.remove('open');
+    t.modal?.setAttribute('aria-hidden','true');
+    document.body.classList.remove('teleprompter-open');
+    document.body.style.overflowY = '';
+    t.button?.setAttribute('aria-pressed','false');
+    tele.open = false;
+  }
+
+  function playTele(){
+    if (tele.playing) return stopTele();
+    switchToArticlePage();
+    applyTeleSettings();
+    tele.playing = true;
+    tele.last = 0;
+    const t = teleEls();
+    if (t.play) t.play.textContent = '⏸ Pause';
+    tele.raf = requestAnimationFrame(stepTele);
+  }
+
+  function resetTele(){
+    stopTele();
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+  }
+
+  function eraseTele(){
+    closeTele();
+  }
+
+  function ensurePanel(){
+    let panel = $('pageReaderPanel');
+    if (panel) return panel;
+    panel = document.createElement('div');
+    panel.id = 'pageReaderPanel';
+    panel.className = 'page-reader-panel';
+    panel.innerHTML = `
+      <button class="primary" id="pageReaderMainBtn" type="button">▶ Read Page</button>
+      <button id="pageReaderPauseBtn" type="button">⏸ Pause</button>
+      <button id="pageReaderBackBtn" type="button">↩ 10 sec</button>
+      <button id="pageReaderForwardBtn" type="button">10 sec ↪</button>
+      <button class="danger" id="pageReaderStopBtn" type="button">Stop</button>
+      <div class="page-reader-status" id="pageReaderStatus">Ready</div>
+    `;
+    document.body.appendChild(panel);
+    $('pageReaderMainBtn')?.addEventListener('click', readWholePage);
+    $('pageReaderPauseBtn')?.addEventListener('click', pauseResumePageReader);
+    $('pageReaderBackBtn')?.addEventListener('click', () => seekPageReader(-10));
+    $('pageReaderForwardBtn')?.addEventListener('click', () => seekPageReader(10));
+    $('pageReaderStopBtn')?.addEventListener('click', stopPageReader);
+    return panel;
+  }
+
+  function setReadStatus(text){
+    ensurePanel().classList.add('show');
+    const s = $('pageReaderStatus');
+    if (s) s.textContent = text;
+    const topBtn = $('readWholePageBtn');
+    if (topBtn) {
+      topBtn.classList.toggle('reader-active', pageReader.status !== 'idle');
+      topBtn.setAttribute('aria-pressed', String(pageReader.status !== 'idle'));
+      const label = topBtn.querySelector('.btn-label');
+      if (label) label.textContent = pageReader.status === 'loading' ? 'Loading Voice' : pageReader.status === 'playing' ? 'Reading Page' : 'Read Page';
+    }
+  }
+
+  function cleanupPageReaderUrl(){
+    if (pageReader.url) {
+      try { URL.revokeObjectURL(pageReader.url); } catch(e) {}
+      pageReader.url = '';
+    }
+  }
+
+  function stopPageReader(){
+    if (pageReader.abort) {
+      try { pageReader.abort.abort(); } catch(e) {}
+      pageReader.abort = null;
+    }
+    if (pageReader.audio) {
+      pageReader.audio.pause();
+      pageReader.audio.currentTime = 0;
+      pageReader.audio.removeAttribute('src');
+      pageReader.audio.load();
+    }
+    cleanupPageReaderUrl();
+    pageReader.status = 'idle';
+    setReadStatus('Stopped');
+    const panel = $('pageReaderPanel');
+    if (panel) setTimeout(() => { if (pageReader.status === 'idle') panel.classList.remove('show'); }, 900);
+  }
+
+  async function readWholePage(){
+    if (pageReader.status === 'loading' || pageReader.status === 'playing' || pageReader.status === 'paused') {
+      stopPageReader();
+      return;
+    }
+    switchToArticlePage();
+    try { if (typeof window.stopParagraphReader === 'function') window.stopParagraphReader(); } catch(e) {}
+    const key = $('apiKey')?.value?.trim() || localStorage.getItem('pas_api_key') || '';
+    if (!key) {
+      alert('Add your OpenAI API key in Summary Engine settings first. Read Page uses the selected OpenAI voice.');
+      try { if (typeof window.openPromptSettings === 'function') window.openPromptSettings(); } catch(e) {}
+      return;
+    }
+    const text = getArticlePageText();
+    if (!text) return alert('No article text is loaded yet. Paste an article first.');
+    const voice = getOpenAiVoiceId();
+    const speed = getOpenAiSpeed();
+    const cacheKey = `whole|${voice}|${speed.toFixed(2)}|${text}`;
+    ensurePanel().classList.add('show');
+    pageReader.status = 'loading';
+    setReadStatus(`Generating ${getOpenAiVoiceLabel()} page audio...`);
+    let blob = pageReader.cache.get(cacheKey);
+    if (!blob) {
+      pageReader.abort = new AbortController();
+      let response;
+      try {
+        response = await fetch('https://api.openai.com/v1/audio/speech', {
+          method: 'POST',
+          mode: 'cors',
+          signal: pageReader.abort.signal,
+          headers: { 'Authorization': `Bearer ${key}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            model: 'gpt-4o-mini-tts',
+            voice,
+            input: text,
+            speed,
+            response_format: 'mp3',
+            instructions: 'Read exactly the provided page text. Do not add an introduction, title, commentary, or extra words.'
+          })
+        });
+      } catch(err) {
+        if (err?.name === 'AbortError') return;
+        pageReader.status = 'idle';
+        setReadStatus('OpenAI voice request failed.');
+        alert('OpenAI page voice request failed before audio was generated. Check your network and API settings.');
+        return;
+      } finally {
+        pageReader.abort = null;
+      }
+      if (!response.ok) {
+        let detail = '';
+        try { const data = await response.json(); detail = data?.error?.message ? `\n\n${data.error.message}` : ''; } catch(e) {}
+        pageReader.status = 'idle';
+        setReadStatus('OpenAI voice failed.');
+        alert(`OpenAI page voice failed. Check your API key, billing, selected voice, and text length.${detail}`);
+        return;
+      }
+      blob = await response.blob();
+      if (!blob?.size) {
+        pageReader.status = 'idle';
+        setReadStatus('Empty audio returned.');
+        alert('OpenAI returned an empty audio file. Try again or reduce the page length.');
+        return;
+      }
+      pageReader.cache.set(cacheKey, blob);
+    }
+    cleanupPageReaderUrl();
+    if (!pageReader.audio) pageReader.audio = new Audio();
+    pageReader.url = URL.createObjectURL(blob);
+    pageReader.audio.src = pageReader.url;
+    pageReader.audio.onended = () => { pageReader.status = 'idle'; setReadStatus('Finished'); };
+    pageReader.audio.onerror = () => { pageReader.status = 'idle'; setReadStatus('Audio playback error'); };
+    pageReader.status = 'playing';
+    setReadStatus(`Reading with ${getOpenAiVoiceLabel()} — use Pause / ±10 sec controls.`);
+    try { await pageReader.audio.play(); }
+    catch(err) { pageReader.status = 'paused'; setReadStatus('Audio ready. Click Read Page to play.'); }
+  }
+
+  function pauseResumePageReader(){
+    if (!pageReader.audio || pageReader.status === 'idle' || pageReader.status === 'loading') return;
+    if (pageReader.audio.paused) {
+      pageReader.audio.play().then(() => { pageReader.status = 'playing'; setReadStatus(`Reading with ${getOpenAiVoiceLabel()}`); }).catch(() => setReadStatus('Click Read Page to start playback.'));
+    } else {
+      pageReader.audio.pause();
+      pageReader.status = 'paused';
+      setReadStatus('Paused');
+    }
+  }
+
+  function seekPageReader(seconds){
+    if (!pageReader.audio || pageReader.status === 'idle' || pageReader.status === 'loading') return;
+    const dur = Number.isFinite(pageReader.audio.duration) ? pageReader.audio.duration : Infinity;
+    pageReader.audio.currentTime = Math.max(0, Math.min(dur, pageReader.audio.currentTime + seconds));
+    setReadStatus(`${seconds < 0 ? 'Rewound' : 'Skipped'} 10 sec`);
+  }
+
+  function wireFixes(){
+    const t = teleEls();
+    t.button?.addEventListener('click', (e) => { e.preventDefault(); e.stopImmediatePropagation(); toggleTele(); }, true);
+    t.play?.addEventListener('click', (e) => { e.preventDefault(); e.stopImmediatePropagation(); playTele(); }, true);
+    t.close?.addEventListener('click', (e) => { e.preventDefault(); e.stopImmediatePropagation(); closeTele(); }, true);
+    t.reset?.addEventListener('click', (e) => { e.preventDefault(); e.stopImmediatePropagation(); resetTele(); }, true);
+    t.erase?.addEventListener('click', (e) => { e.preventDefault(); e.stopImmediatePropagation(); eraseTele(); }, true);
+    t.speed?.addEventListener('input', (e) => { localStorage.setItem('pas_teleprompter_speed', e.target.value || '45'); if (t.speedValue) t.speedValue.textContent = e.target.value || '45'; }, true);
+    t.color?.addEventListener('input', (e) => { const v = e.target.value || '#ffffff'; localStorage.setItem('pas_teleprompter_color', v); document.documentElement.style.setProperty('--teleprompter-text-color', v); }, true);
+    $('readWholePageBtn')?.addEventListener('click', (e) => { e.preventDefault(); readWholePage(); });
+    window.addEventListener('beforeunload', () => { try { stopPageReader(); } catch(e) {} });
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', wireFixes);
+  else wireFixes();
+
+  window.stopCurrentPageTeleprompter = stopTele;
+  window.readWholePageOpenAi = readWholePage;
+  window.stopWholePageReader = stopPageReader;
+})();
+</script>
+
 </body>
 </html>
