@@ -4631,6 +4631,7 @@
             </div>
           </div>
         </div>
+        <button class="top-action" id="loadDraftBtn"><span class="btn-icon">📂</span><span class="btn-label">Load Saved Draft</span></button>
         <button class="top-action top-danger" id="clearBtn"><span class="btn-icon">🗑</span><span class="btn-label">Clear</span></button>
       </div>
     </div>
@@ -5100,6 +5101,7 @@ Paragraph-level summarization is especially useful because it keeps the writer's
       apiUrl: document.getElementById('apiUrl'),
       copyAllBtn: document.getElementById('copyAllBtn'),
       printTopBtn: document.getElementById('printTopBtn'),
+      loadDraftBtn: document.getElementById('loadDraftBtn'),
       clearBtn: document.getElementById('clearBtn'),
       sampleBtn: document.getElementById('sampleBtn'),
       textSizeSlider: document.getElementById('textSizeSlider'),
@@ -7118,30 +7120,38 @@ Paragraph-level summarization is especially useful because it keeps the writer's
     }
 
     function loadDraft() {
-      const raw = localStorage.getItem('pas_draft');
-      if (!raw) return alert('No saved draft found in this browser.');
-      const payload = JSON.parse(raw);
-      setArticleEditorContent(payload.article || '', payload.articleIsRich !== false);
-      els.promptBox.value = payload.prompt || localStorage.getItem('pas_prompt') || DEFAULT_PROMPT;
-      els.contextPromptBox.value = payload.contextPrompt || localStorage.getItem('pas_context_prompt') || ADD_CONTEXT_PROMPT;
-      els.friendlyPromptBox.value = payload.friendlyPrompt || localStorage.getItem('pas_friendly_prompt') || FRIENDLY_REWRITE_PROMPT;
-      els.highlightReportPromptBox.value = payload.highlightReportPrompt || localStorage.getItem('pas_highlight_report_prompt') || HIGHLIGHT_REPORT_PROMPT;
-      els.promptNameUniversal.value = payload.promptNameUniversal || localStorage.getItem('pas_prompt_name_universal') || DEFAULT_PROMPT_NAMES.universal;
-      els.promptNameContext.value = payload.promptNameContext || localStorage.getItem('pas_prompt_name_context') || DEFAULT_PROMPT_NAMES.context;
-      els.promptNameFriendly.value = payload.promptNameFriendly || localStorage.getItem('pas_prompt_name_friendly') || DEFAULT_PROMPT_NAMES.friendly;
-      els.promptNameHighlightReport.value = payload.promptNameHighlightReport || localStorage.getItem('pas_prompt_name_highlight_report') || DEFAULT_PROMPT_NAMES.highlightReport;
-      els.engineMode.value = payload.engine || 'local';
-      els.modelName.value = payload.model || 'gpt-4o-mini';
-      els.apiUrl.value = payload.apiUrl || 'https://api.openai.com/v1/responses';
-      els.apiKey.value = payload.apiKey || '';
-      state.paragraphs = payload.paragraphs || getArticleBlocksFromInput();
-      state.summaries = payload.summaries || [];
-      state.summarySources = payload.summarySources || new Array(state.summaries.length).fill('');
-      state.promptModes = payload.promptModes || new Array(state.paragraphs.length).fill('universal');
-      state.highlights = payload.highlights || [];
-      state.highlightReport = payload.highlightReport || '';
-      state.removedStack = Array.isArray(payload.removedStack) ? payload.removedStack : [];
-      render();
+      try {
+        const raw = localStorage.getItem('pas_draft');
+        if (!raw) return alert('No saved draft found in this browser.');
+        const payload = JSON.parse(raw);
+        if (!payload) return alert('No saved draft found in this browser.');
+        setArticleEditorContent(payload.article || '', payload.articleIsRich !== false);
+        els.promptBox.value = payload.prompt || localStorage.getItem('pas_prompt') || DEFAULT_PROMPT;
+        els.contextPromptBox.value = payload.contextPrompt || localStorage.getItem('pas_context_prompt') || ADD_CONTEXT_PROMPT;
+        els.friendlyPromptBox.value = payload.friendlyPrompt || localStorage.getItem('pas_friendly_prompt') || FRIENDLY_REWRITE_PROMPT;
+        els.highlightReportPromptBox.value = payload.highlightReportPrompt || localStorage.getItem('pas_highlight_report_prompt') || HIGHLIGHT_REPORT_PROMPT;
+        els.promptNameUniversal.value = payload.promptNameUniversal || localStorage.getItem('pas_prompt_name_universal') || DEFAULT_PROMPT_NAMES.universal;
+        els.promptNameContext.value = payload.promptNameContext || localStorage.getItem('pas_prompt_name_context') || DEFAULT_PROMPT_NAMES.context;
+        els.promptNameFriendly.value = payload.promptNameFriendly || localStorage.getItem('pas_prompt_name_friendly') || DEFAULT_PROMPT_NAMES.friendly;
+        els.promptNameHighlightReport.value = payload.promptNameHighlightReport || localStorage.getItem('pas_prompt_name_highlight_report') || DEFAULT_PROMPT_NAMES.highlightReport;
+        els.engineMode.value = payload.engine || 'local';
+        els.modelName.value = payload.model || 'gpt-4o-mini';
+        els.apiUrl.value = payload.apiUrl || 'https://api.openai.com/v1/responses';
+        els.apiKey.value = payload.apiKey || '';
+        state.paragraphs = (Array.isArray(payload.paragraphs) && payload.paragraphs.length) ? payload.paragraphs : getArticleBlocksFromInput();
+        state.summaries = Array.isArray(payload.summaries) ? payload.summaries : [];
+        state.summarySources = Array.isArray(payload.summarySources) ? payload.summarySources : new Array(state.summaries.length).fill('');
+        state.promptModes = Array.isArray(payload.promptModes) ? payload.promptModes : new Array(state.paragraphs.length).fill('universal');
+        state.highlights = Array.isArray(payload.highlights) ? payload.highlights : [];
+        state.highlightReport = payload.highlightReport || '';
+        state.removedStack = Array.isArray(payload.removedStack) ? payload.removedStack : [];
+        syncPromptNameLabels();
+        updateAiStatusBanner();
+        render();
+      } catch (err) {
+        console.warn('Load saved draft failed:', err);
+        alert('Saved draft could not be loaded. It may be corrupted or too large for this browser.');
+      }
     }
 
     async function copyAll() {
@@ -7191,6 +7201,7 @@ Paragraph-level summarization is especially useful because it keeps the writer's
     });
     els.printTopBtn?.addEventListener('click', () => window.print());
     els.sampleBtn.addEventListener('click', () => { setArticleEditorContent(SAMPLE, false); setTimeout(buildParaPreview, 0); });
+    els.loadDraftBtn?.addEventListener('click', loadDraft);
     els.clearArticleTextBtn.addEventListener('click', () => {
       setArticleEditorContent('', true);
       setTimeout(buildParaPreview, 0);
@@ -7493,50 +7504,13 @@ Paragraph-level summarization is especially useful because it keeps the writer's
 
     syncPromptNameLabels();
 
-    // ── Auto-restore draft on page load ─────────────────────────────────────
-    (function autoRestoreDraft() {
-      try {
-        const raw = localStorage.getItem('pas_draft');
-        if (!raw) return;
-        const payload = JSON.parse(raw);
-        if (!payload) return;
-        if (payload.article) setArticleEditorContent(payload.article, payload.articleIsRich !== false);
-        if (payload.prompt)               els.promptBox.value               = payload.prompt;
-        if (payload.contextPrompt)        els.contextPromptBox.value        = payload.contextPrompt;
-        if (payload.friendlyPrompt)       els.friendlyPromptBox.value       = payload.friendlyPrompt;
-        if (payload.highlightReportPrompt) els.highlightReportPromptBox.value = payload.highlightReportPrompt;
-        if (payload.promptNameUniversal)  els.promptNameUniversal.value     = payload.promptNameUniversal;
-        if (payload.promptNameContext)    els.promptNameContext.value        = payload.promptNameContext;
-        if (payload.promptNameFriendly)   els.promptNameFriendly.value      = payload.promptNameFriendly;
-        if (payload.promptNameHighlightReport) els.promptNameHighlightReport.value = payload.promptNameHighlightReport;
-        if (payload.engine) els.engineMode.value = payload.engine;
-        if (payload.model)  els.modelName.value  = payload.model;
-        if (payload.apiUrl) els.apiUrl.value      = payload.apiUrl;
-        if (payload.apiKey) els.apiKey.value      = payload.apiKey;
-        if (Array.isArray(payload.paragraphs) && payload.paragraphs.length) {
-          state.paragraphs     = payload.paragraphs;
-          state.summaries      = Array.isArray(payload.summaries)      ? payload.summaries      : new Array(state.paragraphs.length).fill('');
-          state.summarySources = Array.isArray(payload.summarySources) ? payload.summarySources : new Array(state.paragraphs.length).fill('');
-          state.promptModes    = Array.isArray(payload.promptModes)    ? payload.promptModes    : new Array(state.paragraphs.length).fill('universal');
-          state.highlights     = Array.isArray(payload.highlights)     ? payload.highlights     : [];
-          state.highlightReport = payload.highlightReport || '';
-          state.removedStack   = Array.isArray(payload.removedStack)   ? payload.removedStack   : [];
-        } else if (payload.article) {
-          // Paragraphs were stripped from the slim save - re-derive from article HTML
-          state.paragraphs     = getArticleBlocksFromInput();
-          state.summaries      = Array.isArray(payload.summaries)      ? payload.summaries      : new Array(state.paragraphs.length).fill('');
-          state.summarySources = Array.isArray(payload.summarySources) ? payload.summarySources : new Array(state.paragraphs.length).fill('');
-          state.promptModes    = Array.isArray(payload.promptModes)    ? payload.promptModes    : new Array(state.paragraphs.length).fill('universal');
-          state.highlights     = Array.isArray(payload.highlights)     ? payload.highlights     : [];
-          state.highlightReport = payload.highlightReport || '';
-          state.removedStack   = Array.isArray(payload.removedStack)   ? payload.removedStack   : [];
-        }
-        syncPromptNameLabels();
-        updateAiStatusBanner();
-      } catch (err) {
-        console.warn('Auto-restore draft failed silently:', err);
-      }
-    })();
+    // ── Saved draft behavior ────────────────────────────────────────────────
+    // Intentionally do NOT auto-restore pas_draft on startup.
+    // The app should open blank for every browser session/page load.
+    // Users can restore their browser-local work manually with Load Saved Draft.
+    syncPromptNameLabels();
+    updateAiStatusBanner();
+
 
     window.addEventListener('resize', () => {
       scheduleAlignHeights();
@@ -7733,6 +7707,7 @@ Paragraph-level summarization is especially useful because it keeps the writer's
 
       function executeClear() {
         cancelArm();
+        try { localStorage.removeItem('pas_draft'); } catch (_) {}
         setArticleEditorContent('', true);
         state.paragraphs = [];
         state.summaries = [];
@@ -7747,7 +7722,9 @@ Paragraph-level summarization is especially useful because it keeps the writer's
 
       btn.addEventListener('click', e => {
         e.stopPropagation();
-        if (!state.paragraphs.length) return; // nothing to clear
+        const hasVisibleWork = state.paragraphs.length || getArticleBlocksFromInput().length;
+        const hasSavedDraft = !!localStorage.getItem('pas_draft');
+        if (!hasVisibleWork && !hasSavedDraft) return; // nothing to clear
         if (armed) { executeClear(); }
         else { armClear(); }
       });
