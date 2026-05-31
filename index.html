@@ -4545,11 +4545,7 @@
       highlightReport: 'Highlighted Text Report'
     };
 
-    const SAMPLE = `The central problem with modern information overload is not simply that there is too much to read. It is that valuable ideas arrive mixed with repetition, throat-clearing, anecdotes, and contextual scaffolding that may be useful once but inefficient when a reader wants to return to the material later.
-
-A useful summary system should therefore preserve the author's core claims and evidence without flattening the argument into vague bullet points. The goal is not to replace the article, but to create a faithful map of its logic so the reader can recover the original structure quickly.
-
-Paragraph-level summarization is especially useful because it keeps the writer's sequence intact. When summaries sit directly across from the paragraphs they describe, the reader can compare compressed meaning against the source text and catch omissions immediately.`;
+    const SAMPLE = `Why the 25-Hour Workweek Is Coming\n\nBy Jordan Alcott \xe2\x80\x94 The Economic Review\n\nFor decades, productivity researchers have gathered in conference halls trading blows over one question: how many hours a week does a knowledge worker actually need to produce their best output? The answer, according to growing evidence from Iceland, Japan, and several Scandinavian trials, is far fewer than the standard forty. The number that keeps appearing in the literature is closer to twenty-five.\n\nThe Iceland trials \xe2\x80\x94 involving more than two thousand five hundred workers across hospitals, schools, and city offices \xe2\x80\x94 found that reducing hours from forty to thirty-five or fewer did not reduce output. In most cases it improved it. Sick days fell. Staff turnover dropped sharply. Workers reported sleeping better and arriving at their desks with more focused energy. The government eventually made the shorter week an option for the majority of its public workforce.\n\nSkeptics point out that Iceland is small, homogenous, and unusually trusting of government-led experiments. They have a point. But similar results have emerged from Microsoft Japan, which reported a forty percent productivity jump after a four-day trial, and from Unilever New Zealand, where output remained constant while employees worked one fewer day per week for a full year.\n\nThe mechanism behind these results is not mysterious. Human attention is a depleting resource. After roughly four to five hours of demanding cognitive work, error rates climb and creative thinking stalls. What most knowledge workers spend the remaining hours of a standard day doing is not deep work \xe2\x80\x94 it is email triage, low-stakes meetings, and the performance of busyness. Cutting those hours removes friction without removing value.\n\nYet most companies remain locked into the forty-hour frame, and the resistance is cultural as much as economic. Managers trained to equate presence with productivity feel exposed when workers are not visibly at their desks. Open-plan offices, time-tracking software, and activity dashboards all encode the same assumption: that time is a reasonable proxy for output. Dismantling that assumption requires not just new scheduling but new metrics \xe2\x80\x94 and new metrics require trust.\n\nThe transition will not be uniform. Industries built on client responsiveness, such as law and finance, face real constraints that manufacturing or software firms do not. A lawyer billing by the hour cannot simply bill twenty-five of them. These sectors will require more creative restructuring \xe2\x80\x94 staggered shifts, shared caseloads, and renegotiated client expectations \xe2\x80\x94 before any reduction in hours becomes viable at scale.\n\nWhere the shift is most likely to happen first is in the technology sector, where output is already measured in shipped features and closed tickets rather than hours logged. Several mid-size software companies have already made the four-day week permanent. Their recruiting pipelines have widened considerably. For companies competing for engineering talent, the shorter week is becoming less an experiment and more a retention strategy.\n\nThe deeper question is whether a society organised around forty hours of paid work per week can absorb a structural shift without fracturing. Pension systems, healthcare contributions, and tax revenues are all calibrated to a labour market where full-time means forty hours. If twenty-five becomes the new standard, those systems will need recalibration \xe2\x80\x94 and that is a political project as much as an economic one.`;
 
     const state = {
       paragraphs: [],
@@ -5062,7 +5058,8 @@ Paragraph-level summarization is especially useful because it keeps the writer's
       els.libraryPage?.setAttribute('aria-hidden', 'true');
       els.highlightedTextBtn.classList.toggle('active', showingHighlights);
       els.highlightedTextBtn.setAttribute('aria-pressed', String(showingHighlights));
-      els.highlightedTextBtn.querySelector('.btn-label').textContent = showingHighlights ? 'Article' : 'Highlighted Text';
+      const hlLabel = els.highlightedTextBtn.querySelector('.input-fancy-title');
+      if (hlLabel) hlLabel.textContent = showingHighlights ? '← Back to Article' : 'Highlighted Text';
       els.libraryPageBtn?.classList.remove('active');
       els.libraryPageBtn?.setAttribute('aria-pressed', 'false');
       const lLabel = els.libraryPageBtn?.querySelector('.btn-label');
@@ -6713,6 +6710,7 @@ Paragraph-level summarization is especially useful because it keeps the writer's
     });
     els.printTopBtn?.addEventListener('click', () => window.print());
     els.sampleBtn.addEventListener('click', () => { setArticleEditorContent(SAMPLE, false); setTimeout(buildParaPreview, 0); });
+
     els.clearArticleTextBtn.addEventListener('click', () => {
       setArticleEditorContent('', true);
       setTimeout(buildParaPreview, 0);
