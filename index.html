@@ -3579,6 +3579,14 @@
       flex: 1; border: none; min-height: 0;
     }
 
+    /* ── File import buttons ── */
+    .import-btn-row { display: flex; align-items: center; gap: 8px; flex-shrink: 0; margin-bottom: 2px; }
+    .import-btn { display: inline-flex; align-items: center; gap: 5px; padding: 5px 12px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.18); background: rgba(255,255,255,0.07); color: #cbd5e1; font-size: 12px; font-weight: 800; cursor: pointer; transition: background 0.12s; white-space: nowrap; }
+    .import-btn:hover { background: rgba(255,255,255,0.14); border-color: rgba(255,255,255,0.3); }
+    body.light-mode .import-btn { background: rgba(0,0,0,0.05); border-color: rgba(0,0,0,0.16); color: #374151; }
+    body.light-mode .import-btn:hover { background: rgba(0,0,0,0.10); }
+    .import-status { font-size: 11px; color: #38bdf8; font-weight: 700; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
     /* Kill trailing whitespace after last paragraph */
     #leftList { padding-bottom: 4px !important; }
     #leftList > *:last-child { margin-bottom: 0 !important; padding-bottom: 0 !important; }
@@ -4010,485 +4018,7 @@
         font-size: 10px !important;
       }
     }
-
-
-    /* Prado patch 2026-05-31: make prompt dropdowns readable */
-    .prompt-mode-select,
-    #leftList .prompt-mode-select,
-    #rightList .prompt-mode-select,
-    #promptModal select,
-    .modal-body select {
-      height: 38px !important;
-      min-height: 38px !important;
-      line-height: 38px !important;
-      min-width: 220px !important;
-      max-width: min(360px, 100%) !important;
-      width: auto !important;
-      padding: 0 42px 0 14px !important;
-      border-radius: 14px !important;
-      font-size: 13.5px !important;
-      font-weight: 900 !important;
-      letter-spacing: 0 !important;
-      color: #f8fafc !important;
-      background-color: #0f172a !important;
-      border: 1px solid rgba(56, 189, 248, 0.55) !important;
-      box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.08),
-        0 8px 20px rgba(2, 6, 23, 0.24) !important;
-      text-transform: none !important;
-      text-overflow: ellipsis !important;
-      white-space: nowrap !important;
-      overflow: hidden !important;
-      cursor: pointer !important;
-      background-image:
-        linear-gradient(45deg, transparent 50%, #f8fafc 50%),
-        linear-gradient(135deg, #f8fafc 50%, transparent 50%) !important;
-      background-position:
-        calc(100% - 22px) 16px,
-        calc(100% - 15px) 16px !important;
-      background-size: 7px 7px, 7px 7px !important;
-      background-repeat: no-repeat !important;
-    }
-
-    .prompt-mode-select:hover,
-    .prompt-mode-select:focus,
-    #leftList .prompt-mode-select:hover,
-    #leftList .prompt-mode-select:focus,
-    #rightList .prompt-mode-select:hover,
-    #rightList .prompt-mode-select:focus,
-    #promptModal select:hover,
-    #promptModal select:focus,
-    .modal-body select:hover,
-    .modal-body select:focus {
-      color: #ffffff !important;
-      background-color: #111827 !important;
-      border-color: rgba(125, 211, 252, 0.95) !important;
-      box-shadow:
-        0 0 0 4px rgba(56, 189, 248, 0.18),
-        0 12px 26px rgba(2, 6, 23, 0.34) !important;
-      outline: none !important;
-    }
-
-    .prompt-mode-select option,
-    #leftList .prompt-mode-select option,
-    #rightList .prompt-mode-select option,
-    #promptModal select option,
-    .modal-body select option {
-      color: #0f172a !important;
-      background: #ffffff !important;
-      font-size: 14px !important;
-      font-weight: 800 !important;
-      padding: 10px 12px !important;
-    }
-
-    #leftList .paragraph-tools,
-    #rightList .paragraph-tools,
-    #leftList .ai-prompt-tools,
-    #rightList .ai-prompt-tools {
-      min-width: min(100%, 220px) !important;
-    }
-
-    body.light-mode .prompt-mode-select,
-    body.light-mode #leftList .prompt-mode-select,
-    body.light-mode #rightList .prompt-mode-select,
-    body.light-mode #promptModal select,
-    body.light-mode .modal-body select {
-      color: #0f172a !important;
-      background-color: #ffffff !important;
-      border-color: rgba(14, 116, 144, 0.46) !important;
-      box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.92),
-        0 8px 18px rgba(15, 23, 42, 0.10) !important;
-      background-image:
-        linear-gradient(45deg, transparent 50%, #0f172a 50%),
-        linear-gradient(135deg, #0f172a 50%, transparent 50%) !important;
-    }
-
-    body.light-mode .prompt-mode-select:hover,
-    body.light-mode .prompt-mode-select:focus,
-    body.light-mode #leftList .prompt-mode-select:hover,
-    body.light-mode #leftList .prompt-mode-select:focus,
-    body.light-mode #rightList .prompt-mode-select:hover,
-    body.light-mode #rightList .prompt-mode-select:focus,
-    body.light-mode #promptModal select:hover,
-    body.light-mode #promptModal select:focus,
-    body.light-mode .modal-body select:hover,
-    body.light-mode .modal-body select:focus {
-      color: #020617 !important;
-      background-color: #f8fafc !important;
-      border-color: rgba(14, 116, 144, 0.85) !important;
-      box-shadow:
-        0 0 0 4px rgba(14, 165, 233, 0.16),
-        0 10px 22px rgba(15, 23, 42, 0.14) !important;
-    }
-
-    @media (max-width: 560px) {
-      .prompt-mode-select,
-      #leftList .prompt-mode-select,
-      #rightList .prompt-mode-select,
-      #promptModal select,
-      .modal-body select {
-        width: 100% !important;
-        min-width: 0 !important;
-        max-width: none !important;
-        height: 42px !important;
-        line-height: 42px !important;
-        font-size: 14px !important;
-        background-position:
-          calc(100% - 22px) 18px,
-          calc(100% - 15px) 18px !important;
-      }
-    }
-
-
-
-    /* PRADO PATCH — make prompt-selection dropdowns more opaque/readable */
-    .prompt-mode-select,
-    #rightList .prompt-mode-select,
-    .pane.reading-pane .prompt-mode-select {
-      background-color: #020617 !important;
-      background-image:
-        linear-gradient(45deg, transparent 50%, #ffffff 50%),
-        linear-gradient(135deg, #ffffff 50%, transparent 50%) !important;
-      color: #ffffff !important;
-      border: 2px solid rgba(125, 211, 252, 0.88) !important;
-      box-shadow:
-        0 0 0 1px rgba(255, 255, 255, 0.12),
-        0 12px 28px rgba(0, 0, 0, 0.55),
-        inset 0 1px 0 rgba(255, 255, 255, 0.10) !important;
-      opacity: 1 !important;
-      font-weight: 950 !important;
-    }
-
-    .prompt-mode-select option,
-    #rightList .prompt-mode-select option,
-    .pane.reading-pane .prompt-mode-select option {
-      background: #020617 !important;
-      color: #ffffff !important;
-      font-weight: 900 !important;
-    }
-
-    body.light-mode .prompt-mode-select,
-    body.light-mode #rightList .prompt-mode-select,
-    body.light-mode .pane.reading-pane .prompt-mode-select {
-      background-color: #ffffff !important;
-      background-image:
-        linear-gradient(45deg, transparent 50%, #0f172a 50%),
-        linear-gradient(135deg, #0f172a 50%, transparent 50%) !important;
-      color: #0f172a !important;
-      border: 2px solid rgba(2, 132, 199, 0.88) !important;
-      box-shadow:
-        0 0 0 1px rgba(15, 23, 42, 0.12),
-        0 12px 28px rgba(15, 23, 42, 0.22),
-        inset 0 1px 0 rgba(255, 255, 255, 0.92) !important;
-      opacity: 1 !important;
-    }
-
-    body.light-mode .prompt-mode-select option,
-    body.light-mode #rightList .prompt-mode-select option,
-    body.light-mode .pane.reading-pane .prompt-mode-select option {
-      background: #ffffff !important;
-      color: #0f172a !important;
-    }
-
-    .para-action-menu {
-      background: #020617 !important;
-      border: 2px solid rgba(125, 211, 252, 0.78) !important;
-      box-shadow:
-        0 28px 70px rgba(0, 0, 0, 0.90),
-        0 0 0 1px rgba(255, 255, 255, 0.10) !important;
-      opacity: 1 !important;
-      backdrop-filter: none !important;
-    }
-
-    .para-menu-item {
-      background: #0f172a !important;
-      margin: 3px 0 !important;
-      border: 1px solid rgba(255, 255, 255, 0.10) !important;
-    }
-
-    .para-menu-item:hover,
-    .para-menu-item.active {
-      background: #075985 !important;
-      border-color: rgba(125, 211, 252, 0.58) !important;
-    }
-
-    .para-menu-title { color: #ffffff !important; }
-    .para-menu-desc,
-    .para-menu-section-label { color: #dbeafe !important; }
-
-    body.light-mode .para-action-menu {
-      background: #ffffff !important;
-      border: 2px solid rgba(2, 132, 199, 0.70) !important;
-      box-shadow:
-        0 28px 70px rgba(15, 23, 42, 0.32),
-        0 0 0 1px rgba(15, 23, 42, 0.08) !important;
-      opacity: 1 !important;
-      backdrop-filter: none !important;
-    }
-
-    body.light-mode .para-menu-item {
-      background: #f8fafc !important;
-      border: 1px solid rgba(15, 23, 42, 0.10) !important;
-    }
-
-    body.light-mode .para-menu-item:hover,
-    body.light-mode .para-menu-item.active {
-      background: #dbeafe !important;
-      border-color: rgba(2, 132, 199, 0.36) !important;
-    }
-
-    body.light-mode .para-menu-title { color: #0f172a !important; }
-    body.light-mode .para-menu-desc,
-    body.light-mode .para-menu-section-label { color: #334155 !important; }
-
-
-    /* PRADO PATCH — prevent prompt action menu overlap/bleed-through */
-    .para-action-menu.open {
-      z-index: 2147483647 !important;
-      background: #020617 !important;
-      border: 2px solid rgba(125, 211, 252, 0.95) !important;
-      box-shadow:
-        0 34px 90px rgba(0, 0, 0, 0.96),
-        0 0 0 9999px rgba(2, 6, 23, 0.10) !important;
-      opacity: 1 !important;
-      backdrop-filter: none !important;
-    }
-
-    body.para-menu-open .para-action-wrap:not(.menu-active) .para-action-btn {
-      visibility: hidden !important;
-      pointer-events: none !important;
-    }
-
-    body.para-menu-open .para-action-wrap.menu-active .para-action-btn {
-      visibility: visible !important;
-    }
-
-    body.light-mode .para-action-menu.open {
-      background: #ffffff !important;
-      border-color: rgba(2, 132, 199, 0.92) !important;
-      box-shadow:
-        0 34px 90px rgba(15, 23, 42, 0.36),
-        0 0 0 9999px rgba(15, 23, 42, 0.05) !important;
-    }
-
-
-    /* PRADO PATCH — keep paragraph prompt menu in-flow so it does NOT overlap the next paragraph */
-    .original-control-row {
-      align-items: flex-start !important;
-      flex-wrap: wrap !important;
-      overflow: visible !important;
-      row-gap: 8px !important;
-    }
-
-    .para-card,
-    .summary-card,
-    .paragraph-list,
-    #leftList,
-    #rightList {
-      overflow: visible !important;
-    }
-
-    .para-action-wrap {
-      position: relative !important;
-      display: inline-flex !important;
-      flex-direction: column !important;
-      align-items: flex-start !important;
-      max-width: 100% !important;
-      overflow: visible !important;
-    }
-
-    .para-action-wrap.menu-active {
-      flex: 1 1 100% !important;
-      width: 100% !important;
-      z-index: 25 !important;
-    }
-
-    .para-action-wrap.menu-active .para-action-btn {
-      margin-bottom: 8px !important;
-    }
-
-    .para-action-menu,
-    .para-action-menu.open {
-      position: static !important;
-      left: auto !important;
-      top: auto !important;
-      right: auto !important;
-      bottom: auto !important;
-      width: min(380px, 100%) !important;
-      min-width: min(300px, 100%) !important;
-      max-width: 100% !important;
-      margin-top: 0 !important;
-      transform: none !important;
-      z-index: 25 !important;
-      box-sizing: border-box !important;
-    }
-
-    .para-action-menu.open {
-      display: block !important;
-      box-shadow:
-        0 18px 42px rgba(0, 0, 0, 0.82),
-        0 0 0 1px rgba(255, 255, 255, 0.10) !important;
-    }
-
-    body.light-mode .para-action-menu.open {
-      box-shadow:
-        0 18px 42px rgba(15, 23, 42, 0.20),
-        0 0 0 1px rgba(15, 23, 42, 0.08) !important;
-    }
-
-    body.para-menu-open .para-action-wrap:not(.menu-active) .para-action-btn {
-      visibility: visible !important;
-      pointer-events: auto !important;
-    }
-
-    @media (max-width: 560px) {
-      .para-action-wrap.menu-active,
-      .para-action-menu.open {
-        width: 100% !important;
-      }
-    }
-
-
-
-    /* PRADO PATCH — professional floating prompt menu with reserved space */
-    /* Restores a polished popover look while preventing overlap with the next paragraph. */
-    .para-action-wrap {
-      position: relative !important;
-      display: inline-block !important;
-      flex-direction: initial !important;
-      align-items: initial !important;
-      width: auto !important;
-      max-width: 100% !important;
-      overflow: visible !important;
-    }
-
-    .para-action-wrap.menu-active {
-      flex: 0 0 auto !important;
-      width: auto !important;
-      z-index: 2147483000 !important;
-    }
-
-    .para-action-wrap.menu-active .para-action-btn {
-      margin-bottom: 0 !important;
-    }
-
-    .para-action-menu,
-    .para-action-menu.open {
-      position: fixed !important;
-      left: auto !important;
-      top: auto !important;
-      right: auto !important;
-      bottom: auto !important;
-      display: none;
-      width: 340px !important;
-      min-width: 300px !important;
-      max-width: calc(100vw - 24px) !important;
-      max-height: min(440px, calc(100vh - 28px)) !important;
-      margin: 0 !important;
-      padding: 8px !important;
-      overflow-y: auto !important;
-      transform: none !important;
-      z-index: 2147483647 !important;
-      border-radius: 18px !important;
-      background: #020617 !important;
-      border: 1px solid rgba(125, 211, 252, 0.72) !important;
-      box-shadow:
-        0 26px 74px rgba(0, 0, 0, 0.88),
-        0 0 0 1px rgba(255, 255, 255, 0.08),
-        inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
-      opacity: 1 !important;
-      backdrop-filter: none !important;
-    }
-
-    .para-action-menu.open {
-      display: block !important;
-    }
-
-    .para-action-menu::before {
-      content: "";
-      position: absolute;
-      top: -7px;
-      left: var(--menu-arrow-left, 26px);
-      width: 12px;
-      height: 12px;
-      transform: rotate(45deg);
-      background: #020617;
-      border-left: 1px solid rgba(125, 211, 252, 0.62);
-      border-top: 1px solid rgba(125, 211, 252, 0.62);
-    }
-
-    .para-action-menu.open.menu-above::before {
-      top: auto;
-      bottom: -7px;
-      border-left: 0;
-      border-top: 0;
-      border-right: 1px solid rgba(125, 211, 252, 0.62);
-      border-bottom: 1px solid rgba(125, 211, 252, 0.62);
-    }
-
-    .para-menu-item {
-      border-radius: 12px !important;
-      padding: 10px 11px !important;
-      border: 1px solid transparent !important;
-      background: transparent !important;
-    }
-
-    .para-menu-item:hover,
-    .para-menu-item.active {
-      background: rgba(14, 165, 233, 0.18) !important;
-      border-color: rgba(125, 211, 252, 0.28) !important;
-    }
-
-    .para-menu-title { color: #f8fafc !important; font-size: 12.5px !important; }
-    .para-menu-desc { color: #bae6fd !important; font-size: 10.5px !important; }
-    .para-menu-section-label { color: #93c5fd !important; }
-
-    body.light-mode .para-action-menu,
-    body.light-mode .para-action-menu.open {
-      background: #ffffff !important;
-      border-color: rgba(2, 132, 199, 0.58) !important;
-      box-shadow:
-        0 26px 74px rgba(15, 23, 42, 0.24),
-        0 0 0 1px rgba(15, 23, 42, 0.08),
-        inset 0 1px 0 rgba(255, 255, 255, 0.92) !important;
-    }
-
-    body.light-mode .para-action-menu::before {
-      background: #ffffff;
-      border-color: rgba(2, 132, 199, 0.50);
-    }
-
-    body.light-mode .para-menu-title { color: #0f172a !important; }
-    body.light-mode .para-menu-desc { color: #475569 !important; }
-    body.light-mode .para-menu-section-label { color: #0369a1 !important; }
-
-    body.light-mode .para-menu-item:hover,
-    body.light-mode .para-menu-item.active {
-      background: #e0f2fe !important;
-      border-color: rgba(2, 132, 199, 0.22) !important;
-    }
-
-    body.para-menu-open .para-action-wrap:not(.menu-active) .para-action-btn {
-      visibility: visible !important;
-      pointer-events: auto !important;
-    }
-
-    .summary-card.menu-space-reserved,
-    .para-card.menu-space-reserved {
-      transition: margin-bottom 0.16s ease !important;
-    }
-
-    @media (max-width: 560px) {
-      .para-action-menu,
-      .para-action-menu.open {
-        width: calc(100vw - 24px) !important;
-        min-width: 0 !important;
-      }
-    }
-
-
-  </style>
+</style>
 </head>
 <body>
   <header>
@@ -4631,7 +4161,6 @@
             </div>
           </div>
         </div>
-        <button class="top-action" id="loadDraftBtn"><span class="btn-icon">📂</span><span class="btn-label">Load Saved Draft</span></button>
         <button class="top-action top-danger" id="clearBtn"><span class="btn-icon">🗑</span><span class="btn-label">Clear</span></button>
       </div>
     </div>
@@ -4660,9 +4189,20 @@
 
         <!-- LEFT: Paste area -->
         <div class="article-modal-left">
-          <div class="article-modal-section-label">Paste your article</div>
+          <div class="article-modal-section-label">Paste your article or import a file</div>
+          <div class="import-btn-row">
+            <label class="import-btn" title="Import PDF">
+              📄 PDF
+              <input type="file" id="importPdfInput" accept=".pdf" style="display:none">
+            </label>
+            <label class="import-btn" title="Import EPUB">
+              📖 EPUB
+              <input type="file" id="importEpubInput" accept=".epub" style="display:none">
+            </label>
+            <span id="importStatus" class="import-status"></span>
+          </div>
           <div id="articleRichInput" class="article-rich-input" contenteditable="true" role="textbox" aria-multiline="true" spellcheck="false"
-            data-placeholder="Paste article text here (Ctrl+V). Images copied from webpages will be embedded automatically."></div>
+            data-placeholder="Paste article text here (Ctrl+V), or import a PDF/EPUB above."></div>
           <textarea id="articleInput" aria-hidden="true" tabindex="-1" style="display:none"></textarea>
           <div class="article-modal-actions-row">
             <button class="modal-secondary" id="sampleBtn" type="button">Load Sample</button>
@@ -4763,7 +4303,7 @@
           </div>
         </div>
         <div class="modal-panel-note" id="apiNotice">
-          <strong>Engine note:</strong> Full AI tools require API mode, a valid API key, and a reachable endpoint. Default endpoint uses the OpenAI Responses API; custom proxy or Chat Completions URLs are also supported.
+          <strong>Engine note:</strong> true AI rewriting requires API mode, a valid API key, and a reachable endpoint. Default endpoint uses the OpenAI Responses API; custom proxy or Chat Completions URLs are also supported.
         </div>
       </div>
       <div class="modal-actions">
@@ -4841,8 +4381,8 @@
       <div class="ai-status-left">
         <div class="ai-status-icon">⚠</div>
         <div>
-          <strong>Enter API Key to Unlock AI Tools</strong>
-          <span id="aiStatusText">The engine is set to Local fallback. Enter an API key to start taking full advantage of AI tools.</span>
+          <strong>Not generating true AI summaries</strong>
+          <span id="aiStatusText">The app is using the local fallback because no API key is active.</span>
         </div>
       </div>
       <button class="ai-status-action" id="bannerOpenPromptBtn">Add API Key</button>
@@ -5024,11 +4564,7 @@
       highlightReport: 'Highlighted Text Report'
     };
 
-    const SAMPLE = `The central problem with modern information overload is not simply that there is too much to read. It is that valuable ideas arrive mixed with repetition, throat-clearing, anecdotes, and contextual scaffolding that may be useful once but inefficient when a reader wants to return to the material later.
-
-A useful summary system should therefore preserve the author's core claims and evidence without flattening the argument into vague bullet points. The goal is not to replace the article, but to create a faithful map of its logic so the reader can recover the original structure quickly.
-
-Paragraph-level summarization is especially useful because it keeps the writer's sequence intact. When summaries sit directly across from the paragraphs they describe, the reader can compare compressed meaning against the source text and catch omissions immediately.`;
+    const SAMPLE = `Why the 25-Hour Workweek Is Coming\n\nBy Jordan Alcott \xe2\x80\x94 The Economic Review\n\nFor decades, productivity researchers have gathered in conference halls trading blows over one question: how many hours a week does a knowledge worker actually need to produce their best output? The answer, according to growing evidence from Iceland, Japan, and several Scandinavian trials, is far fewer than the standard forty. The number that keeps appearing in the literature is closer to twenty-five.\n\nThe Iceland trials \xe2\x80\x94 involving more than two thousand five hundred workers across hospitals, schools, and city offices \xe2\x80\x94 found that reducing hours from forty to thirty-five or fewer did not reduce output. In most cases it improved it. Sick days fell. Staff turnover dropped sharply. Workers reported sleeping better and arriving at their desks with more focused energy. The government eventually made the shorter week an option for the majority of its public workforce.\n\nSkeptics point out that Iceland is small, homogenous, and unusually trusting of government-led experiments. They have a point. But similar results have emerged from Microsoft Japan, which reported a forty percent productivity jump after a four-day trial, and from Unilever New Zealand, where output remained constant while employees worked one fewer day per week for a full year.\n\nThe mechanism behind these results is not mysterious. Human attention is a depleting resource. After roughly four to five hours of demanding cognitive work, error rates climb and creative thinking stalls. What most knowledge workers spend the remaining hours of a standard day doing is not deep work \xe2\x80\x94 it is email triage, low-stakes meetings, and the performance of busyness. Cutting those hours removes friction without removing value.\n\nYet most companies remain locked into the forty-hour frame, and the resistance is cultural as much as economic. Managers trained to equate presence with productivity feel exposed when workers are not visibly at their desks. Open-plan offices, time-tracking software, and activity dashboards all encode the same assumption: that time is a reasonable proxy for output. Dismantling that assumption requires not just new scheduling but new metrics \xe2\x80\x94 and new metrics require trust.\n\nThe transition will not be uniform. Industries built on client responsiveness, such as law and finance, face real constraints that manufacturing or software firms do not. A lawyer billing by the hour cannot simply bill twenty-five of them. These sectors will require more creative restructuring \xe2\x80\x94 staggered shifts, shared caseloads, and renegotiated client expectations \xe2\x80\x94 before any reduction in hours becomes viable at scale.\n\nWhere the shift is most likely to happen first is in the technology sector, where output is already measured in shipped features and closed tickets rather than hours logged. Several mid-size software companies have already made the four-day week permanent. Their recruiting pipelines have widened considerably. For companies competing for engineering talent, the shorter week is becoming less an experiment and more a retention strategy.\n\nThe deeper question is whether a society organised around forty hours of paid work per week can absorb a structural shift without fracturing. Pension systems, healthcare contributions, and tax revenues are all calibrated to a labour market where full-time means forty hours. If twenty-five becomes the new standard, those systems will need recalibration \xe2\x80\x94 and that is a political project as much as an economic one.`;
 
     const state = {
       paragraphs: [],
@@ -5101,7 +4637,6 @@ Paragraph-level summarization is especially useful because it keeps the writer's
       apiUrl: document.getElementById('apiUrl'),
       copyAllBtn: document.getElementById('copyAllBtn'),
       printTopBtn: document.getElementById('printTopBtn'),
-      loadDraftBtn: document.getElementById('loadDraftBtn'),
       clearBtn: document.getElementById('clearBtn'),
       sampleBtn: document.getElementById('sampleBtn'),
       textSizeSlider: document.getElementById('textSizeSlider'),
@@ -5542,7 +5077,8 @@ Paragraph-level summarization is especially useful because it keeps the writer's
       els.libraryPage?.setAttribute('aria-hidden', 'true');
       els.highlightedTextBtn.classList.toggle('active', showingHighlights);
       els.highlightedTextBtn.setAttribute('aria-pressed', String(showingHighlights));
-      els.highlightedTextBtn.querySelector('.btn-label').textContent = showingHighlights ? 'Article' : 'Highlighted Text';
+      const hlLabel = els.highlightedTextBtn.querySelector('.input-fancy-title');
+      if (hlLabel) hlLabel.textContent = showingHighlights ? '← Back to Article' : 'Highlighted Text';
       els.libraryPageBtn?.classList.remove('active');
       els.libraryPageBtn?.setAttribute('aria-pressed', 'false');
       const lLabel = els.libraryPageBtn?.querySelector('.btn-label');
@@ -5624,7 +5160,7 @@ Paragraph-level summarization is especially useful because it keeps the writer's
         saveSilent();
         renderHighlightedTextPage();
       } catch (err) {
-        state.highlightReport = `API report generation was not completed. ${explainApiError(err)}\n\nFallback report:\n${localHighlightedReport()}`;
+        state.highlightReport = `Could not generate true AI report. ${explainApiError(err)}\n\nFallback report:\n${localHighlightedReport()}`;
         saveSilent();
         renderHighlightedTextPage();
       } finally {
@@ -6209,7 +5745,7 @@ Paragraph-level summarization is especially useful because it keeps the writer's
         state.edited.delete(index);
       } catch (err) {
         state.summarySources[index] = 'fallback';
-        state.summaries[index] = `API summary generation was not completed. ${explainApiError(err)}\n\nFallback: ${localHighFidelitySummary(paragraph, Date.now() % 3)}`;
+        state.summaries[index] = `Could not generate true AI summary. ${explainApiError(err)}\n\nFallback: ${localHighFidelitySummary(paragraph, Date.now() % 3)}`;
       } finally {
         state.busy.delete(index);
         // Last-run metric removed from the interface.
@@ -6563,11 +6099,11 @@ Paragraph-level summarization is especially useful because it keeps the writer's
       els.aiStatusBanner.classList.toggle('show', !isTrueAi);
 
       if (!usingApi) {
-        els.aiStatusText.textContent = 'Engine is set to Local fallback. Enter an API key to start taking full advantage of AI tools.';
+        els.aiStatusText.textContent = 'Engine is set to Local fallback, so summaries are extractive instead of true AI-generated responses.';
         els.bannerOpenPromptBtn.textContent = 'Switch Engine';
       } else if (!hasKey) {
-        els.aiStatusText.textContent = 'API mode is selected, but no API key is entered. Enter an API key to start taking full advantage of AI tools.';
-        els.bannerOpenPromptBtn.textContent = 'Enter API Key';
+        els.aiStatusText.textContent = 'API mode is selected, but no API key is entered. Add a key to generate true AI summaries.';
+        els.bannerOpenPromptBtn.textContent = 'Add API Key';
       } else {
         els.aiStatusText.textContent = 'API mode is active.';
         els.bannerOpenPromptBtn.textContent = 'Prompt Bank';
@@ -7120,38 +6656,30 @@ Paragraph-level summarization is especially useful because it keeps the writer's
     }
 
     function loadDraft() {
-      try {
-        const raw = localStorage.getItem('pas_draft');
-        if (!raw) return alert('No saved draft found in this browser.');
-        const payload = JSON.parse(raw);
-        if (!payload) return alert('No saved draft found in this browser.');
-        setArticleEditorContent(payload.article || '', payload.articleIsRich !== false);
-        els.promptBox.value = payload.prompt || localStorage.getItem('pas_prompt') || DEFAULT_PROMPT;
-        els.contextPromptBox.value = payload.contextPrompt || localStorage.getItem('pas_context_prompt') || ADD_CONTEXT_PROMPT;
-        els.friendlyPromptBox.value = payload.friendlyPrompt || localStorage.getItem('pas_friendly_prompt') || FRIENDLY_REWRITE_PROMPT;
-        els.highlightReportPromptBox.value = payload.highlightReportPrompt || localStorage.getItem('pas_highlight_report_prompt') || HIGHLIGHT_REPORT_PROMPT;
-        els.promptNameUniversal.value = payload.promptNameUniversal || localStorage.getItem('pas_prompt_name_universal') || DEFAULT_PROMPT_NAMES.universal;
-        els.promptNameContext.value = payload.promptNameContext || localStorage.getItem('pas_prompt_name_context') || DEFAULT_PROMPT_NAMES.context;
-        els.promptNameFriendly.value = payload.promptNameFriendly || localStorage.getItem('pas_prompt_name_friendly') || DEFAULT_PROMPT_NAMES.friendly;
-        els.promptNameHighlightReport.value = payload.promptNameHighlightReport || localStorage.getItem('pas_prompt_name_highlight_report') || DEFAULT_PROMPT_NAMES.highlightReport;
-        els.engineMode.value = payload.engine || 'local';
-        els.modelName.value = payload.model || 'gpt-4o-mini';
-        els.apiUrl.value = payload.apiUrl || 'https://api.openai.com/v1/responses';
-        els.apiKey.value = payload.apiKey || '';
-        state.paragraphs = (Array.isArray(payload.paragraphs) && payload.paragraphs.length) ? payload.paragraphs : getArticleBlocksFromInput();
-        state.summaries = Array.isArray(payload.summaries) ? payload.summaries : [];
-        state.summarySources = Array.isArray(payload.summarySources) ? payload.summarySources : new Array(state.summaries.length).fill('');
-        state.promptModes = Array.isArray(payload.promptModes) ? payload.promptModes : new Array(state.paragraphs.length).fill('universal');
-        state.highlights = Array.isArray(payload.highlights) ? payload.highlights : [];
-        state.highlightReport = payload.highlightReport || '';
-        state.removedStack = Array.isArray(payload.removedStack) ? payload.removedStack : [];
-        syncPromptNameLabels();
-        updateAiStatusBanner();
-        render();
-      } catch (err) {
-        console.warn('Load saved draft failed:', err);
-        alert('Saved draft could not be loaded. It may be corrupted or too large for this browser.');
-      }
+      const raw = localStorage.getItem('pas_draft');
+      if (!raw) return alert('No saved draft found in this browser.');
+      const payload = JSON.parse(raw);
+      setArticleEditorContent(payload.article || '', payload.articleIsRich !== false);
+      els.promptBox.value = payload.prompt || localStorage.getItem('pas_prompt') || DEFAULT_PROMPT;
+      els.contextPromptBox.value = payload.contextPrompt || localStorage.getItem('pas_context_prompt') || ADD_CONTEXT_PROMPT;
+      els.friendlyPromptBox.value = payload.friendlyPrompt || localStorage.getItem('pas_friendly_prompt') || FRIENDLY_REWRITE_PROMPT;
+      els.highlightReportPromptBox.value = payload.highlightReportPrompt || localStorage.getItem('pas_highlight_report_prompt') || HIGHLIGHT_REPORT_PROMPT;
+      els.promptNameUniversal.value = payload.promptNameUniversal || localStorage.getItem('pas_prompt_name_universal') || DEFAULT_PROMPT_NAMES.universal;
+      els.promptNameContext.value = payload.promptNameContext || localStorage.getItem('pas_prompt_name_context') || DEFAULT_PROMPT_NAMES.context;
+      els.promptNameFriendly.value = payload.promptNameFriendly || localStorage.getItem('pas_prompt_name_friendly') || DEFAULT_PROMPT_NAMES.friendly;
+      els.promptNameHighlightReport.value = payload.promptNameHighlightReport || localStorage.getItem('pas_prompt_name_highlight_report') || DEFAULT_PROMPT_NAMES.highlightReport;
+      els.engineMode.value = payload.engine || 'local';
+      els.modelName.value = payload.model || 'gpt-4o-mini';
+      els.apiUrl.value = payload.apiUrl || 'https://api.openai.com/v1/responses';
+      els.apiKey.value = payload.apiKey || '';
+      state.paragraphs = payload.paragraphs || getArticleBlocksFromInput();
+      state.summaries = payload.summaries || [];
+      state.summarySources = payload.summarySources || new Array(state.summaries.length).fill('');
+      state.promptModes = payload.promptModes || new Array(state.paragraphs.length).fill('universal');
+      state.highlights = payload.highlights || [];
+      state.highlightReport = payload.highlightReport || '';
+      state.removedStack = Array.isArray(payload.removedStack) ? payload.removedStack : [];
+      render();
     }
 
     async function copyAll() {
@@ -7201,7 +6729,7 @@ Paragraph-level summarization is especially useful because it keeps the writer's
     });
     els.printTopBtn?.addEventListener('click', () => window.print());
     els.sampleBtn.addEventListener('click', () => { setArticleEditorContent(SAMPLE, false); setTimeout(buildParaPreview, 0); });
-    els.loadDraftBtn?.addEventListener('click', loadDraft);
+
     els.clearArticleTextBtn.addEventListener('click', () => {
       setArticleEditorContent('', true);
       setTimeout(buildParaPreview, 0);
@@ -7504,13 +7032,50 @@ Paragraph-level summarization is especially useful because it keeps the writer's
 
     syncPromptNameLabels();
 
-    // ── Saved draft behavior ────────────────────────────────────────────────
-    // Intentionally do NOT auto-restore pas_draft on startup.
-    // The app should open blank for every browser session/page load.
-    // Users can restore their browser-local work manually with Load Saved Draft.
-    syncPromptNameLabels();
-    updateAiStatusBanner();
-
+    // ── Auto-restore draft on page load ─────────────────────────────────────
+    (function autoRestoreDraft() {
+      try {
+        const raw = localStorage.getItem('pas_draft');
+        if (!raw) return;
+        const payload = JSON.parse(raw);
+        if (!payload) return;
+        if (payload.article) setArticleEditorContent(payload.article, payload.articleIsRich !== false);
+        if (payload.prompt)               els.promptBox.value               = payload.prompt;
+        if (payload.contextPrompt)        els.contextPromptBox.value        = payload.contextPrompt;
+        if (payload.friendlyPrompt)       els.friendlyPromptBox.value       = payload.friendlyPrompt;
+        if (payload.highlightReportPrompt) els.highlightReportPromptBox.value = payload.highlightReportPrompt;
+        if (payload.promptNameUniversal)  els.promptNameUniversal.value     = payload.promptNameUniversal;
+        if (payload.promptNameContext)    els.promptNameContext.value        = payload.promptNameContext;
+        if (payload.promptNameFriendly)   els.promptNameFriendly.value      = payload.promptNameFriendly;
+        if (payload.promptNameHighlightReport) els.promptNameHighlightReport.value = payload.promptNameHighlightReport;
+        if (payload.engine) els.engineMode.value = payload.engine;
+        if (payload.model)  els.modelName.value  = payload.model;
+        if (payload.apiUrl) els.apiUrl.value      = payload.apiUrl;
+        if (payload.apiKey) els.apiKey.value      = payload.apiKey;
+        if (Array.isArray(payload.paragraphs) && payload.paragraphs.length) {
+          state.paragraphs     = payload.paragraphs;
+          state.summaries      = Array.isArray(payload.summaries)      ? payload.summaries      : new Array(state.paragraphs.length).fill('');
+          state.summarySources = Array.isArray(payload.summarySources) ? payload.summarySources : new Array(state.paragraphs.length).fill('');
+          state.promptModes    = Array.isArray(payload.promptModes)    ? payload.promptModes    : new Array(state.paragraphs.length).fill('universal');
+          state.highlights     = Array.isArray(payload.highlights)     ? payload.highlights     : [];
+          state.highlightReport = payload.highlightReport || '';
+          state.removedStack   = Array.isArray(payload.removedStack)   ? payload.removedStack   : [];
+        } else if (payload.article) {
+          // Paragraphs were stripped from the slim save - re-derive from article HTML
+          state.paragraphs     = getArticleBlocksFromInput();
+          state.summaries      = Array.isArray(payload.summaries)      ? payload.summaries      : new Array(state.paragraphs.length).fill('');
+          state.summarySources = Array.isArray(payload.summarySources) ? payload.summarySources : new Array(state.paragraphs.length).fill('');
+          state.promptModes    = Array.isArray(payload.promptModes)    ? payload.promptModes    : new Array(state.paragraphs.length).fill('universal');
+          state.highlights     = Array.isArray(payload.highlights)     ? payload.highlights     : [];
+          state.highlightReport = payload.highlightReport || '';
+          state.removedStack   = Array.isArray(payload.removedStack)   ? payload.removedStack   : [];
+        }
+        syncPromptNameLabels();
+        updateAiStatusBanner();
+      } catch (err) {
+        console.warn('Auto-restore draft failed silently:', err);
+      }
+    })();
 
     window.addEventListener('resize', () => {
       scheduleAlignHeights();
@@ -7707,7 +7272,6 @@ Paragraph-level summarization is especially useful because it keeps the writer's
 
       function executeClear() {
         cancelArm();
-        try { localStorage.removeItem('pas_draft'); } catch (_) {}
         setArticleEditorContent('', true);
         state.paragraphs = [];
         state.summaries = [];
@@ -7722,9 +7286,7 @@ Paragraph-level summarization is especially useful because it keeps the writer's
 
       btn.addEventListener('click', e => {
         e.stopPropagation();
-        const hasVisibleWork = state.paragraphs.length || getArticleBlocksFromInput().length;
-        const hasSavedDraft = !!localStorage.getItem('pas_draft');
-        if (!hasVisibleWork && !hasSavedDraft) return; // nothing to clear
+        if (!state.paragraphs.length) return; // nothing to clear
         if (armed) { executeClear(); }
         else { armClear(); }
       });
@@ -7775,29 +7337,18 @@ Paragraph-level summarization is especially useful because it keeps the writer's
     // ── Para action dropdown ──────────────────────────────────────────────────
     window.toggleParaMenu = function(i) {
       const menu = document.getElementById('paraMenu' + i);
-      const wrap = document.getElementById('paraWrap' + i);
       const btn  = document.querySelector('#paraWrap' + i + ' .para-action-btn');
-      if (!menu || !btn || !wrap) return;
+      if (!menu || !btn) return;
       const isOpen = menu.classList.contains('open');
       document.querySelectorAll('.para-action-menu.open').forEach(m => m.classList.remove('open'));
-      document.querySelectorAll('.para-action-wrap.menu-active').forEach(w => w.classList.remove('menu-active'));
-      document.body.classList.remove('para-menu-open');
       if (!isOpen) {
         const rect = btn.getBoundingClientRect();
+        menu.style.top  = (rect.bottom + 6) + 'px';
         menu.style.left = rect.left + 'px';
-        menu.style.top = (rect.bottom + 10) + 'px';
         menu.classList.add('open');
-        wrap.classList.add('menu-active');
-        document.body.classList.add('para-menu-open');
-
-        const margin = 12;
-        let mr = menu.getBoundingClientRect();
-        if (mr.right > window.innerWidth - margin) {
-          menu.style.left = Math.max(margin, window.innerWidth - mr.width - margin) + 'px';
-        }
-        if (mr.bottom > window.innerHeight - margin) {
-          const aboveTop = rect.top - mr.height - 10;
-          menu.style.top = Math.max(margin, aboveTop) + 'px';
+        const mr = menu.getBoundingClientRect();
+        if (mr.right > window.innerWidth - 10) {
+          menu.style.left = Math.max(10, window.innerWidth - mr.width - 10) + 'px';
         }
       }
     };
@@ -7805,11 +7356,6 @@ Paragraph-level summarization is especially useful because it keeps the writer's
     window.closeParaMenu = function(i) {
       const menu = document.getElementById('paraMenu' + i);
       if (menu) menu.classList.remove('open');
-      const wrap = document.getElementById('paraWrap' + i);
-      if (wrap) wrap.classList.remove('menu-active');
-      if (!document.querySelector('.para-action-menu.open')) {
-        document.body.classList.remove('para-menu-open');
-      }
     };
 
     window.setPromptModeAndGenerate = function(i, mode) {
@@ -7821,8 +7367,6 @@ Paragraph-level summarization is especially useful because it keeps the writer's
     document.addEventListener('click', e => {
       if (!e.target.closest('.para-action-wrap')) {
         document.querySelectorAll('.para-action-menu.open').forEach(m => m.classList.remove('open'));
-        document.querySelectorAll('.para-action-wrap.menu-active').forEach(w => w.classList.remove('menu-active'));
-        document.body.classList.remove('para-menu-open');
       }
     });
 
@@ -8029,107 +7573,239 @@ Paragraph-level summarization is especially useful because it keeps the writer's
       });
     })();
 
-
-    // PRADO PATCH — professional prompt popover with collision handling and spacing.
+    // ── PDF & EPUB Import ─────────────────────────────────────────────────────
     (function() {
-      function clearPromptMenuSpacing() {
-        document.querySelectorAll('.menu-space-reserved').forEach(card => {
-          card.style.marginBottom = '';
-          card.classList.remove('menu-space-reserved');
+      const status = document.getElementById('importStatus');
+
+      function setStatus(msg, color) {
+        if (!status) return;
+        status.textContent = msg;
+        status.style.color = color || '#38bdf8';
+      }
+
+      function setRichContent(text) {
+        if (!els.articleRichInput) return;
+        // Convert plain text to paragraphs
+        const paras = text.split(/\n{2,}/).map(p => p.trim()).filter(p => p.length > 0);
+        els.articleRichInput.innerHTML = paras.map(p =>
+          `<p>${escapeHtml(p.replace(/\n/g, ' '))}</p>`
+        ).join('');
+        if (els.articleInput) els.articleInput.value = els.articleRichInput.innerHTML;
+        setTimeout(buildParaPreview, 300);
+      }
+
+      // ── PDF import via PDF.js ──────────────────────────────────────────────
+      async function importPdf(file) {
+        setStatus('Loading PDF.js…');
+        if (!window.pdfjsLib) {
+          await new Promise((resolve, reject) => {
+            const s = document.createElement('script');
+            s.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+            s.onload = resolve; s.onerror = reject;
+            document.head.appendChild(s);
+          });
+          window.pdfjsLib.GlobalWorkerOptions.workerSrc =
+            'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        }
+
+        setStatus('Reading PDF…');
+        const arrayBuffer = await file.arrayBuffer();
+        const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+        const allParagraphs = [];
+
+        for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+          setStatus(`Extracting page ${pageNum} / ${pdf.numPages}…`);
+          const page = await pdf.getPage(pageNum);
+          const content = await page.getTextContent({ includeMarkedContent: false });
+          const items = content.items.filter(item => item.str && item.str.trim());
+
+          if (!items.length) continue;
+
+          // Group items into lines using Y position (transform[5])
+          // Items with same/similar Y are on the same line
+          const lines = [];
+          let currentLine = null;
+
+          // Sort top-to-bottom (higher Y = higher on page in PDF coords, so sort descending)
+          const sorted = [...items].sort((a, b) => {
+            const yDiff = b.transform[5] - a.transform[5];
+            if (Math.abs(yDiff) > 2) return yDiff;
+            return a.transform[4] - b.transform[4]; // same line: sort left-to-right
+          });
+
+          for (const item of sorted) {
+            const y = Math.round(item.transform[5]);
+            const fontSize = Math.abs(item.transform[3]) || item.height || 12;
+
+            if (!currentLine || Math.abs(currentLine.y - y) > fontSize * 0.6) {
+              currentLine = { y, fontSize, parts: [], str: '' };
+              lines.push(currentLine);
+            }
+            currentLine.parts.push(item.str);
+          }
+
+          // Join each line's parts
+          for (const line of lines) {
+            line.str = line.parts.join('').trim();
+          }
+
+          // Detect paragraph breaks:
+          // A gap > 1.5x the normal line spacing = new paragraph
+          // Also detect headers (larger font size)
+          const validLines = lines.filter(l => l.str.length > 0);
+          if (!validLines.length) continue;
+
+          // Calculate median line height
+          const gaps = [];
+          for (let i = 1; i < validLines.length; i++) {
+            gaps.push(Math.abs(validLines[i - 1].y - validLines[i].y));
+          }
+          gaps.sort((a, b) => a - b);
+          const medianGap = gaps[Math.floor(gaps.length / 2)] || 14;
+          const paraGapThreshold = medianGap * 1.6;
+
+          let currentPara = [];
+          for (let i = 0; i < validLines.length; i++) {
+            const line = validLines[i];
+            const prevLine = validLines[i - 1];
+
+            // Detect if this starts a new paragraph
+            let isNewPara = false;
+            if (prevLine) {
+              const gap = Math.abs(prevLine.y - line.y);
+              // Large gap = paragraph break
+              if (gap > paraGapThreshold) isNewPara = true;
+              // Previous line ends with sentence-ending punctuation = likely new para
+              if (/[.!?]["']?\s*$/.test(prevLine.str) && gap > medianGap * 1.1) isNewPara = true;
+            }
+
+            if (isNewPara && currentPara.length) {
+              const paraText = currentPara.join(' ').trim();
+              if (paraText.split(/\s+/).length >= 4) allParagraphs.push(paraText);
+              currentPara = [];
+            }
+
+            // Merge hyphenated line breaks
+            const str = line.str;
+            if (currentPara.length && str) {
+              const prev = currentPara[currentPara.length - 1];
+              if (prev.endsWith('-')) {
+                currentPara[currentPara.length - 1] = prev.slice(0, -1) + str;
+              } else {
+                currentPara.push(str);
+              }
+            } else if (str) {
+              currentPara.push(str);
+            }
+          }
+
+          // Flush last paragraph
+          if (currentPara.length) {
+            const paraText = currentPara.join(' ').trim();
+            if (paraText.split(/\s+/).length >= 4) allParagraphs.push(paraText);
+          }
+        }
+
+        // Set content as paragraphs directly
+        if (!els.articleRichInput) return;
+        els.articleRichInput.innerHTML = allParagraphs
+          .map(p => `<p>${escapeHtml(p)}</p>`)
+          .join('');
+        if (els.articleInput) els.articleInput.value = els.articleRichInput.innerHTML;
+        setTimeout(buildParaPreview, 300);
+        setStatus(`✓ ${pdf.numPages} pages → ${allParagraphs.length} paragraphs from "${file.name}"`, '#4ade80');
+      }
+
+      // ── EPUB import via JSZip + DOM parsing ────────────────────────────────
+      async function importEpub(file) {
+        setStatus('Loading JSZip…');
+        if (!window.JSZip) {
+          await new Promise((resolve, reject) => {
+            const s = document.createElement('script');
+            s.src = 'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js';
+            s.onload = resolve;
+            s.onerror = reject;
+            document.head.appendChild(s);
+          });
+        }
+
+        setStatus('Unzipping EPUB…');
+        const arrayBuffer = await file.arrayBuffer();
+        const zip = await JSZip.loadAsync(arrayBuffer);
+
+        // Find all HTML/XHTML content files
+        const contentFiles = [];
+        zip.forEach((path, zipEntry) => {
+          if (/\.(html|xhtml|htm)$/i.test(path) && !zipEntry.dir) {
+            contentFiles.push({ path, zipEntry });
+          }
         });
-        document.querySelectorAll('.para-action-menu').forEach(menu => {
-          menu.classList.remove('menu-above');
-          menu.style.removeProperty('--menu-arrow-left');
-        });
-      }
 
-      function closeAllPromptMenus() {
-        document.querySelectorAll('.para-action-menu.open').forEach(menu => menu.classList.remove('open'));
-        document.querySelectorAll('.para-action-wrap.menu-active').forEach(wrap => wrap.classList.remove('menu-active'));
-        document.body.classList.remove('para-menu-open');
-        clearPromptMenuSpacing();
-      }
-
-      function reserveSpaceBelow(menu, btn, card, top, isAbove) {
-        if (!card || isAbove) return;
-        const cardRect = card.getBoundingClientRect();
-        const menuRect = menu.getBoundingClientRect();
-        const overlap = Math.ceil(menuRect.bottom - cardRect.bottom + 16);
-        if (overlap > 0) {
-          const current = parseFloat(getComputedStyle(card).marginBottom) || 0;
-          card.style.marginBottom = (current + overlap) + 'px';
-          card.classList.add('menu-space-reserved');
-        }
-      }
-
-      window.toggleParaMenu = function(i) {
-        const menu = document.getElementById('paraMenu' + i);
-        const wrap = document.getElementById('paraWrap' + i);
-        const btn = document.querySelector('#paraWrap' + i + ' .para-action-btn');
-        if (!menu || !btn || !wrap) return;
-
-        const wasOpen = menu.classList.contains('open');
-        closeAllPromptMenus();
-        if (wasOpen) return;
-
-        menu.classList.add('open');
-        wrap.classList.add('menu-active');
-        document.body.classList.add('para-menu-open');
-
-        const margin = 12;
-        const rect = btn.getBoundingClientRect();
-
-        // Measure after opening.
-        const measured = menu.getBoundingClientRect();
-        const menuWidth = measured.width || 340;
-        const menuHeight = measured.height || 360;
-
-        let left = rect.left;
-        if (left + menuWidth > window.innerWidth - margin) left = window.innerWidth - menuWidth - margin;
-        if (left < margin) left = margin;
-
-        const belowTop = rect.bottom + 10;
-        const aboveTop = rect.top - menuHeight - 10;
-        let top = belowTop;
-        let isAbove = false;
-
-        if (belowTop + menuHeight > window.innerHeight - margin && aboveTop >= margin) {
-          top = aboveTop;
-          isAbove = true;
-        } else if (belowTop + menuHeight > window.innerHeight - margin) {
-          top = Math.max(margin, window.innerHeight - menuHeight - margin);
+        // Try to find spine order from content.opf
+        let orderedFiles = contentFiles;
+        const opfEntry = Object.values(zip.files).find(f => f.name.endsWith('.opf'));
+        if (opfEntry) {
+          const opfText = await opfEntry.async('string');
+          const parser = new DOMParser();
+          const opfDoc = parser.parseFromString(opfText, 'application/xml');
+          const spineItems = Array.from(opfDoc.querySelectorAll('spine itemref'));
+          const manifest = {};
+          opfDoc.querySelectorAll('manifest item').forEach(item => {
+            manifest[item.getAttribute('id')] = item.getAttribute('href');
+          });
+          if (spineItems.length) {
+            const spineHrefs = spineItems.map(item => manifest[item.getAttribute('idref')]).filter(Boolean);
+            const opfDir = opfEntry.name.includes('/') ? opfEntry.name.split('/').slice(0, -1).join('/') + '/' : '';
+            orderedFiles = spineHrefs
+              .map(href => {
+                const fullPath = opfDir + href;
+                const found = contentFiles.find(f => f.path === fullPath || f.path.endsWith(href));
+                return found;
+              })
+              .filter(Boolean);
+            if (!orderedFiles.length) orderedFiles = contentFiles;
+          }
         }
 
-        menu.style.left = left + 'px';
-        menu.style.top = top + 'px';
-        menu.classList.toggle('menu-above', isAbove);
-
-        const arrowLeft = Math.max(20, Math.min(menuWidth - 28, rect.left + rect.width / 2 - left - 6));
-        menu.style.setProperty('--menu-arrow-left', arrowLeft + 'px');
-
-        const card = wrap.closest('.summary-card, .para-card');
-        reserveSpaceBelow(menu, btn, card, top, isAbove);
-      };
-
-      window.closeParaMenu = function(i) {
-        const menu = document.getElementById('paraMenu' + i);
-        const wrap = document.getElementById('paraWrap' + i);
-        if (menu) menu.classList.remove('open');
-        if (wrap) wrap.classList.remove('menu-active');
-        if (!document.querySelector('.para-action-menu.open')) {
-          document.body.classList.remove('para-menu-open');
-          clearPromptMenuSpacing();
+        let fullText = '';
+        for (let i = 0; i < orderedFiles.length; i++) {
+          setStatus(`Extracting chapter ${i + 1} / ${orderedFiles.length}…`);
+          const html = await orderedFiles[i].zipEntry.async('string');
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(html, 'text/html');
+          doc.querySelectorAll('nav, script, style, head').forEach(el => el.remove());
+          // Extract paragraph-by-paragraph preserving structure
+          const blocks = doc.querySelectorAll('p, h1, h2, h3, h4, div, li');
+          if (blocks.length) {
+            blocks.forEach(block => {
+              const text = (block.innerText || block.textContent || '').trim();
+              if (text.length > 20) fullText += text + '\n\n';
+            });
+          } else {
+            const bodyText = doc.body ? (doc.body.innerText || doc.body.textContent) : '';
+            if (bodyText.trim()) fullText += bodyText.trim() + '\n\n';
+          }
         }
-      };
 
-      document.addEventListener('click', e => {
-        if (!e.target.closest('.para-action-wrap')) closeAllPromptMenus();
-      }, true);
+        setRichContent(fullText.trim());
+        setStatus(`✓ ${orderedFiles.length} chapters imported from "${file.name}"`, '#4ade80');
+      }
 
-      window.addEventListener('scroll', closeAllPromptMenus, { passive: true });
-      window.addEventListener('resize', closeAllPromptMenus);
-      document.addEventListener('keydown', e => {
-        if (e.key === 'Escape') closeAllPromptMenus();
+      // Wire up inputs
+      document.getElementById('importPdfInput')?.addEventListener('change', async e => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        e.target.value = '';
+        try { await importPdf(file); }
+        catch (err) { setStatus('⚠ PDF import failed: ' + err.message, '#f87171'); }
+      });
+
+      document.getElementById('importEpubInput')?.addEventListener('change', async e => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        e.target.value = '';
+        try { await importEpub(file); }
+        catch (err) { setStatus('⚠ EPUB import failed: ' + err.message, '#f87171'); }
       });
     })();
 
