@@ -4248,9 +4248,20 @@
     }
 
     #leftList .original-control-row {
-      margin: 0 0 2px !important;
+      display: flex !important;
+      justify-content: flex-end !important;
+      align-items: center !important;
+      gap: 8px !important;
+      margin: 2px 0 0 !important;
       opacity: 0.9 !important;
-      min-height: 24px !important;
+      min-height: 30px !important;
+      text-align: right !important;
+      width: 100% !important;
+    }
+
+    #leftList .paragraph-end-tools {
+      white-space: nowrap !important;
+      clear: both !important;
     }
 
     #leftList .paragraph-remove-row {
@@ -4309,10 +4320,10 @@
       padding: 0 !important;
       border-radius: 999px !important;
       justify-content: center !important;
-      background: rgba(190, 18, 60, 0.36) !important;
+      background: rgba(190, 18, 60, 0.32) !important;
       border: 1px solid rgba(251, 113, 133, 0.72) !important;
       color: #ffe4e6 !important;
-      font-size: 19px !important;
+      font-size: 15px !important;
       font-weight: 950 !important;
       line-height: 1 !important;
       box-shadow: 0 8px 20px rgba(127, 29, 29, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.10) !important;
@@ -4324,6 +4335,31 @@
       border-color: #fecaca !important;
       color: #ffffff !important;
       box-shadow: 0 12px 26px rgba(220, 38, 38, 0.36), 0 0 0 3px rgba(254, 202, 202, 0.16) !important;
+    }
+
+    #leftList .emoji-tool-btn {
+      width: 30px !important;
+      height: 30px !important;
+      min-width: 30px !important;
+      min-height: 30px !important;
+      max-width: 30px !important;
+      padding: 0 !important;
+      border-radius: 999px !important;
+      justify-content: center !important;
+      background: rgba(56, 189, 248, 0.16) !important;
+      border: 1px solid rgba(125, 211, 252, 0.52) !important;
+      color: #e0f2fe !important;
+      font-size: 16px !important;
+      line-height: 1 !important;
+      box-shadow: 0 8px 20px rgba(8, 47, 73, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.10) !important;
+    }
+
+    #leftList .emoji-tool-btn:hover,
+    #leftList .emoji-tool-btn:focus-visible {
+      background: rgba(14, 165, 233, 0.42) !important;
+      border-color: #bae6fd !important;
+      color: #ffffff !important;
+      box-shadow: 0 12px 26px rgba(14, 165, 233, 0.30), 0 0 0 3px rgba(186, 230, 253, 0.14) !important;
     }
 
     .inline-note {
@@ -6923,12 +6959,16 @@
             : 'Generate a response with the universal prompt.';
         return `
           <article class="para-card" data-index="${i}">
-            <div class="card-meta original-control-row">
-              <div class="para-action-wrap" id="paraWrap${i}">
-                <button class="para-action-btn ${busy ? 'busy' : ''}" onclick="toggleParaMenu(${i})" title="Actions for this paragraph">
-                  ${busy ? '<span class="spinner"></span>' : '⚡'} <span class="para-action-label">${busy ? 'Generating…' : (mode === 'universal' ? escapeHtml(promptNames.universal) : mode === 'context' ? escapeHtml(promptNames.context) : escapeHtml(promptNames.friendly))}</span> <span class="para-action-arrow">▾</span>
+            <div class="article-text">${paragraphToDisplayHtml(p, i)}</div>
+            <div class="card-meta original-control-row paragraph-end-tools">
+              <span class="para-action-wrap" id="paraWrap${i}">
+                <button class="para-action-btn emoji-tool-btn ${busy ? 'busy' : ''}" onclick="toggleParaMenu(${i})" title="${busy ? 'Generating...' : 'Generate note'}" aria-label="${busy ? 'Generating note' : 'Generate note for paragraph ' + (i + 1)}">
+                  ${busy ? '<span class="spinner"></span>' : '&#129302;'}
                 </button>
-                <div class="para-action-menu" id="paraMenu${i}">
+              </span>
+              <button class="remove-paragraph-btn" title="Remove this paragraph" aria-label="Remove paragraph ${i + 1}" onclick="removeParagraph(${i})">&#128465;&#65039;</button>
+            </div>
+            <div class="para-action-menu" id="paraMenu${i}">
                   <div class="para-menu-section-label">Generate Note</div>
                   <div class="para-menu-item ${mode === 'universal' ? 'active' : ''}" onclick="setPromptModeAndGenerate(${i},'universal')"><span>📝</span><div><div class="para-menu-title">${escapeHtml(promptNames.universal)}</div><div class="para-menu-desc">Universal summary prompt</div></div></div>
                   <div class="para-menu-item ${mode === 'context' ? 'active' : ''}" onclick="setPromptModeAndGenerate(${i},'context')"><span>📡</span><div><div class="para-menu-title">${escapeHtml(promptNames.context)}</div><div class="para-menu-desc">Broadcaster-style context</div></div></div>
@@ -6938,10 +6978,6 @@
                   <div class="para-menu-item" onclick="readParagraphEeyore(${i});closeParaMenu(${i})"><span>🔊</span><div><div class="para-menu-title">Read Aloud</div><div class="para-menu-desc">${escapeHtml(getReaderButtonLabel())} voice</div></div></div>
                   <div class="para-menu-item" onclick="openVoiceSettings();closeParaMenu(${i})"><span>⚙️</span><div><div class="para-menu-title">Voice Settings</div><div class="para-menu-desc">Change voice &amp; speed</div></div></div>
                 </div>
-              </div>
-              <button class="remove-paragraph-btn" title="Remove this paragraph" aria-label="Remove paragraph ${i + 1}" onclick="removeParagraph(${i})">×</button>
-            </div>
-            <div class="article-text">${paragraphToDisplayHtml(p, i)}</div>
             <div class="inline-note ${summary || busy ? 'show' : ''}">
               <div class="inline-note-text" contenteditable="true" oninput="editSummary(${i}, this.innerText)">${busy ? 'Generating requested response…' : (summary ? markHighlightsForText(summary, i, 'summary') : `<span class="inline-note-placeholder">${escapeHtml(placeholder)}</span>`)}</div>
               <div class="inline-note-meta">
