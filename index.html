@@ -146,9 +146,13 @@ body.present .project-tab{max-width:none}
 /* Published portfolio: begin with project navigation and omit the studio banner. */
 :root{--header-h:0px}
 body>.app-header{display:none!important}
+body.booting::before{content:"";position:fixed;inset:0;z-index:1000;background:#071923}
+body.booting::after{content:"";position:fixed;left:50%;top:50%;z-index:1001;width:26px;height:26px;margin:-15px 0 0 -15px;border:2px solid #254450;border-top-color:#58ddc5;border-radius:50%;animation:portfolioBootSpin .7s linear infinite}
+@keyframes portfolioBootSpin{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){body.booting::after{animation-duration:1.4s}}
 </style>
 </head>
-<body>
+<body class="booting">
 <header class="app-header">
  <div class="brand"><div class="brand-symbol" data-icon="terminal"></div><div><div class="brand-name">Terminal Control Studio</div><div id="projectName" class="project-name">Before & after workspace</div></div></div>
  <div class="header-actions">
@@ -2144,7 +2148,7 @@ document.addEventListener('keyup',e=>{if(e.code==='Space'){spaceDown=false;viewp
 document.addEventListener('visibilitychange',()=>{if(document.hidden){try{if(editing)finishEdit();storePortfolio()}catch{}}});window.addEventListener('pagehide',()=>{try{if(editing)finishEdit();storePortfolio()}catch{}});
 // A tiny inspection surface helps validate exports without exposing or sending any data.
 window.TerminalStudio={getState:()=>clone(state),getPortfolio:()=>collectPortfolio(),getSelection:()=>[...selection],getZoom:()=>zoom,svg:cleanSvg};
-initProjectNavigation();setTool('select');requestAnimationFrame(()=>{fit('width');if(present)setPresent(true);$('#projectTabs [aria-selected="true"]')?.scrollIntoView({block:'nearest',inline:'nearest'})});if(!storageOK)$('#saveStatus').innerHTML='<span class="status-dot" style="background:#e8bf6f"></span><span>Download a backup</span>';else savedStatus('Saved automatically');if(migrationChanged)storePortfolio();
+initProjectNavigation();setTool('select');requestAnimationFrame(()=>{fit('width');if(present)setPresent(true);$('#projectTabs [aria-selected="true"]')?.scrollIntoView({block:'nearest',inline:'nearest'});requestAnimationFrame(()=>document.body.classList.remove('booting'))});if(!storageOK)$('#saveStatus').innerHTML='<span class="status-dot" style="background:#e8bf6f"></span><span>Download a backup</span>';else savedStatus('Saved automatically');if(migrationChanged)storePortfolio();
 })();
 </script>
 </body>
