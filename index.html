@@ -146,9 +146,50 @@ body.present .project-tab{max-width:none}
 /* Published portfolio: begin with project navigation and omit the studio banner. */
 :root{--header-h:0px}
 body>.app-header{display:none!important}
+.portfolio-entry{position:fixed;inset:0;z-index:1000;display:grid;min-height:100dvh;overflow:auto;background:#071923;color:#edf5f7;isolation:isolate;transition:opacity .22s ease,transform .22s ease}
+.portfolio-entry::before{content:"";position:absolute;inset:0;z-index:-2;background:radial-gradient(circle at 78% 18%,#164e4a80 0,transparent 31%),radial-gradient(circle at 13% 88%,#123a4d80 0,transparent 34%),linear-gradient(135deg,#071923 0%,#0a1f2b 58%,#07151f 100%)}
+.portfolio-entry::after{content:"";position:absolute;inset:0;z-index:-1;opacity:.15;background-image:linear-gradient(#79d9c514 1px,transparent 1px),linear-gradient(90deg,#79d9c514 1px,transparent 1px);background-size:46px 46px;mask-image:linear-gradient(to bottom,black,transparent 80%)}
+.portfolio-entry.leaving{opacity:0;transform:scale(1.012);pointer-events:none}
+.portfolio-entry-shell{width:min(1180px,calc(100% - 48px));min-height:100dvh;margin:auto;display:grid;grid-template-rows:auto 1fr auto;padding:38px 0 34px}
+.portfolio-entry-header{display:flex;align-items:center;justify-content:space-between;gap:24px;color:#96aeba;font-size:11px;font-weight:700;letter-spacing:.17em;text-transform:uppercase}
+.portfolio-entry-name{display:flex;align-items:center;gap:12px;color:#e9f5f4}.portfolio-entry-name::before{content:"";width:30px;height:3px;background:#4dd5bc;border-radius:10px;box-shadow:0 0 20px #4dd5bc80}
+.portfolio-entry-role{color:#79b7ad;text-align:right}
+.portfolio-entry-main{align-self:center;max-width:900px;padding:76px 0 68px}
+.portfolio-entry-kicker{margin:0 0 22px;color:#54d1bb;font-size:12px;font-weight:800;letter-spacing:.2em;text-transform:uppercase}
+.portfolio-entry h1{margin:0;max-width:970px;font-size:clamp(54px,7.2vw,106px);line-height:.91;letter-spacing:-.055em;text-transform:uppercase;font-weight:900;color:#f3f7f8}
+.portfolio-entry h1 span{color:#47cdb5}
+.portfolio-entry-copy{max-width:720px;margin:31px 0 0;color:#b5c7ce;font-size:clamp(17px,1.6vw,22px);line-height:1.55}
+.portfolio-entry-actions{display:flex;align-items:center;flex-wrap:wrap;gap:12px;margin-top:38px}
+.portfolio-entry-actions button{min-height:52px;padding:13px 22px;border-radius:7px;font-size:14px;font-weight:800;letter-spacing:.01em}
+.portfolio-entry-primary{background:#46cfb6;border-color:#46cfb6;color:#062a26}.portfolio-entry-primary:hover{background:#75dfcc;border-color:#75dfcc}
+.portfolio-entry-secondary{background:#102938;border-color:#355265;color:#d6e5e9}.portfolio-entry-secondary:hover{background:#183748;border-color:#52788d}
+.portfolio-entry-meta{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;margin-top:54px;border:1px solid #284251;background:#284251;max-width:900px}
+.portfolio-entry-stat{min-height:78px;padding:18px 20px;background:#0a202c}.portfolio-entry-stat strong{display:block;color:#eef7f6;font-size:15px;margin-bottom:6px}.portfolio-entry-stat span{color:#7999a7;font-size:11px;letter-spacing:.09em;text-transform:uppercase}
+.portfolio-entry-footer{display:flex;justify-content:space-between;gap:24px;padding-top:22px;border-top:1px solid #27404d;color:#75909d;font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+@media(max-width:700px){.portfolio-entry-shell{width:min(100% - 30px,1180px);padding:24px 0}.portfolio-entry-role{display:none}.portfolio-entry-main{padding:58px 0 42px}.portfolio-entry h1{font-size:clamp(46px,16vw,72px)}.portfolio-entry-copy{font-size:16px}.portfolio-entry-actions{align-items:stretch;flex-direction:column}.portfolio-entry-actions button{width:100%}.portfolio-entry-meta{grid-template-columns:1fr}.portfolio-entry-stat{min-height:66px}.portfolio-entry-footer{align-items:flex-start;flex-direction:column}}
 </style>
 </head>
 <body>
+<section class="portfolio-entry" id="portfolioEntry" aria-label="Portfolio introduction">
+ <div class="portfolio-entry-shell">
+  <header class="portfolio-entry-header"><div class="portfolio-entry-name">Jacob Prado</div><div class="portfolio-entry-role">Terminal Operations · Systems Design</div></header>
+  <main class="portfolio-entry-main">
+   <p class="portfolio-entry-kicker">Operations portfolio · 2026</p>
+   <h1>Complex operations.<br><span>Clear, usable systems.</span></h1>
+   <p class="portfolio-entry-copy">I design and build practical tools that turn rail-terminal data, operating rules, and frontline decisions into one clear view.</p>
+   <div class="portfolio-entry-actions">
+    <button class="portfolio-entry-primary" id="enterPortfolio" type="button">Explore the projects&nbsp; →</button>
+    <button class="portfolio-entry-secondary" id="viewPortfolioOverview" type="button">Start with the overview</button>
+   </div>
+   <div class="portfolio-entry-meta" aria-label="Portfolio summary">
+    <div class="portfolio-entry-stat"><strong>9 project stories</strong><span>Operations through implementation</span></div>
+    <div class="portfolio-entry-stat"><strong>7 planners · 2 shifts</strong><span>Tools in operational use</span></div>
+    <div class="portfolio-entry-stat"><strong>Sole owner</strong><span>Problem · design · build · rollout</span></div>
+   </div>
+  </main>
+  <footer class="portfolio-entry-footer"><span>Intermodal rail-terminal operations</span><span>Recreated sample data protects privacy</span></footer>
+ </div>
+</section>
 <header class="app-header">
  <div class="brand"><div class="brand-symbol" data-icon="terminal"></div><div><div class="brand-name">Terminal Control Studio</div><div id="projectName" class="project-name">Before & after workspace</div></div></div>
  <div class="header-actions">
@@ -2145,6 +2186,21 @@ document.addEventListener('visibilitychange',()=>{if(document.hidden){try{if(edi
 // A tiny inspection surface helps validate exports without exposing or sending any data.
 window.TerminalStudio={getState:()=>clone(state),getPortfolio:()=>collectPortfolio(),getSelection:()=>[...selection],getZoom:()=>zoom,svg:cleanSvg};
 initProjectNavigation();setTool('select');requestAnimationFrame(()=>{fit('width');if(present)setPresent(true);$('#projectTabs [aria-selected="true"]')?.scrollIntoView({block:'nearest',inline:'nearest'})});if(!storageOK)$('#saveStatus').innerHTML='<span class="status-dot" style="background:#e8bf6f"></span><span>Download a backup</span>';else savedStatus('Saved automatically');if(migrationChanged)storePortfolio();
+})();
+</script>
+<script>
+(()=>{
+ const entry=document.getElementById('portfolioEntry');
+ if(!entry)return;
+ const dismiss=target=>{
+  entry.classList.add('leaving');
+  window.setTimeout(()=>{
+   entry.remove();
+   if(target)document.getElementById('tab-'+target)?.click();
+  },220);
+ };
+ document.getElementById('enterPortfolio')?.addEventListener('click',()=>dismiss('page-yard-planning'));
+ document.getElementById('viewPortfolioOverview')?.addEventListener('click',()=>dismiss(null));
 })();
 </script>
 </body>
