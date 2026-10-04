@@ -142,6 +142,9 @@ body.present .project-tab{max-width:none}
 }
 @media(max-width:1300px) and (min-width:651px){.save-status{display:flex;margin-right:2px}.save-status span:last-child{font-size:0}.save-status span:last-child::after{content:"Autosave";font-size:10px}}
 .landing-hotspot{cursor:pointer;pointer-events:all;transition:fill-opacity .14s,stroke-opacity .14s}.landing-hotspot:hover,.landing-hotspot:focus{fill:#fff!important;fill-opacity:.07!important;stroke:#2dd4bf!important;stroke-opacity:.75!important;outline:none}
+/* Published portfolio: begin with project navigation and omit the studio banner. */
+:root{--header-h:0px}
+body>.app-header{display:none!important}
 </style>
 </head>
 <body>
