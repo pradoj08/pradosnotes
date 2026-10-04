@@ -2197,6 +2197,7 @@ initProjectNavigation();setTool('select');requestAnimationFrame(()=>{fit('width'
   window.setTimeout(()=>{
    entry.remove();
    if(target)document.getElementById('tab-'+target)?.click();
+   if(!document.body.classList.contains('present'))document.getElementById('presentButton')?.click();
   },220);
  };
  document.getElementById('enterPortfolio')?.addEventListener('click',()=>dismiss('page-yard-planning'));
