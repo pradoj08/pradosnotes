@@ -2316,8 +2316,9 @@ function setTrainCycleImageLayout(index){
 }
 let yardOriginalDesignImageSource='',yardOriginalDesignNaturalW=1752,yardOriginalDesignNaturalH=312;
 let yardThirdOriginalImageSource='',yardThirdOriginalNaturalW=2083,yardThirdOriginalNaturalH=742,yardThirdCycleIndex=0,yardThirdCyclePageId='';
-const YARD_THIRD_CYCLE_IMAGE_2='yard-planning-third-section-cycle-2.png';
-const YARD_THIRD_CYCLE_IMAGE_3='yard-planning-full-railcar-breakdown.png';
+const YARD_THIRD_CYCLE_IMAGE_2='yard-planning-original-cycle-image.png';
+const YARD_THIRD_CYCLE_IMAGE_3='yard-planning-third-section-cycle-2.png';
+const YARD_THIRD_CYCLE_PRIMARY_IMAGE='yard-planning-full-railcar-breakdown.png';
 const YARD_THIRD_CYCLE_LABEL_IDS=['live-track-callout-workforce','live-track-arrow-workforce','live-track-callout-inventory','live-track-arrow-inventory','live-track-callout-capacity','live-track-arrow-capacity'];
 const YARD_THIRD_CYCLE_FIRST_LABEL_IDS=['live-track-cycle-first-callout-detail','live-track-cycle-first-arrow-detail','live-track-cycle-first-callout-compare','live-track-cycle-first-arrow-compare'];
 function ensureYardThirdCycleFirstLabels(){
@@ -2410,7 +2411,7 @@ function cycleThirdSectionImage(){
  if(state.projectId!=='page-yard-planning')return;
  const image=obj('design-alt-image');if(!image)return;
  if(!yardThirdOriginalImageSource){const originalPage=seed.pages.find(p=>p.projectId==='page-yard-planning'),originalImage=originalPage?.objects?.find(o=>o.id==='design-alt-image');yardThirdOriginalImageSource=originalImage?.src||image.src;yardThirdOriginalNaturalW=originalImage?.naturalW||2083;yardThirdOriginalNaturalH=originalImage?.naturalH||742}
- const sources=[{src:YARD_THIRD_CYCLE_IMAGE_3,naturalW:1736,naturalH:647,fit:'contain'},{src:yardThirdOriginalImageSource,naturalW:yardThirdOriginalNaturalW,naturalH:yardThirdOriginalNaturalH,fit:'contain'},{src:YARD_THIRD_CYCLE_IMAGE_2,naturalW:1626,naturalH:765,fit:'contain'}];
+ const sources=[{src:YARD_THIRD_CYCLE_PRIMARY_IMAGE,naturalW:1736,naturalH:647,fit:'contain'},{src:YARD_THIRD_CYCLE_IMAGE_2,naturalW:2083,naturalH:742,fit:'contain'},{src:YARD_THIRD_CYCLE_IMAGE_3,naturalW:1626,naturalH:765,fit:'contain'}];
  yardThirdCycleIndex=(yardThirdCycleIndex+1)%sources.length;
  const source=sources[yardThirdCycleIndex];image.src=source.src;image.naturalW=source.naturalW;image.naturalH=source.naturalH;image.cycleFit=source.fit;
  state.yardThirdActiveCycleIndex=yardThirdCycleIndex;
