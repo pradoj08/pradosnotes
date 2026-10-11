@@ -282,6 +282,13 @@ function migrateEndorsementsPage(){
  portfolio.endorsementsPageAddedVersion=2;migrationChanged=true;
 }
 migrateEndorsementsPage();
+function migrateEndorsementsBottomCrop(page){
+ if(page.projectId!=='page-endorsements'||page.endorsementsBottomCropVersion===1)return;
+ const image=page.objects.find(o=>o.id==='endorsements-composite');
+ if(image){image.x=0;image.y=0;image.w=1760;image.h=5620;image.keepAspect=false;image.cycleFit='top-cover';page.height=5620}
+ page.endorsementsBottomCropVersion=1;migrationChanged=true;
+}
+portfolio.pages.forEach(migrateEndorsementsBottomCrop);
 function migrateSectionTints(page){
  if(page.sectionTintVersion===1)return;
  const reference=(seed.pages||[]).find(p=>p.projectId===page.projectId);
