@@ -1677,9 +1677,9 @@ function migrateTrainLegacySplitLayout(page){
 }
 portfolio.pages.forEach(migrateTrainLegacySplitLayout);
 function migrateTrainMappingName(page){
- if(page.projectId!=='page-train-consist-mapped'||page.trainMappingNameVersion===2)return;
- page.title='Train & Track Mapping';page.tabName='Train & Track Mapping';const heading=page.objects.find(o=>o.id==='page-title');if(heading)heading.text='Train & Track Mapping';
- page.trainMappingNameVersion=2;migrationChanged=true;
+ if(page.projectId!=='page-train-consist-mapped'||page.trainMappingNameVersion===3)return;
+ page.title='Train Mapping';page.tabName='Train Mapping';const heading=page.objects.find(o=>o.id==='page-title');if(heading)heading.text='Train Mapping';
+ page.trainMappingNameVersion=3;migrationChanged=true;
 }
 portfolio.pages.forEach(migrateTrainMappingName);
 function migrateUnlockTrainMappingLabels(page){
