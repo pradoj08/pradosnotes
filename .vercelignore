@@ -1,4 +1,4 @@
-*
+/*
 !.vercelignore
 !.gitignore
 !index.html
@@ -15,5 +15,5 @@
 !yard-planning-full-railcar-breakdown.png
 !yard-planning-original-cycle-image.png
 !yard-planning-third-section-cycle-2.png
-!track-consist-live/
-!track-consist-live/**
+!/track-consist-live/
+!/track-consist-live/**
