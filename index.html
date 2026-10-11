@@ -1606,6 +1606,30 @@ function migrateIntermodalOperateName(page){
  page.intermodalOperateNameVersion=2;migrationChanged=true;
 }
 portfolio.pages.forEach(migrateIntermodalOperateName);
+function migrateIntermodalQuestionCards(page){
+ if(page.projectId!=='page-intermodal-simulation'||page.intermodalQuestionCardsVersion===1)return;
+ const legacyQuestionId='o-mv489d9d-tem4n';
+ page.objects=page.objects.filter(o=>o.id!==legacyQuestionId&&!String(o.id||'').startsWith('operate-question-'));
+ const panel=page.objects.find(o=>o.id==='simulation-panel');
+ if(panel){panel.h=880;panel.fill='#eef8f6';panel.stroke='#b7d9d1';panel.strokeWidth=1.5;panel.radius=16}
+ const label=page.objects.find(o=>o.id==='simulation-label');
+ if(label){label.x=64;label.y=218;label.w=1240;label.h=42;label.fontSize=25;label.textColor='#087f75'}
+ const subtitle=page.objects.find(o=>o.id==='simulation-subtitle');
+ if(subtitle){subtitle.x=64;subtitle.y=264;subtitle.w=1550;subtitle.h=42;subtitle.fontSize=20;subtitle.fontWeight=400;subtitle.textColor='#315265'}
+ const cards=[
+  ['operate-question-1','01  DECISION FRICTION','Which decisions are still rebuilt manually every shift even though the source data already exists?',64,338,792,210,'#e8f7f4','#0f766e'],
+  ['operate-question-2','02  ONE SOURCE OF TRUTH','Where do your supervisors lose the most time reconciling two versions of operational truth?',880,338,816,210,'#eef4ff','#365fa7'],
+  ['operate-question-3','03  EARLY WARNING','Which constraint creates the earliest warning but is usually recognized too late?',64,572,792,210,'#fff8e8','#956d19'],
+  ['operate-question-4','04  TOOL ADOPTION','What tool has strong functionality but weak adoption, and why do operators avoid it?',880,572,816,210,'#f7f0fc','#7c4ba5'],
+  ['operate-question-5','05  FEEDBACK LOOP','How does forecast compare with actual results today, and who owns the feedback loop?',64,806,1632,190,'#edf8f2','#147454']
+ ];
+ for(const [id,heading,text,x,y,w,h,fill,stroke] of cards){
+  page.objects.push({id,type:'text',name:heading,x,y,w,h,text,heading,fontSize:27,fontFamily:'Arial',fontWeight:600,textColor:'#183449',fill,fillOpacity:1,stroke,strokeWidth:2,strokeOpacity:1,radius:14,padding:24,align:'left',lineHeight:1.28,group:'base',locked:false,visible:true});
+ }
+ page.height=1140;
+ page.intermodalQuestionCardsVersion=1;migrationChanged=true;
+}
+portfolio.pages.forEach(migrateIntermodalQuestionCards);
 function migrateRemoveYardCheckEyebrow(page){
  if(page.projectId!=='page-yard-check'||page.yardCheckEyebrowRemovedVersion===1)return;
  const removed=new Set(['page-eyebrow','header-accent']);
