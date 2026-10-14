@@ -136,7 +136,7 @@ body.workshop-mode .page-shell{opacity:0;pointer-events:none}body.workshop-mode 
     <span class="local-time" id="local-time"></span>
     <button class="tool-button" id="motion-toggle" aria-pressed="false" aria-label="Pause animations"><span id="motion-icon" aria-hidden="true">Ⅱ</span><span id="motion-label">Pause</span></button>
     <button class="tool-button" id="lighting-toggle" aria-pressed="false" aria-label="Switch to dusk lighting"><span aria-hidden="true">◐</span><span id="lighting-label">Night</span></button>
-    <button class="tool-button" data-action="settings" aria-label="Edit content and connect your links"><span aria-hidden="true">⚙</span><span>Edit content</span></button>
+    <button class="tool-button authoring-only" data-action="settings" aria-label="Edit content and connect your links"><span aria-hidden="true">⚙</span><span>Edit content</span></button>
   </div>
 </footer>
 <dialog id="content-dialog" class="content-dialog" aria-labelledby="panel-title">
@@ -169,6 +169,8 @@ body.workshop-mode .page-shell{opacity:0;pointer-events:none}body.workshop-mode 
 <script>
 const refreshNavigationEntry=performance.getEntriesByType('navigation')[0];
 if(refreshNavigationEntry?.type==='reload'&&location.hash!=='#home')location.replace('index.html#home');
+const localAuthoringHost=/^(?:localhost|127\.0\.0\.1|\[::1\])$/i.test(location.hostname)||location.protocol==='file:';
+if(!localAuthoringHost)document.querySelectorAll('.authoring-only').forEach(element=>element.remove());
 /*
  * Original, dependency-free terminal renderer.
  * WebGL draws real geometry with a depth buffer, procedural container corrugations,
