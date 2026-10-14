@@ -99,11 +99,9 @@ body.workshop-mode .page-shell{opacity:0;pointer-events:none}body.workshop-mode 
     </a>
   </div>
   <section class="hero-center" aria-labelledby="hero-title">
-    <span class="eyebrow"><span class="eyebrow-line"></span> THE WORK BEHIND THE SYSTEMS</span>
     <h1 id="hero-title">Jacob Prado<span class="title-period">.</span></h1>
     <p class="hero-subtitle" id="hero-subtitle">Intermodal operations. Systems design.<br>Built around the people doing the work.</p>
     <a class="primary-button" href="portfolio.html">Explore my work <span aria-hidden="true">↗</span></a>
-    <span class="hero-footnote">FROM THE TERMINAL FLOOR TO THE INTERFACE</span>
   </section>
   <div class="float-card card-side" style="--accent:#7ee5ba;--rotation:5deg;--delay:-2.5s">
     <a class="card-link" href="#side-projects" aria-label="Explore my side projects">
@@ -134,7 +132,6 @@ body.workshop-mode .page-shell{opacity:0;pointer-events:none}body.workshop-mode 
   <button class="primary-button" data-action="terminal">Back to portfolio <span aria-hidden="true">↗</span></button>
 </div>
 <footer class="scene-toolbar">
-  <div class="scene-caption"><i class="status-dot"></i><span id="scene-status">ANIMATED TERMINAL</span><span class="divider">/</span><span class="simulation-label">ILLUSTRATIVE SCENE</span></div>
   <div class="scene-controls">
     <span class="local-time" id="local-time"></span>
     <button class="tool-button" id="motion-toggle" aria-pressed="false" aria-label="Pause animations"><span id="motion-icon" aria-hidden="true">Ⅱ</span><span id="motion-label">Pause</span></button>
@@ -682,7 +679,7 @@ if(refreshNavigationEntry?.type==='reload'&&location.hash!=='#home')location.rep
       notify('Your self-contained HTML website has been exported with the current content and attached PDFs.');
     }catch(error){console.error(error);notify('Export is unavailable from a local split-source file. Open the supplied standalone HTML instead, or serve the source folder with a local web server.');}
   }
-  function applyMotion(){document.body.classList.toggle('motion-paused',paused);$('motion-toggle').setAttribute('aria-pressed',String(paused));$('motion-toggle').setAttribute('aria-label',paused?'Resume animations':'Pause animations');$('motion-icon').textContent=paused?'▷':'Ⅱ';$('motion-label').textContent=paused?'Play':'Pause';$('scene-status').textContent=paused?'ANIMATION PAUSED':'ANIMATED TERMINAL';window.TerminalScene?.setPaused(paused);workshopScene?.setPaused(paused);}
+  function applyMotion(){document.body.classList.toggle('motion-paused',paused);$('motion-toggle').setAttribute('aria-pressed',String(paused));$('motion-toggle').setAttribute('aria-label',paused?'Resume animations':'Pause animations');$('motion-icon').textContent=paused?'▷':'Ⅱ';$('motion-label').textContent=paused?'Play':'Pause';window.TerminalScene?.setPaused(paused);workshopScene?.setPaused(paused);}
   function toggleExplore(){exploring=!exploring;document.body.classList.toggle('terminal-mode',exploring);$('terminal-overlay').hidden=!exploring;window.TerminalScene?.setExplore(exploring);if(exploring){window.scrollTo({top:0,behavior:'instant'});$('terminal-overlay').querySelector('button').focus({preventScroll:true});}else document.querySelector('.terminal-launch').focus({preventScroll:true});}
   document.addEventListener('click',event=>{
     const action=event.target.closest('[data-action]')?.dataset.action;
