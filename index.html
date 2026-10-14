@@ -851,7 +851,7 @@ window.ExperienceScene={
     const cards=[...root.querySelectorAll('.resume-job'),educationCard].filter(Boolean);
     if(!cards.length)return;
     contentDialog.querySelector('.resume-timeline')?.remove();
-    const timelineLabels=['ConGlobal','ITS Logistics','Envent','Kaneka','Education'];
+    const timelineLabels=['ConGlobal','ITS Technologies & Logistics','Envent','Kaneka','Education'];
     const stopTargets=cards;
     cards.forEach((card,index)=>card.dataset.timelineStep=String(index));
     const timeline=document.createElement('nav');
