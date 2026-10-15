@@ -75,6 +75,7 @@ body.workshop-mode .page-shell{opacity:0;pointer-events:none}body.workshop-mode 
 @media(prefers-reduced-motion:reduce){.endorsement-card{transition:none!important}}
 .resume-timeline{--timeline-edge:10%;--timeline-gutter:17.6px}.resume-timeline .resume-timeline-track{left:calc(var(--timeline-edge) + var(--timeline-gutter));right:calc(var(--timeline-edge) + var(--timeline-gutter))}@media(max-width:600px){.resume-timeline{--timeline-gutter:4.8px}}
 .endorsement-timeline button{color:#b2c3c8}.endorsement-timeline button.is-past{color:#c0d0d4}.endorsement-timeline button.is-active{color:#fff}.endorsement-timeline .resume-timeline-label{font-size:11px;letter-spacing:.85px;text-shadow:0 1px 10px #000}@media(max-width:600px){.endorsement-timeline .resume-timeline-label{font-size:7.5px;letter-spacing:.25px}}
+.panel-home-label{display:none}.side-projects-mode .panel-brand{display:none}.side-projects-mode .panel-close{width:auto;height:auto;min-height:40px;margin-left:auto;padding:9px 14px;border-color:rgba(127,200,255,.32);border-radius:6px;background:rgba(11,25,32,.72);display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:650;letter-spacing:.2px;line-height:1}.side-projects-mode .panel-close:hover{border-color:rgba(127,200,255,.65);background:rgba(31,45,54,.9)}.side-projects-mode .panel-close-symbol{display:none}.side-projects-mode .panel-home-label{display:inline-flex;align-items:center;gap:8px}@media(max-width:600px){.side-projects-mode .panel-close{min-height:38px;padding:8px 11px;font-size:10px}}
 </style>
 </head>
 <body>
@@ -171,7 +172,7 @@ body.workshop-mode .page-shell{opacity:0;pointer-events:none}body.workshop-mode 
   </div>
 </footer>
 <dialog id="content-dialog" class="content-dialog" aria-labelledby="panel-title">
-  <div class="panel-header"><a class="panel-brand" href="#home">JP<span> / SELECTED WORK & EXPERIENCE</span></a><div class="resume-panel-identity"><strong>Jacob Prado</strong><div><a href="tel:+12817868445">281-786-8445</a><span>•</span><a href="mailto:PradoJ08@yahoo.com">PradoJ08@yahoo.com</a><span>•</span><span>La Porte, TX 77571</span></div></div><button class="icon-button panel-close" data-action="close" aria-label="Return to landing page"><span class="panel-close-symbol" aria-hidden="true">×</span><span class="panel-return-label"><span aria-hidden="true">←</span> Return</span></button></div>
+  <div class="panel-header"><a class="panel-brand" href="#home">JP<span> / SELECTED WORK & EXPERIENCE</span></a><div class="resume-panel-identity"><strong>Jacob Prado</strong><div><a href="tel:+12817868445">281-786-8445</a><span>•</span><a href="mailto:PradoJ08@yahoo.com">PradoJ08@yahoo.com</a><span>•</span><span>La Porte, TX 77571</span></div></div><button class="icon-button panel-close" data-action="close" aria-label="Return to homepage"><span class="panel-close-symbol" aria-hidden="true">×</span><span class="panel-return-label"><span aria-hidden="true">←</span> Return</span><span class="panel-home-label"><span aria-hidden="true">←</span> Homepage</span></button></div>
   <nav class="panel-nav" aria-label="Portfolio sections"><a href="portfolio.html">Projects</a><a href="#resume">Resume</a><a href="#endorsements">Endorsements</a><a href="#side-projects">Side projects</a></nav>
   <div class="panel-body" id="panel-body"></div>
 </dialog>
