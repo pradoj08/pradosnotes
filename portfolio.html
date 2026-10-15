@@ -2104,14 +2104,29 @@ function migrateRemoveBillingGlossary(){
  portfolio.billingGlossaryRemovedVersion=1;migrationChanged=true;
 }
 migrateRemoveBillingGlossary();
+function migrateWorkflowPage(){
+ if(portfolio.workflowPageVersion===1)return;
+ let page=portfolio.pages.find(item=>item.projectId==='page-workflow'||String(item.tabName||item.title).toLowerCase()==='workflow');
+ if(!page){
+  page=clone(seed.template||portfolio.template||portfolio.pages[0]);
+  page.projectId='page-workflow';page.tabName='Workflow';page.title='Workflow';page.savedAt=0;page.presentOnOpen=false;page.annotationProfile='general';
+  const heading=(page.objects||[]).find(object=>object.id==='page-title');
+  if(heading)heading.text='Workflow';
+ }
+ portfolio.pages=portfolio.pages.filter(item=>item!==page);
+ const welcomeIndex=portfolio.pages.findIndex(item=>item.projectId==='page-welcome');
+ portfolio.pages.splice(welcomeIndex<0?0:welcomeIndex+1,0,page);
+ portfolio.workflowPageVersion=1;migrationChanged=true;
+}
+migrateWorkflowPage();
 function migrateProjectOrder(){
- if(portfolio.projectOrderVersion===9)return;
+ if(portfolio.projectOrderVersion===10)return;
  if(!portfolio.pages.some(page=>page.projectId==='page-train-consist-mapped')){
   const trainPage={version:1,projectId:'page-train-consist-mapped',title:'Train Consist Mapped',tabName:'Train Consist Mapped',showAnnotations:true,presentOnOpen:false,savedAt:Date.now(),sourceSlots:[],annotationPresets:{},focusViews:[],width:1760,height:1200,background:'#f7fbf9',objects:[]};
   const intermodalIndex=portfolio.pages.findIndex(page=>page.projectId==='page-intermodal-simulation');
   portfolio.pages.splice(intermodalIndex<0?portfolio.pages.length:intermodalIndex,0,trainPage);migrationChanged=true;
  }
- const preferred=['page-welcome','page-yard-planning','page-yard-check','page-container-mapping','page-train-consist-mapped','page-employee-readiness-monitor','page-chassis-planning','page-billing-performance','page-intermodal-simulation'];
+ const preferred=['page-welcome','page-workflow','page-yard-planning','page-yard-check','page-container-mapping','page-train-consist-mapped','page-employee-readiness-monitor','page-chassis-planning','page-billing-performance','page-intermodal-simulation'];
  const activeProjectId=portfolio.activePageId;
  const rank=new Map(preferred.map((id,index)=>[id,index]));
  portfolio.pages=portfolio.pages.map((page,index)=>({page,index})).sort((a,b)=>{
@@ -2121,7 +2136,7 @@ function migrateProjectOrder(){
  }).map(item=>item.page);
  portfolio.activePageId=portfolio.pages.some(page=>page.projectId===activeProjectId)?activeProjectId:'page-yard-check';
  state=portfolio.pages.find(page=>page.projectId===portfolio.activePageId)||portfolio.pages[0];
- portfolio.projectOrderVersion=9;migrationChanged=true;
+ portfolio.projectOrderVersion=10;migrationChanged=true;
 }
 migrateProjectOrder();
 
