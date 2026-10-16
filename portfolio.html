@@ -149,6 +149,10 @@ body.booting::before{content:"";position:fixed;inset:0;z-index:1000;background:#
 body.booting::after{content:"";position:fixed;left:50%;top:50%;z-index:1001;width:26px;height:26px;margin:-15px 0 0 -15px;border:2px solid #254450;border-top-color:#58ddc5;border-radius:50%;animation:portfolioBootSpin .7s linear infinite}
 @keyframes portfolioBootSpin{to{transform:rotate(360deg)}}
 @media(prefers-reduced-motion:reduce){body.booting::after{animation-duration:1.4s}}
+.workflow-frame{display:block;flex:1 1 auto;width:100%;min-height:0;border:0;background:#081117;color-scheme:dark}
+body.workflow-active .app-main{grid-template-columns:minmax(0,1fr)}
+body.workflow-active .sidebar,body.workflow-active .inspector,body.workflow-active .canvas-toolbar,body.workflow-active .detail-toolbar,body.workflow-active .viewport,body.workflow-active .stage-bottom{display:none!important}
+body.workflow-active .stage-area{min-height:0;background:#081117}
 </style>
 </head>
 <body class="booting">
@@ -181,13 +185,14 @@ body.booting::after{content:"";position:fixed;left:50%;top:50%;z-index:1001;widt
  <div class="project-eyebrow"><span data-icon="layers"></span>PROJECTS</div>
  <div class="project-tabs" id="projectTabs" role="tablist" aria-label="Project pages">
   <button type="button" class="project-tab" role="tab" id="tab-page-welcome" data-project-id="page-welcome" aria-controls="stageArea" aria-selected="false" tabindex="-1"><span class="tab-number">01</span><span class="tab-name">Start Here</span></button>
-  <button type="button" class="project-tab" role="tab" id="tab-page-yard-planning" data-project-id="page-yard-planning" aria-controls="stageArea" aria-selected="false" tabindex="-1"><span class="tab-number">02</span><span class="tab-name">Yard Planning</span></button>
-  <button type="button" class="project-tab" role="tab" id="tab-page-yard-check" data-project-id="page-yard-check" aria-controls="stageArea" aria-selected="false" tabindex="-1"><span class="tab-number">03</span><span class="tab-name">Yard Check</span></button>
-  <button type="button" class="project-tab" role="tab" id="tab-page-container-mapping" data-project-id="page-container-mapping" aria-controls="stageArea" aria-selected="false" tabindex="-1"><span class="tab-number">04</span><span class="tab-name">Container Mapping</span></button>
-  <button type="button" class="project-tab" role="tab" id="tab-page-employee-readiness-monitor" data-project-id="page-employee-readiness-monitor" aria-controls="stageArea" aria-selected="false" tabindex="-1"><span class="tab-number">05</span><span class="tab-name">Employee Readiness</span></button>
-  <button type="button" class="project-tab" role="tab" id="tab-page-chassis-planning" data-project-id="page-chassis-planning" aria-controls="stageArea" aria-selected="false" tabindex="-1"><span class="tab-number">06</span><span class="tab-name">Chassis Planning</span></button>
-  <button type="button" class="project-tab" role="tab" id="tab-page-billing-performance" data-project-id="page-billing-performance" aria-controls="stageArea" aria-selected="false" tabindex="-1"><span class="tab-number">07</span><span class="tab-name">Billing &amp; Performance</span></button>
-  <button type="button" class="project-tab" role="tab" id="tab-page-intermodal-simulation" data-project-id="page-intermodal-simulation" aria-controls="stageArea" aria-selected="true" tabindex="0"><span class="tab-number">08</span><span class="tab-name">How I Operate</span></button>
+   <button type="button" class="project-tab" role="tab" id="tab-page-workflow" data-project-id="page-workflow" aria-controls="stageArea" aria-selected="false" tabindex="-1"><span class="tab-number">02</span><span class="tab-name">Workflow</span></button>
+   <button type="button" class="project-tab" role="tab" id="tab-page-yard-planning" data-project-id="page-yard-planning" aria-controls="stageArea" aria-selected="false" tabindex="-1"><span class="tab-number">03</span><span class="tab-name">Yard Planning</span></button>
+   <button type="button" class="project-tab" role="tab" id="tab-page-yard-check" data-project-id="page-yard-check" aria-controls="stageArea" aria-selected="false" tabindex="-1"><span class="tab-number">04</span><span class="tab-name">Yard Check</span></button>
+   <button type="button" class="project-tab" role="tab" id="tab-page-container-mapping" data-project-id="page-container-mapping" aria-controls="stageArea" aria-selected="false" tabindex="-1"><span class="tab-number">05</span><span class="tab-name">Container Mapping</span></button>
+   <button type="button" class="project-tab" role="tab" id="tab-page-employee-readiness-monitor" data-project-id="page-employee-readiness-monitor" aria-controls="stageArea" aria-selected="false" tabindex="-1"><span class="tab-number">06</span><span class="tab-name">Employee Readiness</span></button>
+   <button type="button" class="project-tab" role="tab" id="tab-page-chassis-planning" data-project-id="page-chassis-planning" aria-controls="stageArea" aria-selected="false" tabindex="-1"><span class="tab-number">07</span><span class="tab-name">Chassis Planning</span></button>
+   <button type="button" class="project-tab" role="tab" id="tab-page-billing-performance" data-project-id="page-billing-performance" aria-controls="stageArea" aria-selected="false" tabindex="-1"><span class="tab-number">08</span><span class="tab-name">Billing &amp; Performance</span></button>
+   <button type="button" class="project-tab" role="tab" id="tab-page-intermodal-simulation" data-project-id="page-intermodal-simulation" aria-controls="stageArea" aria-selected="true" tabindex="0"><span class="tab-number">09</span><span class="tab-name">How I Operate</span></button>
   <a class="project-tab return-landing-link" href="index.html#home" aria-label="Return to the landing page"><span class="tab-name">← Landing page</span></a>
  </div>
  <div class="project-actions">
@@ -242,6 +247,7 @@ body.booting::after{content:"";position:fixed;left:50%;top:50%;z-index:1001;widt
   <div class="sidebar-footer">Works offline. Images stay in your file and browser. Changes save automatically. Use Save now to confirm, or export an editable copy for backup.</div>
  </aside>
  <main class="stage-area" id="stageArea" role="tabpanel">
+   <iframe id="workflowFrame" class="workflow-frame hidden" title="Workflow — build process and technology" src="workflow.html" loading="eager" aria-hidden="true"></iframe>
   <div class="canvas-toolbar"><div class="left"><span class="pill">EDITABLE WORKSPACE</span><span id="selectionStatus">Select an element to edit</span></div><div class="right"><button id="styleToggle" title="Open style controls"><span data-icon="sliders"></span>Style</button></div></div>
   <div id="detailToolbar" class="detail-toolbar hidden" role="toolbar" aria-label="Enlarge project evidence"></div>
     <div class="viewport" id="viewport"><div class="paper-space" id="paperSpace"><div class="paper" id="paper"><button id="imageCycleButton" class="paper-image-cycle hidden" title="Show the next screenshot" aria-label="Cycle to the next image"><span id="imageCycleText">Cycle Image</span></button><button id="thirdImageCycleButton" class="paper-image-cycle hidden" title="Additional image can be added later" aria-label="Cycle the third section image"><span>Cycle Image</span></button><button id="containerRetrievalCycleButton" class="paper-image-cycle hidden" title="Show the stack-lot photograph" aria-label="Cycle the container retrieval image"><span>Cycle Image</span></button><iframe id="containerRetrievalHtmlFrame" class="paper-html-cycle hidden" title="Interactive 3D container yard" src="container-retrieval-cycle-3.html" loading="lazy"></iframe><iframe id="trainConsistHtmlFrame" class="paper-html-cycle hidden" title="Interactive track consist visualization" src="track-consist-live/index.html" loading="lazy" scrolling="no"></iframe><svg id="board" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Editable terminal systems comparison"></svg></div></div></div>
@@ -2105,7 +2111,7 @@ function migrateRemoveBillingGlossary(){
 }
 migrateRemoveBillingGlossary();
 function migrateWorkflowPage(){
- if(portfolio.workflowPageVersion===1)return;
+ if(portfolio.workflowPageVersion===2&&portfolio.pages.some(item=>item.projectId==='page-workflow'))return;
  let page=portfolio.pages.find(item=>item.projectId==='page-workflow'||String(item.tabName||item.title).toLowerCase()==='workflow');
  if(!page){
   page=clone(seed.template||portfolio.template||portfolio.pages[0]);
@@ -2116,7 +2122,7 @@ function migrateWorkflowPage(){
  portfolio.pages=portfolio.pages.filter(item=>item!==page);
  const welcomeIndex=portfolio.pages.findIndex(item=>item.projectId==='page-welcome');
  portfolio.pages.splice(welcomeIndex<0?0:welcomeIndex+1,0,page);
- portfolio.workflowPageVersion=1;migrationChanged=true;
+ portfolio.workflowPageVersion=2;migrationChanged=true;
 }
 migrateWorkflowPage();
 function migrateProjectOrder(){
@@ -2876,7 +2882,8 @@ function roleFocusId(role){
  if(role==='legacy')return images.find(item=>/legacy|original|before/i.test(item.name||''))?.id||null;
  return images.find(item=>/^design-image$/.test(item.id)||/my design|designed/i.test(item.name||''))?.id||null;
 }
-function updateHeader(){updateImageCycleButton();updateThirdImageCycleButton();updateContainerRetrievalCycleButton(); $('#projectName').textContent=state.title;$('#undoButton').disabled=!undoStack.length;$('#redoButton').disabled=!redoStack.length;$('#showAnnotations').checked=state.showAnnotations;$('#selectionStatus').textContent=selection.length?`${selection.length} ${selection.length===1?'element':'elements'} selected`:'Select an element to edit';$$('.layer-card').forEach(n=>n.classList.toggle('active',selection.includes(n.dataset.focus)));renderProjectTabs()}
+function updateWorkflowView(){const active=state.projectId==='page-workflow',frame=$('#workflowFrame');document.body.classList.toggle('workflow-active',active);frame.classList.toggle('hidden',!active);frame.setAttribute('aria-hidden',String(!active))}
+function updateHeader(){updateWorkflowView();updateImageCycleButton();updateThirdImageCycleButton();updateContainerRetrievalCycleButton(); $('#projectName').textContent=state.title;$('#undoButton').disabled=!undoStack.length;$('#redoButton').disabled=!redoStack.length;$('#showAnnotations').checked=state.showAnnotations;$('#selectionStatus').textContent=selection.length?`${selection.length} ${selection.length===1?'element':'elements'} selected`:'Select an element to edit';$$('.layer-card').forEach(n=>n.classList.toggle('active',selection.includes(n.dataset.focus)));renderProjectTabs()}
 function persist(){syncPage();clearTimeout(saveTimer);$('#saveStatus').innerHTML='<span class="status-dot"></span><span>Saving all projects…</span>';saveTimer=setTimeout(storePortfolio,350)}
 function commit(before){undoStack.push(before);if(undoStack.length>60)undoStack.shift();redoStack=[];persist();render();renderInspector()}
 function transact(fn){finishEdit();const before=clone(state);fn();commit(before)}
