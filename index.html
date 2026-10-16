@@ -253,6 +253,10 @@ if(!localAuthoringHost)document.querySelectorAll('.authoring-only').forEach(elem
   function project(p){const x=p[0],y=p[1],z=p[2],w=vp[3]*x+vp[7]*y+vp[11]*z+vp[15];if(w<1)return null;return {x:(vp[0]*x+vp[4]*y+vp[8]*z+vp[12])/w*width*.5+width*.5,y:-(vp[1]*x+vp[5]*y+vp[9]*z+vp[13])/w*height*.5+height*.5,d:w};}
   const lamps=[];
   const stars=Array.from({length:110},()=>({x:rand(),y:rand()*.30,r:rand()*.85+.15,o:rand()*.30+.06,p:rand()*6.28}));
+  const workshopNoise=(i,s=0)=>Math.abs(Math.sin(i*91.733+s)*43758.5453)%1;
+  const workshopStars=Array.from({length:150},(_,i)=>({x:workshopNoise(i,2.7),y:workshopNoise(i,8.4)*.31,r:.35+workshopNoise(i,4.2)*1.05,o:.18+workshopNoise(i,11.8)*.42,p:i*.71,bright:i%19===0}));
+  const workshopClouds=Array.from({length:9},(_,i)=>({x:i/9,y:.045+(i%5)*.043,scale:.65+(i%4)*.23,speed:2.1+(i%3)*.52,phase:i*1.41}));
+  const workshopSkyline=Array.from({length:34},(_,i)=>({x:i/33,w:.022+workshopNoise(i,6.1)*.036,h:.032+workshopNoise(i,13.2)*.078,roof:i%4,mast:i%6===2,windows:i%2===0}));
   function light(p, color=[255,197,121], strength=1){
     const s=project(p);if(!s||s.x<-60||s.y<-60||s.x>width+60||s.y>height+60)return;
     const r=clamp(5700/s.d,4,38), alpha=mix(.74,.25,environmentLight)*strength;
@@ -261,8 +265,17 @@ if(!localAuthoringHost)document.querySelectorAll('.authoring-only').forEach(elem
     ctx.fillStyle=g;ctx.fillRect(s.x-r,s.y-r,r*2,r*2);
     if(s.d<600){ctx.strokeStyle=`rgba(${color},${alpha*.32})`;ctx.lineWidth=.6;ctx.beginPath();ctx.moveTo(s.x-r*.42,s.y);ctx.lineTo(s.x+r*.42,s.y);ctx.moveTo(s.x,s.y-r*.25);ctx.lineTo(s.x,s.y+r*.25);ctx.stroke();}
   }
+  function drawWorkshopSky(){
+    const night=1-environmentLight,horizon=height*.345;
+    const wash=ctx.createRadialGradient(width*.57,height*.04,0,width*.57,height*.12,width*.54);wash.addColorStop(0,`rgba(69,145,166,${.10+environmentLight*.06})`);wash.addColorStop(.48,`rgba(40,99,119,${.045+environmentLight*.025})`);wash.addColorStop(1,'rgba(4,13,20,0)');ctx.fillStyle=wash;ctx.fillRect(0,0,width,height*.42);
+    if(night>.03){for(const s of workshopStars){const twinkle=.48+.52*(.5+.5*Math.sin(time*(s.bright?1.6:.68)+s.p)),alpha=s.o*night*twinkle,x=s.x*width,y=s.y*height;ctx.fillStyle=`rgba(213,235,247,${alpha})`;ctx.beginPath();ctx.arc(x,y,s.r*(s.bright?1.45:1),0,Math.PI*2);ctx.fill();if(s.bright&&night>.32){ctx.strokeStyle=`rgba(203,232,247,${alpha*.7})`;ctx.lineWidth=.6;ctx.beginPath();ctx.moveTo(x-4,y);ctx.lineTo(x+4,y);ctx.moveTo(x,y-3);ctx.lineTo(x,y+3);ctx.stroke();}}}
+    const span=width+520,cloudColor=environmentLight>.52?'196,217,219':'73,102,117';for(const cloud of workshopClouds){const x=((cloud.x*span+time*cloud.speed)%span)-260,y=height*cloud.y+Math.sin(time*.07+cloud.phase)*5,unit=Math.max(.72,Math.min(1.65,width/1180))*cloud.scale,copyFade=.48+.52*clamp((x/width-.08)/.55,0,1);ctx.save();ctx.globalAlpha=(.18+environmentLight*.17+night*.06)*copyFade;ctx.fillStyle=`rgba(${cloudColor},.58)`;ctx.beginPath();for(let j=0;j<5;j++){ctx.ellipse(x+(j-2)*55*unit,y+Math.sin(j*1.6+cloud.phase)*7*unit,82*unit,18*unit,0,0,Math.PI*2);}ctx.fill();ctx.strokeStyle=`rgba(202,231,236,${.05+night*.08})`;ctx.lineWidth=.8;ctx.stroke();ctx.restore();}
+    ctx.save();ctx.globalAlpha=.82;ctx.fillStyle=environmentLight>.5?'rgba(31,52,57,.62)':'rgba(4,16,24,.78)';for(const b of workshopSkyline){const x=b.x*width,bw=Math.max(22,b.w*width),bh=b.h*height;ctx.fillRect(x-bw*.5,horizon-bh,bw,bh);if(b.roof===0){ctx.beginPath();ctx.moveTo(x-bw*.5,horizon-bh);ctx.lineTo(x,horizon-bh-height*.012);ctx.lineTo(x+bw*.5,horizon-bh);ctx.closePath();ctx.fill();}else if(b.roof===1){ctx.fillRect(x-bw*.18,horizon-bh-height*.012,bw*.36,height*.012);}if(b.mast){const mastTop=horizon-bh-height*(.045+(b.x%3)*.018);ctx.fillRect(x-1,mastTop,2,horizon-bh-mastTop);if(night>.2){ctx.fillStyle=`rgba(255,104,77,${night*.82})`;ctx.fillRect(x-1.5,mastTop-1.5,3,3);ctx.fillStyle=environmentLight>.5?'rgba(31,52,57,.62)':'rgba(4,16,24,.78)';}}if(b.windows&&night>.12){ctx.fillStyle=`rgba(245,193,105,${night*.32})`;for(let wx=x-bw*.34;wx<x+bw*.34;wx+=11)ctx.fillRect(wx,horizon-bh+8+(b.roof%3)*4,2,2);ctx.fillStyle=environmentLight>.5?'rgba(31,52,57,.62)':'rgba(4,16,24,.78)';}}
+    const towers=[.09,.29,.56,.77,.91];ctx.strokeStyle=environmentLight>.5?'rgba(45,68,70,.7)':'rgba(8,22,29,.9)';ctx.lineWidth=2;for(let i=0;i<towers.length;i++){const x=towers[i]*width,top=horizon-height*(.11+(i%3)*.03);ctx.beginPath();ctx.moveTo(x,horizon);ctx.lineTo(x,top);ctx.moveTo(x-9,horizon-height*.035);ctx.lineTo(x,top);ctx.lineTo(x+9,horizon-height*.035);ctx.stroke();if(night>.22){ctx.fillStyle=`rgba(255,96,72,${night*(.42+.35*(.5+.5*Math.sin(time*2+i)))})`;ctx.fillRect(x-1.5,top-1.5,3,3);}}ctx.restore();
+  }
   function drawAtmosphere(headlights){
     ctx.clearRect(0,0,width,height);
+    if(prefs.workshop)drawWorkshopSky();
     if(environmentLight<.96){for(const s of stars){const a=s.o*(.8+.2*Math.sin(time*.4+s.p))*(1-environmentLight);ctx.fillStyle=`rgba(180,209,225,${a})`;ctx.beginPath();ctx.arc(s.x*width+smoothX*2,s.y*height,s.r,0,Math.PI*2);ctx.fill();}}
     for(const p of lamps)light(p);
     for(const p of headlights)light(p,[199,228,244],.9);
