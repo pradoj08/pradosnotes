@@ -2795,7 +2795,9 @@ function drawObject(o,parent){const g=svgEl('g',{'data-id':o.id,'data-locked':!!
 
  const attrs={fill:o.fill||'#ffffff','fill-opacity':o.fillOpacity??1,stroke:o.stroke||'#cbd5e1','stroke-width':o.strokeWidth??0,'stroke-opacity':o.strokeOpacity??1,'stroke-dasharray':o.lineStyle==='dashed'?`${(o.strokeWidth||2)*3} ${(o.strokeWidth||2)*2}`:null};
  if(o.type==='ellipse'){svgEl('ellipse',{cx:o.x+o.w/2,cy:o.y+o.h/2,rx:o.w/2,ry:o.h/2,...attrs},g);return g}
- svgEl('rect',{x:o.x,y:o.y,width:o.w,height:o.h,rx:Math.min(o.radius||0,o.h/2,o.w/2),...attrs},g);
+ // Keep the editable intro copy from painting over the card borders baked into the landing image.
+ const backgroundHeight=state.projectId==='page-welcome'&&o.id==='welcome-legacy-fix-copy'?Math.min(o.h,75):o.h;
+ svgEl('rect',{x:o.x,y:o.y,width:o.w,height:backgroundHeight,rx:Math.min(o.radius||0,backgroundHeight/2,o.w/2),...attrs},g);
  if(o.type==='text'){const p=o.padding??14,w=Math.max(10,o.w-2*p),fs=o.fontSize||24,lh=o.lineHeight||1.3;let y=o.y+p+fs;const color=o.textColor||'#17364b';if(o.heading){y=o.y+p+fs+1;const hh=addSvgText(g,o.heading,o.x+p,y,fs+1,color,700,o.align,w,1.2);y+=hh+8;}
  addSvgText(g,o.text,o.x+p,y,fs,color,o.fontWeight||400,o.align,w,lh);
  // This transparent hit target makes unfilled labels easy to select.
