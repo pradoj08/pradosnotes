@@ -1816,7 +1816,9 @@ function migrateTrainDesignImageFill(page){
  page.trainDesignImageFillVersion=1;migrationChanged=true;
 }
 portfolio.pages.forEach(migrateTrainDesignImageFill);
- const YARD_CYCLE_IMAGE_1='yard-planning-cycle-1-original.png';
+ const YARD_CYCLE_IMAGE_1='yard-overview-portfolio-20261021.png';
+ const YARD_CYCLE_IMAGE_1_NATURAL_W=2560;
+ const YARD_CYCLE_IMAGE_1_NATURAL_H=3287;
  function resetYardCycleImagesOnRefresh(){
  const page=portfolio.pages.find(p=>p.projectId==='page-yard-planning');
  const reference=seed.pages.find(p=>p.projectId==='page-yard-planning');
@@ -1848,7 +1850,7 @@ portfolio.pages.forEach(migrateTrainDesignImageFill);
   if(Number.isFinite(page.yardThirdCycleOriginalPageHeight))page.height=page.yardThirdCycleOriginalPageHeight;
   page.yardThirdCyclePanelCompacted=false;delete page.yardThirdCycleOriginalPanelH;delete page.yardThirdCycleOriginalPageHeight;
  }
-  if(image&&original){image.src=YARD_CYCLE_IMAGE_1;image.naturalW=1692;image.naturalH=502;image.cycleFit='contain';image.visible=true}
+  if(image&&original){image.src=YARD_CYCLE_IMAGE_1;image.naturalW=YARD_CYCLE_IMAGE_1_NATURAL_W;image.naturalH=YARD_CYCLE_IMAGE_1_NATURAL_H;image.cycleFit='contain';image.visible=true}
  if(thirdImage&&thirdOriginal){thirdImage.src='yard-planning-full-railcar-breakdown-clean-20261010.png';thirdImage.naturalW=2031;thirdImage.naturalH=686;thirdImage.cycleFit='contain'}
  page.yardActiveCycleIndex=0;page.yardThirdActiveCycleIndex=0;
  for(const object of page.objects)if(Number.isInteger(object.yardCycleIndex))object.visible=object.yardCycleIndex===0;
@@ -1856,6 +1858,28 @@ portfolio.pages.forEach(migrateTrainDesignImageFill);
  for(const object of page.objects)if(thirdLabels.has(object.id))object.visible=false;
 }
 resetYardCycleImagesOnRefresh();
+function migrateYardOverviewPortrait(page){
+ if(page.projectId!=='page-yard-planning'||page.yardOverviewPortraitVersion===1)return;
+ const image=page.objects.find(o=>o.id==='design-image'),panel=page.objects.find(o=>o.id==='design-panel');
+ if(image&&panel){
+  const oldBottom=image.y+image.h,targetH=image.w*(YARD_CYCLE_IMAGE_1_NATURAL_H/YARD_CYCLE_IMAGE_1_NATURAL_W),delta=targetH-image.h,threshold=oldBottom-2;
+  if(Math.abs(delta)>.1){
+   for(const o of page.objects){
+    if(o.id===image.id||o.id===panel.id)continue;
+    if(o.type==='arrow'){if(o.y1>=threshold)o.y1+=delta;if(o.y2>=threshold)o.y2+=delta}
+    else if(Number.isFinite(o.y)&&o.y>=threshold)o.y+=delta;
+   }
+   image.h=targetH;panel.h+=delta;page.height+=delta;
+  }
+  Object.assign(image,{src:YARD_CYCLE_IMAGE_1,naturalW:YARD_CYCLE_IMAGE_1_NATURAL_W,naturalH:YARD_CYCLE_IMAGE_1_NATURAL_H,keepAspect:true,cycleFit:'contain',placeholder:false,visible:true,name:'Yard overview and switching plan'});
+  const slot=page.sourceSlots?.find(item=>item.objectId==='design-image');
+  if(slot)Object.assign(slot,{label:'My design · Yard overview',uploadLabel:'yard overview plan',subtitle:'Current ramp, switching, and post-switching plan'});
+  const view=page.focusViews?.find(item=>item.id==='yard-planner');
+  if(view)Object.assign(view,{label:'Yard overview',title:'My design · Complete yard overview',description:'Current ramp, post-switching, outbound, and additional planning tables in one operating view.'});
+ }
+ page.yardOverviewPortraitVersion=1;migrationChanged=true;
+}
+portfolio.pages.forEach(migrateYardOverviewPortrait);
 function migrateYardThirdPrimaryCleanImage(page){
  if(page.projectId!=='page-yard-planning'||page.yardThirdPrimaryCleanImageVersion===1)return;
  const image=page.objects.find(o=>o.id==='design-alt-image'),panel=page.objects.find(o=>o.id==='live-track-panel');
@@ -2452,7 +2476,7 @@ function updateTrainConsistHtmlFrame(){
  frame.classList.toggle('hidden',!show);if(!show)return;
  frame.style.left=image.x*zoom+'px';frame.style.top=image.y*zoom+'px';frame.style.width=image.w*zoom+'px';frame.style.height=image.h*zoom+'px';
 }
-let yardOriginalDesignImageSource=YARD_CYCLE_IMAGE_1,yardOriginalDesignNaturalW=1692,yardOriginalDesignNaturalH=502;
+let yardOriginalDesignImageSource=YARD_CYCLE_IMAGE_1,yardOriginalDesignNaturalW=YARD_CYCLE_IMAGE_1_NATURAL_W,yardOriginalDesignNaturalH=YARD_CYCLE_IMAGE_1_NATURAL_H;
 let yardThirdOriginalImageSource='',yardThirdOriginalNaturalW=2031,yardThirdOriginalNaturalH=686,yardThirdCycleIndex=0,yardThirdCyclePageId='';
 const YARD_THIRD_CYCLE_IMAGE_2='yard-planning-original-cycle-image.png';
 const YARD_THIRD_CYCLE_PRIMARY_IMAGE='yard-planning-full-railcar-breakdown-clean-20261010.png';
@@ -2659,7 +2683,7 @@ function setChassisForecastCycleLayout(index){
  }
 }
 function cycleableImageViews(){
-  if(state.projectId==='page-yard-planning')return [{label:'Original planning view'},{label:'Track capacity view'}];
+  if(state.projectId==='page-yard-planning')return [{label:'Yard overview'},{label:'Track capacity view'}];
   if(state.projectId==='page-train-consist-mapped')return [{label:'Train consist visualized'},{label:'Track detail drawn car by car'}];
   if(state.projectId==='page-chassis-planning')return [{label:'Chassis forecast and response plan'},{label:'Current tracks and 24-hour chassis calculator'}];
   return [];
@@ -2701,7 +2725,7 @@ function cyclePageImage(){
   if(state.projectId!=='page-yard-planning')return;
   const image=obj('design-image');
   if(!image)return;
-  if(!yardOriginalDesignImageSource){yardOriginalDesignImageSource=YARD_CYCLE_IMAGE_1;yardOriginalDesignNaturalW=1692;yardOriginalDesignNaturalH=502}
+  if(!yardOriginalDesignImageSource){yardOriginalDesignImageSource=YARD_CYCLE_IMAGE_1;yardOriginalDesignNaturalW=YARD_CYCLE_IMAGE_1_NATURAL_W;yardOriginalDesignNaturalH=YARD_CYCLE_IMAGE_1_NATURAL_H}
   const sources=[{src:yardOriginalDesignImageSource,naturalW:yardOriginalDesignNaturalW,naturalH:yardOriginalDesignNaturalH},{src:YARD_CYCLE_IMAGE_2,naturalW:1490,naturalH:332}];
   imageCycleIndex=(imageCycleIndex+1)%sources.length;
   const source=sources[imageCycleIndex];image.src=source.src;image.naturalW=source.naturalW;image.naturalH=source.naturalH;
