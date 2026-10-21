@@ -1959,6 +1959,13 @@ portfolio.pages.forEach(migrateYardOverviewPortrait);
   page.yardPictureTwoLabelsVersion=1;migrationChanged=true;
  }
  portfolio.pages.forEach(migrateAddYardPictureTwoLabels);
+ function migrateYardCycleLabelName(page){
+  if(page.projectId!=='page-yard-planning'||page.yardCycleLabelNameVersion===1)return;
+  const label=page.objects.find(o=>o.id==='o-mv2fk9pf-00keh');
+  if(label)label.heading='Track Forecast Labels';
+  page.yardCycleLabelNameVersion=1;migrationChanged=true;
+ }
+ portfolio.pages.forEach(migrateYardCycleLabelName);
 function migrateYardThirdPrimaryCleanImage(page){
  if(page.projectId!=='page-yard-planning'||page.yardThirdPrimaryCleanImageVersion===1)return;
  const image=page.objects.find(o=>o.id==='design-alt-image'),panel=page.objects.find(o=>o.id==='live-track-panel');
