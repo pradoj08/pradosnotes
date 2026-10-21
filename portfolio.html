@@ -1883,6 +1883,29 @@ function migrateYardOverviewPortrait(page){
  page.yardOverviewPortraitVersion=2;migrationChanged=true;
 }
 portfolio.pages.forEach(migrateYardOverviewPortrait);
+ function migrateYardPrimaryCalloutsToTop(page){
+  if(page.projectId!=='page-yard-planning'||page.yardPrimaryCalloutsTopVersion===1)return;
+  const image=page.objects.find(o=>o.id==='design-image');
+  if(!image){page.yardPrimaryCalloutsTopVersion=1;migrationChanged=true;return}
+  const cardIds=['callout-holds','callout-dwell','callout-groups','callout-capacity'];
+  const arrowIds=['arrow-holds','arrow-dwell','arrow-groups','arrow-capacity'];
+  const cardY=image.y,cardH=140,gap=16,inset=8,columnGap=16,cardW=(image.w-inset*2-columnGap*3)/4;
+  image.y=cardY+cardH+gap;
+  cardIds.forEach((cardId,index)=>{
+   const x=image.x+inset+index*(cardW+columnGap);
+   for(const card of page.objects.filter(o=>o.type==='text'&&(o.id===cardId||o.id.startsWith(cardId+'-cycle-')))){
+    const suffix=card.id.slice(cardId.length),arrow=page.objects.find(o=>o.id===arrowIds[index]+suffix);
+    Object.assign(card,{x,y:cardY,w:cardW,h:cardH});
+    if(!arrow)continue;
+    const rx=arrow.endAnchor?.rx??.5,ry=arrow.endAnchor?.ry??.5;
+    arrow.startAnchor={id:card.id,rx:.5,ry:1};
+    arrow.endAnchor={id:image.id,rx,ry};
+    Object.assign(arrow,{x1:x+cardW/2,y1:cardY+cardH,x2:image.x+image.w*rx,y2:image.y+image.h*ry});
+   }
+  });
+  page.yardPrimaryCalloutsTopVersion=1;migrationChanged=true;
+ }
+ portfolio.pages.forEach(migrateYardPrimaryCalloutsToTop);
 function migrateYardThirdPrimaryCleanImage(page){
  if(page.projectId!=='page-yard-planning'||page.yardThirdPrimaryCleanImageVersion===1)return;
  const image=page.objects.find(o=>o.id==='design-alt-image'),panel=page.objects.find(o=>o.id==='live-track-panel');
